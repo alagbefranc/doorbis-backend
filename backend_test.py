@@ -668,10 +668,10 @@ class KushDoorBackendTester:
             self.log_result("Support Endpoints", "FAIL", f"Request failed: {str(e)}")
             return False
     
-    def test_analytics_endpoints(self):
-        """Test analytics endpoints"""
+    def test_analytics_comprehensive(self):
+        """Test comprehensive analytics endpoints with sample data"""
         if not self.auth_token:
-            self.log_result("Analytics Endpoints", "FAIL", "No auth token available")
+            self.log_result("Analytics Comprehensive", "FAIL", "No auth token available")
             return False
         
         try:
@@ -686,7 +686,7 @@ class KushDoorBackendTester:
                 data = response.json()
                 required_fields = ['monthly_revenue', 'avg_order_value', 'customer_satisfaction', 'delivery_performance']
                 if all(field in data for field in required_fields):
-                    self.log_result("Analytics Overview", "PASS", "Analytics overview retrieved successfully")
+                    self.log_result("Analytics Overview", "PASS", f"Analytics overview with real data: Revenue ${data['monthly_revenue']}, AOV ${data['avg_order_value']}")
                 else:
                     self.log_result("Analytics Overview", "FAIL", f"Missing analytics fields: {data}")
                     return False
@@ -703,9 +703,8 @@ class KushDoorBackendTester:
             
             if response.status_code == 200:
                 data = response.json()
-                if isinstance(data, list):
-                    self.log_result("Sales Performance", "PASS", f"Retrieved {len(data)} sales performance periods")
-                    return True
+                if isinstance(data, list) and len(data) > 0:
+                    self.log_result("Sales Performance", "PASS", f"Retrieved {len(data)} sales performance periods with real data")
                 else:
                     self.log_result("Sales Performance", "FAIL", f"Invalid sales data: {data}")
                     return False
@@ -713,10 +712,83 @@ class KushDoorBackendTester:
                 self.log_result("Sales Performance", "FAIL", f"HTTP {response.status_code}: {response.text}")
                 return False
             
+            # Test top products
+            response = requests.get(
+                f"{API_BASE_URL}/analytics/top-products",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_result("Top Products Analytics", "PASS", f"Retrieved {len(data)} top products with sales data")
+                else:
+                    self.log_result("Top Products Analytics", "FAIL", f"Invalid top products data: {data}")
+                    return False
+            else:
+                self.log_result("Top Products Analytics", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Test delivery metrics
+            response = requests.get(
+                f"{API_BASE_URL}/analytics/delivery-metrics",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list) and len(data) > 0:
+                    self.log_result("Delivery Metrics", "PASS", f"Retrieved {len(data)} delivery metrics")
+                else:
+                    self.log_result("Delivery Metrics", "FAIL", f"Invalid delivery metrics: {data}")
+                    return False
+            else:
+                self.log_result("Delivery Metrics", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Test customer insights
+            response = requests.get(
+                f"{API_BASE_URL}/analytics/customer-insights",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list) and len(data) > 0:
+                    self.log_result("Customer Insights", "PASS", f"Retrieved {len(data)} customer insight metrics")
+                else:
+                    self.log_result("Customer Insights", "FAIL", f"Invalid customer insights: {data}")
+                    return False
+            else:
+                self.log_result("Customer Insights", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Test referral tracking
+            response = requests.get(
+                f"{API_BASE_URL}/analytics/referral-tracking",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list) and len(data) > 0:
+                    self.log_result("Referral Tracking", "PASS", f"Retrieved {len(data)} referral sources")
+                    return True
+                else:
+                    self.log_result("Referral Tracking", "FAIL", f"Invalid referral data: {data}")
+                    return False
+            else:
+                self.log_result("Referral Tracking", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
             return True
                 
         except requests.exceptions.RequestException as e:
-            self.log_result("Analytics Endpoints", "FAIL", f"Request failed: {str(e)}")
+            self.log_result("Analytics Comprehensive", "FAIL", f"Request failed: {str(e)}")
             return False
     
     def test_cors_configuration(self):
