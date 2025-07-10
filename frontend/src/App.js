@@ -2960,32 +2960,6 @@ const CustomersManagement = ({ setSlideCard }) => {
 };
 
 // Drivers Management Component
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm font-medium text-gray-600">Avg. Order Value</div>
-              <div className="text-2xl font-bold text-purple-600 mt-1">$128.50</div>
-              <div className="text-sm text-green-600 mt-1">+8.2% from last month</div>
-            </div>
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm font-medium text-gray-600">Repeat Customers</div>
-              <div className="text-2xl font-bold text-orange-600 mt-1">67%</div>
-              <div className="text-sm text-gray-500 mt-1">188 customers</div>
-            </div>
-            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </div>
-          </div>
         </div>
       </div>
 
