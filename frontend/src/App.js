@@ -2959,8 +2959,7 @@ const CustomersManagement = ({ setSlideCard }) => {
   );
 };
 
-const ProductsCatalog = ({ setSlideCard }) => {
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+// Drivers Management Component
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-gray-600">Avg. Order Value</div>
