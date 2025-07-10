@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List
-from ..models.payment import Payment, PaymentCreate, PaymentUpdate, Payout
-from ..auth.auth import get_current_active_user
+from models.payment import Payment, PaymentCreate, PaymentUpdate, Payout
+from auth.auth import get_current_active_user
 
 router = APIRouter(prefix="/payments", tags=["Payments"])
 
