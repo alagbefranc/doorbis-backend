@@ -3643,8 +3643,6 @@ const App = () => {
       <AppContent />
     </AuthProvider>
   );
-    </div>
-  );
-}
+};
 
 export default App;
