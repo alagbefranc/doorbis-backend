@@ -2733,6 +2733,381 @@ const SupportCenter = ({ setSlideCard }) => {
   );
 };
 
+// Account Settings Component
+const AccountSettings = ({ setSlideCard }) => {
+  const teamMembers = [
+    { id: 'USR-001', name: 'John Doe', email: 'john@greenvalley.com', role: 'Admin', status: 'active', lastLogin: '2 hours ago' },
+    { id: 'USR-002', name: 'Jane Smith', email: 'jane@greenvalley.com', role: 'Manager', status: 'active', lastLogin: '4 hours ago' },
+    { id: 'USR-003', name: 'Mike Johnson', email: 'mike@greenvalley.com', role: 'Support', status: 'active', lastLogin: '1 day ago' },
+    { id: 'USR-004', name: 'Sarah Wilson', email: 'sarah@greenvalley.com', role: 'Viewer', status: 'inactive', lastLogin: '1 week ago' },
+  ];
+
+  const getRoleColor = (role) => {
+    switch(role) {
+      case 'Admin': return 'bg-red-100 text-red-800';
+      case 'Manager': return 'bg-blue-100 text-blue-800';
+      case 'Support': return 'bg-green-100 text-green-800';
+      case 'Viewer': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'inactive': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Profile Settings */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-6">Profile Settings</h3>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                GV
+              </div>
+              <button className="text-sm text-green-600 hover:text-green-700 font-medium">
+                Change Profile Picture
+              </button>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Store Name</label>
+              <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="Green Valley Dispensary" />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Owner Name</label>
+              <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="John Doe" />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <input type="email" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="john@greenvalley.com" />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+              <input type="tel" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="(555) 123-4567" />
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows="3" defaultValue="123 Main Street, Los Angeles, CA 90210"></textarea>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">License Number</label>
+              <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="C11-0000123-LIC" />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Time Zone</label>
+              <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+                <option>Pacific Time (PT)</option>
+                <option>Mountain Time (MT)</option>
+                <option>Central Time (CT)</option>
+                <option>Eastern Time (ET)</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Subdomain</label>
+              <div className="flex">
+                <span className="inline-flex items-center px-3 py-2 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                  https://
+                </span>
+                <input type="text" className="flex-1 border border-gray-300 px-3 py-2" defaultValue="green-valley" />
+                <span className="inline-flex items-center px-3 py-2 rounded-r-lg border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                  .kush.doorbis.com
+                </span>
+              </div>
+            </div>
+            
+            <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+              Save Profile Changes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Notification Settings */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-6">Notification Preferences</h3>
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-gray-900">Order Notifications</div>
+              <div className="text-sm text-gray-500">Get notified about new orders</div>
+            </div>
+            <input type="checkbox" className="w-4 h-4 text-green-600" defaultChecked />
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-gray-900">Payment Notifications</div>
+              <div className="text-sm text-gray-500">Get notified about payments and payouts</div>
+            </div>
+            <input type="checkbox" className="w-4 h-4 text-green-600" defaultChecked />
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-gray-900">Support Tickets</div>
+              <div className="text-sm text-gray-500">Get notified about customer support tickets</div>
+            </div>
+            <input type="checkbox" className="w-4 h-4 text-green-600" defaultChecked />
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-gray-900">Marketing Updates</div>
+              <div className="text-sm text-gray-500">Receive product updates and tips</div>
+            </div>
+            <input type="checkbox" className="w-4 h-4 text-green-600" />
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-gray-900">SMS Notifications</div>
+              <div className="text-sm text-gray-500">Receive urgent notifications via SMS</div>
+            </div>
+            <input type="checkbox" className="w-4 h-4 text-green-600" defaultChecked />
+          </div>
+        </div>
+      </div>
+
+      {/* Security Settings */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-6">Security Settings</h3>
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-gray-900">Two-Factor Authentication</div>
+              <div className="text-sm text-gray-500">Add an extra layer of security</div>
+            </div>
+            <button 
+              className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+              onClick={() => setSlideCard({
+                isOpen: true,
+                title: 'Enable Two-Factor Authentication',
+                content: (
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Enable 2FA</h3>
+                      <p className="text-gray-600">Secure your account with two-factor authentication</p>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="text-center">
+                        <div className="w-32 h-32 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                          <div className="text-4xl">📱</div>
+                        </div>
+                        <p className="text-sm text-gray-600">Scan this QR code with your authenticator app</p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Enter verification code</label>
+                        <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="123456" />
+                      </div>
+                      
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <p className="text-sm text-yellow-800">
+                          <strong>Backup codes:</strong> Save these codes in a secure location. You can use them to access your account if you lose your phone.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                      Enable 2FA
+                    </button>
+                  </div>
+                )
+              })}
+            >
+              Enable
+            </button>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-gray-900">Change Password</div>
+              <div className="text-sm text-gray-500">Update your password regularly</div>
+            </div>
+            <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+              Change
+            </button>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-gray-900">Active Sessions</div>
+              <div className="text-sm text-gray-500">Manage your active login sessions</div>
+            </div>
+            <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+              View
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Team Management */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Team Management</h3>
+          <button 
+            className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+            onClick={() => setSlideCard({
+              isOpen: true,
+              title: 'Invite Team Member',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Invite Team Member</h3>
+                    <p className="text-gray-600">Add a new team member to your dispensary</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                      <input type="email" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="colleague@email.com" />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                      <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option>Admin</option>
+                        <option>Manager</option>
+                        <option>Support</option>
+                        <option>Viewer</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Personal Message (Optional)</label>
+                      <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows="3" placeholder="Welcome to the team!"></textarea>
+                    </div>
+                    
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <p className="text-sm text-blue-800">
+                        <strong>Role Permissions:</strong>
+                        <br />• Admin: Full access to all features
+                        <br />• Manager: Can manage orders, products, and customers
+                        <br />• Support: Can view and respond to tickets
+                        <br />• Viewer: Read-only access to reports
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    Send Invitation
+                  </button>
+                </div>
+              )
+            })}
+          >
+            Invite Member
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {teamMembers.map((member, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                        {member.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{member.name}</div>
+                        <div className="text-sm text-gray-500">{member.id}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{member.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(member.role)}`}>
+                      {member.role}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(member.status)}`}>
+                      {member.status.charAt(0).toUpperCase() + member.status.slice(1)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.lastLogin}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button className="text-green-600 hover:text-green-900 transition-colors mr-3">Edit</button>
+                    <button className="text-red-600 hover:text-red-900 transition-colors">Remove</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Danger Zone */}
+      <div className="bg-white rounded-xl shadow-sm border border-red-200 p-6">
+        <h3 className="text-lg font-semibold text-red-900 mb-6">Danger Zone</h3>
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-red-900">Export Data</div>
+              <div className="text-sm text-red-600">Download all your data before making changes</div>
+            </div>
+            <button className="border border-red-300 text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors text-sm font-medium">
+              Export
+            </button>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-red-900">Delete Account</div>
+              <div className="text-sm text-red-600">Permanently delete your account and all data</div>
+            </div>
+            <button className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Dashboard Main Component
 const DashboardMain = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
