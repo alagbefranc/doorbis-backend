@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List
-from ..models.product import Product, ProductCreate, ProductUpdate
-from ..auth.auth import get_current_active_user
+from models.product import Product, ProductCreate, ProductUpdate
+from auth.auth import get_current_active_user
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
