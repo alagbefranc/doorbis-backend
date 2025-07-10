@@ -1473,7 +1473,12 @@ const EditProductForm = ({ product, onSubmit, onCancel }) => {
   );
 };
 
-// Drivers Management Component
+// Products Catalog Component
+const ProductsCatalog = ({ setSlideCard }) => {
+  const [products, setProducts] = useState([]);
+  const [productStats, setProductStats] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchProducts();
