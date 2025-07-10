@@ -49,9 +49,11 @@ async def authenticate_user(db: AsyncIOMotorDatabase, email: str, password: str)
         return False
     return user
 
+# This will be set by the main server
+get_database = None
+
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncIOMotorDatabase = None
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     """Get current authenticated user from JWT token"""
     credentials_exception = HTTPException(
@@ -68,6 +70,11 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
     
+    # Get database from the injected function
+    if get_database is None:
+        raise HTTPException(status_code=500, detail="Database not configured")
+    
+    db = await get_database()
     user = await get_user_by_email(db, email)
     if user is None:
         raise credentials_exception
