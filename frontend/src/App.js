@@ -362,15 +362,15 @@ const DashboardOverview = ({ setSlideCard }) => {
           <div className="space-y-4">
             {topProducts.length > 0 ? (
               topProducts.map((product, index) => (
-                <div key={product.product_name || index} className="flex items-center justify-between">
+                <div key={product.name || index} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center text-white font-semibold text-xs">
                       {index + 1}
                     </div>
-                    <span className="font-medium text-gray-900">{product.product_name}</span>
+                    <span className="font-medium text-gray-900">{product.name}</span>
                   </div>
                   <div className="text-sm text-gray-500">
-                    {product.total_sales} sales - ${product.total_revenue ? product.total_revenue.toFixed(2) : '0.00'}
+                    {product.sales} sales - {product.revenue}
                   </div>
                 </div>
               ))
