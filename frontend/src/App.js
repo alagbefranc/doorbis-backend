@@ -202,23 +202,34 @@ const DashboardOverview = ({ setSlideCard }) => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
+      setError('');
+      console.log('Fetching dashboard data...');
       
       // Fetch analytics data
       const analyticsResult = await ApiService.getAnalyticsOverview();
+      console.log('Analytics result:', analyticsResult);
       if (analyticsResult.success) {
         setAnalyticsData(analyticsResult.data);
+        console.log('Analytics data set:', analyticsResult.data);
+      } else {
+        console.error('Analytics failed:', analyticsResult.error);
       }
       
       // Fetch recent orders  
       const ordersResult = await ApiService.getOrders();
+      console.log('Orders result:', ordersResult);
       if (ordersResult.success) {
         // Get latest 3 orders
-        const recent = ordersResult.data.orders.slice(0, 3);
+        const recent = ordersResult.data.orders ? ordersResult.data.orders.slice(0, 3) : [];
         setRecentOrders(recent);
+        console.log('Recent orders set:', recent);
+      } else {
+        console.error('Orders failed:', ordersResult.error);
       }
       
     } catch (error) {
-      setError('Failed to load dashboard data');
+      const errorMsg = `Failed to load dashboard data: ${error.message}`;
+      setError(errorMsg);
       console.error('Dashboard data error:', error);
     } finally {
       setLoading(false);
