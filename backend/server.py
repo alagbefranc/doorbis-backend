@@ -54,17 +54,17 @@ async def get_database():
 # Update all route dependencies to use the database
 def setup_route_dependencies():
     """Setup database dependencies for all routes"""
-    # Update auth routes
-    auth_router.dependency_overrides[auth_router.__dict__['get_database']] = get_database
-    products_router.dependency_overrides[products_router.__dict__['get_database']] = get_database
-    orders_router.dependency_overrides[orders_router.__dict__['get_database']] = get_database
-    customers_router.dependency_overrides[customers_router.__dict__['get_database']] = get_database
-    drivers_router.dependency_overrides[drivers_router.__dict__['get_database']] = get_database
-    payments_router.dependency_overrides[payments_router.__dict__['get_database']] = get_database
-    support_router.dependency_overrides[support_router.__dict__['get_database']] = get_database
-    analytics_router.dependency_overrides[analytics_router.__dict__['get_database']] = get_database
+    # Use dependency overrides for all routers
+    auth_router.dependency_overrides[routes.auth.get_database] = get_database
+    products_router.dependency_overrides[routes.products.get_database] = get_database
+    orders_router.dependency_overrides[routes.orders.get_database] = get_database
+    customers_router.dependency_overrides[routes.customers.get_database] = get_database
+    drivers_router.dependency_overrides[routes.drivers.get_database] = get_database
+    payments_router.dependency_overrides[routes.payments.get_database] = get_database
+    support_router.dependency_overrides[routes.support.get_database] = get_database
+    analytics_router.dependency_overrides[routes.analytics.get_database] = get_database
 
-# Alternative approach - monkey patch the get_database function in each module
+# Import all route modules
 import routes.auth
 import routes.products
 import routes.orders
@@ -74,14 +74,8 @@ import routes.payments
 import routes.support
 import routes.analytics
 
-routes.auth.get_database = get_database
-routes.products.get_database = get_database
-routes.orders.get_database = get_database
-routes.customers.get_database = get_database
-routes.drivers.get_database = get_database
-routes.payments.get_database = get_database
-routes.support.get_database = get_database
-routes.analytics.get_database = get_database
+# Setup dependencies
+setup_route_dependencies()
 
 # Update auth dependency as well
 import auth.auth
