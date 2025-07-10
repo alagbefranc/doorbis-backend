@@ -190,17 +190,93 @@ const SlidingCard = ({ isOpen, onClose, title, children, width = "w-96" }) => {
 
 // Dashboard Overview Component
 const DashboardOverview = ({ setSlideCard }) => {
-  const overviewCards = [
-    { title: 'Total Orders', value: '1,247', change: '+12.5%', color: 'green', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
-    { title: 'Revenue', value: '$84,329', change: '+8.2%', color: 'blue', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1' },
-    { title: 'Active Drivers', value: '23', change: '+2', color: 'purple', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
-    { title: 'Live Visitors', value: '127', change: '+5.1%', color: 'orange', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' }
-  ];
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const recentOrders = [
-    { id: '#ORD-001', customer: 'Sarah Johnson', items: '2x Blue Dream, 1x Edibles', status: 'delivered', amount: '$127.50', time: '2 hours ago' },
-    { id: '#ORD-002', customer: 'Mike Chen', items: '1x OG Kush, 3x Pre-rolls', status: 'en-route', amount: '$89.00', time: '45 minutes ago' },
-    { id: '#ORD-003', customer: 'Emma Wilson', items: '1x Sativa Mix, 2x Gummies', status: 'pending', amount: '$156.25', time: '30 minutes ago' },
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch analytics data
+      const analyticsResult = await ApiService.getAnalyticsOverview();
+      if (analyticsResult.success) {
+        setAnalyticsData(analyticsResult.data);
+      }
+      
+      // Fetch recent orders  
+      const ordersResult = await ApiService.getOrders();
+      if (ordersResult.success) {
+        // Get latest 3 orders
+        const recent = ordersResult.data.orders.slice(0, 3);
+        setRecentOrders(recent);
+      }
+      
+    } catch (error) {
+      setError('Failed to load dashboard data');
+      console.error('Dashboard data error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+        <p className="text-red-800">{error}</p>
+        <button 
+          onClick={() => { setError(''); fetchDashboardData(); }}
+          className="mt-2 text-red-600 hover:text-red-800"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  // Use real data if available, fallback to default values
+  const overviewCards = [
+    { 
+      title: 'Total Orders', 
+      value: analyticsData?.total_orders || '0', 
+      change: analyticsData?.orders_change || '+0%', 
+      color: 'green', 
+      icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' 
+    },
+    { 
+      title: 'Revenue', 
+      value: analyticsData?.total_revenue ? `$${analyticsData.total_revenue.toFixed(2)}` : '$0.00', 
+      change: analyticsData?.revenue_change || '+0%', 
+      color: 'blue', 
+      icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1' 
+    },
+    { 
+      title: 'Active Drivers', 
+      value: analyticsData?.active_drivers || '0', 
+      change: analyticsData?.drivers_change || '+0', 
+      color: 'purple', 
+      icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' 
+    },
+    { 
+      title: 'Avg Order Value', 
+      value: analyticsData?.avg_order_value ? `$${analyticsData.avg_order_value.toFixed(2)}` : '$0.00', 
+      change: analyticsData?.aov_change || '+0%', 
+      color: 'orange', 
+      icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' 
+    }
   ];
 
   return (
