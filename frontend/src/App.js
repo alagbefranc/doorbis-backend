@@ -2331,6 +2331,408 @@ const AnalyticsReports = ({ setSlideCard }) => {
   );
 };
 
+// Support Center Component
+const SupportCenter = ({ setSlideCard }) => {
+  const tickets = [
+    { id: 'TKT-001', customer: 'Sarah Johnson', subject: 'Order not delivered', priority: 'high', status: 'open', created: '2 hours ago', assigned: 'John Doe', category: 'delivery' },
+    { id: 'TKT-002', customer: 'Mike Chen', subject: 'Product quality issue', priority: 'medium', status: 'in-progress', created: '4 hours ago', assigned: 'Jane Smith', category: 'product' },
+    { id: 'TKT-003', customer: 'Emma Wilson', subject: 'Payment refund request', priority: 'high', status: 'open', created: '1 hour ago', assigned: 'Unassigned', category: 'payment' },
+    { id: 'TKT-004', customer: 'David Brown', subject: 'Website login issue', priority: 'low', status: 'resolved', created: '1 day ago', assigned: 'Tech Support', category: 'technical' },
+    { id: 'TKT-005', customer: 'Jessica Taylor', subject: 'Order modification needed', priority: 'medium', status: 'in-progress', created: '6 hours ago', assigned: 'John Doe', category: 'order' },
+  ];
+
+  const knowledgeBase = [
+    { id: 'KB-001', title: 'How to track your order', category: 'Orders', views: 1245, helpful: 89 },
+    { id: 'KB-002', title: 'Payment methods accepted', category: 'Payment', views: 892, helpful: 76 },
+    { id: 'KB-003', title: 'Delivery time estimates', category: 'Delivery', views: 1034, helpful: 92 },
+    { id: 'KB-004', title: 'Product quality guarantee', category: 'Products', views: 567, helpful: 85 },
+    { id: 'KB-005', title: 'How to cancel an order', category: 'Orders', views: 734, helpful: 78 },
+  ];
+
+  const getPriorityColor = (priority) => {
+    switch(priority) {
+      case 'high': return 'bg-red-100 text-red-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'open': return 'bg-blue-100 text-blue-800';
+      case 'in-progress': return 'bg-yellow-100 text-yellow-800';
+      case 'resolved': return 'bg-green-100 text-green-800';
+      case 'closed': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getCategoryIcon = (category) => {
+    switch(category) {
+      case 'delivery': return '🚚';
+      case 'product': return '🌿';
+      case 'payment': return '💳';
+      case 'technical': return '🔧';
+      case 'order': return '📋';
+      default: return '❓';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Support Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Open Tickets</div>
+              <div className="text-2xl font-bold text-blue-600 mt-1">23</div>
+              <div className="text-sm text-gray-500 mt-1">5 high priority</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Avg Response Time</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">24 min</div>
+              <div className="text-sm text-green-600 mt-1">-15% from last month</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Resolution Rate</div>
+              <div className="text-2xl font-bold text-purple-600 mt-1">94.2%</div>
+              <div className="text-sm text-purple-600 mt-1">+2.1% from last month</div>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Satisfaction Score</div>
+              <div className="text-2xl font-bold text-orange-600 mt-1">4.6/5</div>
+              <div className="text-sm text-orange-600 mt-1">Based on 234 reviews</div>
+            </div>
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Live Chat Widget */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Live Chat Support</h3>
+          <button 
+            className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+            onClick={() => setSlideCard({
+              isOpen: true,
+              title: 'Chat Settings',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Live Chat Configuration</h3>
+                    <p className="text-gray-600">Configure your live chat widget settings</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">Enable Live Chat</span>
+                      <input type="checkbox" className="w-4 h-4 text-green-600" defaultChecked />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">Auto-Reply</span>
+                      <input type="checkbox" className="w-4 h-4 text-green-600" defaultChecked />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">24/7 Support</span>
+                      <input type="checkbox" className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Welcome Message</label>
+                      <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows="3" defaultValue="Hi! How can we help you today?"></textarea>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Business Hours</label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <input type="time" className="border border-gray-300 rounded-lg px-3 py-2" defaultValue="09:00" />
+                        <input type="time" className="border border-gray-300 rounded-lg px-3 py-2" defaultValue="21:00" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3 pt-4">
+                    <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                      Save Settings
+                    </button>
+                    <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                      Test Chat Widget
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          >
+            Configure Chat
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span className="text-sm font-medium text-gray-900">Chat Widget Active</span>
+              </div>
+              <span className="text-sm text-green-600">Online</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Active Chats</span>
+              <span className="text-sm font-medium text-gray-900">7</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Waiting in Queue</span>
+              <span className="text-sm font-medium text-gray-900">2</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Avg Response Time</span>
+              <span className="text-sm font-medium text-gray-900">2.3 min</span>
+            </div>
+          </div>
+          
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="text-sm font-medium text-gray-900 mb-2">Recent Chat Messages</div>
+            <div className="space-y-2">
+              <div className="text-xs text-gray-600">
+                <strong>Sarah J:</strong> "My order is delayed, when will it arrive?"
+              </div>
+              <div className="text-xs text-gray-600">
+                <strong>Mike C:</strong> "Can I change my delivery address?"
+              </div>
+              <div className="text-xs text-gray-600">
+                <strong>Emma W:</strong> "I need help with payment refund"
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Support Tickets */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Support Tickets</h3>
+          <div className="flex space-x-3">
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option>All Tickets</option>
+              <option>Open</option>
+              <option>In Progress</option>
+              <option>Resolved</option>
+            </select>
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option>All Priority</option>
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+            <button className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+              Create Ticket
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {tickets.map((ticket, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="text-2xl mr-3">{getCategoryIcon(ticket.category)}</div>
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{ticket.id}</div>
+                        <div className="text-sm text-gray-500">{ticket.created}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ticket.customer}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">{ticket.subject}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPriorityColor(ticket.priority)}`}>
+                      {ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
+                      {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1).replace('-', ' ')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{ticket.assigned}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button 
+                      className="text-green-600 hover:text-green-900 transition-colors mr-3"
+                      onClick={() => setSlideCard({
+                        isOpen: true,
+                        title: `Ticket ${ticket.id}`,
+                        content: (
+                          <div className="space-y-6">
+                            <div className="text-center">
+                              <div className="text-4xl mb-4">{getCategoryIcon(ticket.category)}</div>
+                              <h3 className="text-lg font-semibold text-gray-900 mb-2">{ticket.id}</h3>
+                              <p className="text-gray-600">{ticket.subject}</p>
+                            </div>
+                            
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-3">Ticket Details</h4>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Customer:</span>
+                                  <span className="font-medium">{ticket.customer}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Priority:</span>
+                                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getPriorityColor(ticket.priority)}`}>
+                                    {ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1)}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Status:</span>
+                                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
+                                    {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Assigned:</span>
+                                  <span className="font-medium">{ticket.assigned}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Created:</span>
+                                  <span className="font-medium">{ticket.created}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Category:</span>
+                                  <span className="font-medium">{ticket.category}</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-3">Conversation</h4>
+                              <div className="bg-gray-50 rounded-lg p-4 text-sm">
+                                <div className="text-gray-600 mb-2">Customer message:</div>
+                                <div className="text-gray-900">"{ticket.subject} - I need immediate assistance with this issue."</div>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-3 pt-4">
+                              <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                <option>Update Status</option>
+                                <option>Open</option>
+                                <option>In Progress</option>
+                                <option>Resolved</option>
+                                <option>Closed</option>
+                              </select>
+                              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows="3" placeholder="Add a response..."></textarea>
+                              <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                Send Response
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    >
+                      View
+                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 transition-colors mr-3">Assign</button>
+                    <button className="text-red-600 hover:text-red-900 transition-colors">Close</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Knowledge Base */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Knowledge Base</h3>
+          <button className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+            Add Article
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Article</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Helpful</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {knowledgeBase.map((article, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{article.title}</div>
+                    <div className="text-sm text-gray-500">{article.id}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{article.category}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{article.views}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">{article.helpful}%</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button className="text-green-600 hover:text-green-900 transition-colors mr-3">Edit</button>
+                    <button className="text-blue-600 hover:text-blue-900 transition-colors mr-3">View</button>
+                    <button className="text-red-600 hover:text-red-900 transition-colors">Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Dashboard Main Component
 const DashboardMain = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
