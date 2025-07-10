@@ -380,20 +380,23 @@ const DashboardOverview = ({ setSlideCard }) => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {recentOrders.map((order, index) => (
-                <tr key={index} className="hover:bg-gray-50">
+                <tr key={order.id || index} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.customer}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{order.items}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.customer_name || 'Unknown Customer'}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{order.items_summary || 'No items'}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       order.status === 'delivered' ? 'bg-green-100 text-green-800' :
                       order.status === 'en-route' ? 'bg-blue-100 text-blue-800' :
-                      'bg-yellow-100 text-yellow-800'
+                      order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
                     }`}>
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    ${order.total_amount ? order.total_amount.toFixed(2) : '0.00'}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button 
                       className="text-green-600 hover:text-green-900 transition-colors"
@@ -405,18 +408,18 @@ const DashboardOverview = ({ setSlideCard }) => {
                             <div>
                               <h4 className="font-semibold text-gray-900">Customer Information</h4>
                               <div className="mt-2 space-y-1">
-                                <div className="text-sm">Name: {order.customer}</div>
-                                <div className="text-sm text-gray-600">Phone: (555) 123-4567</div>
-                                <div className="text-sm text-gray-600">Email: customer@email.com</div>
+                                <div className="text-sm">Name: {order.customer_name || 'Unknown'}</div>
+                                <div className="text-sm text-gray-600">Phone: {order.customer_phone || 'N/A'}</div>
+                                <div className="text-sm text-gray-600">Email: {order.customer_email || 'N/A'}</div>
                               </div>
                             </div>
                             <div>
                               <h4 className="font-semibold text-gray-900">Order Details</h4>
                               <div className="mt-2 space-y-1">
-                                <div className="text-sm">Items: {order.items}</div>
-                                <div className="text-sm">Amount: {order.amount}</div>
-                                <div className="text-sm">Status: {order.status}</div>
-                                <div className="text-sm text-gray-600">Ordered: {order.time}</div>
+                                <div className="text-sm">Items: {order.items_summary || 'No items'}</div>
+                                <div className="text-sm">Amount: ${order.total_amount ? order.total_amount.toFixed(2) : '0.00'}</div>
+                                <div className="text-sm">Status: {order.status || 'Unknown'}</div>
+                                <div className="text-sm text-gray-600">Ordered: {order.created_at ? new Date(order.created_at).toLocaleString() : 'Unknown'}</div>
                               </div>
                             </div>
                             <div className="flex space-x-2 pt-4">
