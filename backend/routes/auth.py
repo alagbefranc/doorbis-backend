@@ -3,6 +3,7 @@ from fastapi.security import HTTPBearer
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from datetime import timedelta
 from models.user import User, UserCreate, UserLogin, Token
+from database import get_database
 from auth.auth import (
     authenticate_user, 
     create_access_token, 
@@ -13,15 +14,9 @@ from auth.auth import (
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-# This will be injected by the main server
-get_database = None
-
 @router.post("/register", response_model=dict)
 async def register(user_data: UserCreate):
     """Register a new user"""
-    if get_database is None:
-        raise HTTPException(status_code=500, detail="Database not configured")
-    
     db = await get_database()
     
     # Check if user already exists
@@ -54,9 +49,6 @@ async def register(user_data: UserCreate):
 @router.post("/login", response_model=Token)
 async def login(user_credentials: UserLogin):
     """Login user and return access token"""
-    if get_database is None:
-        raise HTTPException(status_code=500, detail="Database not configured")
-    
     db = await get_database()
     
     user = await authenticate_user(db, user_credentials.email, user_credentials.password)
