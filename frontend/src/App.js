@@ -449,13 +449,64 @@ const DashboardOverview = ({ setSlideCard }) => {
 
 // Orders Management Component
 const OrdersManagement = ({ setSlideCard }) => {
-  const allOrders = [
-    { id: '#ORD-001', customer: 'Sarah Johnson', phone: '(555) 123-4567', items: '2x Blue Dream (3.5g), 1x Edibles (10mg)', status: 'delivered', amount: '$127.50', driver: 'Mike Rodriguez', time: '2 hours ago', address: '123 Main St, Los Angeles, CA' },
-    { id: '#ORD-002', customer: 'Mike Chen', phone: '(555) 234-5678', items: '1x OG Kush (7g), 3x Pre-rolls', status: 'en-route', amount: '$89.00', driver: 'Lisa Anderson', time: '45 minutes ago', address: '456 Oak Ave, Beverly Hills, CA' },
-    { id: '#ORD-003', customer: 'Emma Wilson', phone: '(555) 345-6789', items: '1x Sativa Mix (3.5g), 2x Gummies (5mg)', status: 'pending', amount: '$156.25', driver: 'Not assigned', time: '30 minutes ago', address: '789 Pine Rd, Santa Monica, CA' },
-    { id: '#ORD-004', customer: 'David Brown', phone: '(555) 456-7890', items: '1x Indica Special (7g), 1x Tincture', status: 'preparing', amount: '$203.75', driver: 'Not assigned', time: '15 minutes ago', address: '321 Elm St, Hollywood, CA' },
-    { id: '#ORD-005', customer: 'Jessica Taylor', phone: '(555) 567-8901', items: '2x Hybrid Mix (3.5g), 4x Chocolates', status: 'cancelled', amount: '$178.00', driver: 'N/A', time: '1 hour ago', address: '654 Birch Ln, West Hollywood, CA' },
-  ];
+  const [orders, setOrders] = useState([]);
+  const [orderStats, setOrderStats] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetchOrders();
+    fetchOrderStats();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const result = await ApiService.getOrders();
+      if (result.success) {
+        setOrders(result.data.orders || []);
+      } else {
+        setError('Failed to load orders');
+      }
+    } catch (error) {
+      setError('Error loading orders');
+      console.error('Orders fetch error:', error);
+    }
+  };
+
+  const fetchOrderStats = async () => {
+    try {
+      const result = await ApiService.getOrderStats();
+      if (result.success) {
+        setOrderStats(result.data);
+      }
+    } catch (error) {
+      console.error('Order stats fetch error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+        <p className="text-red-800">{error}</p>
+        <button 
+          onClick={() => { setError(''); fetchOrders(); fetchOrderStats(); }}
+          className="mt-2 text-red-600 hover:text-red-800"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
 
   const getStatusColor = (status) => {
     switch(status) {
