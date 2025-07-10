@@ -317,16 +317,17 @@ class ApiService {
     }
   }
 
-  // Health check
-  async healthCheck() {
+  async getTopProducts() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/health`);
-      
+      const response = await fetch(`${API_BASE_URL}/api/analytics/top-products`, {
+        headers: this.getAuthHeaders(),
+      });
+
       if (response.ok) {
         const data = await response.json();
         return { success: true, data };
       } else {
-        return { success: false, error: 'Health check failed' };
+        return { success: false, error: 'Failed to fetch top products' };
       }
     } catch (error) {
       return { success: false, error: error.message };
