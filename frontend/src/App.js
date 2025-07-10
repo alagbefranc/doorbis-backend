@@ -365,6 +365,474 @@ const DashboardOverview = ({ setSlideCard }) => {
   );
 };
 
+// Orders Management Component
+const OrdersManagement = ({ setSlideCard }) => {
+  const allOrders = [
+    { id: '#ORD-001', customer: 'Sarah Johnson', phone: '(555) 123-4567', items: '2x Blue Dream (3.5g), 1x Edibles (10mg)', status: 'delivered', amount: '$127.50', driver: 'Mike Rodriguez', time: '2 hours ago', address: '123 Main St, Los Angeles, CA' },
+    { id: '#ORD-002', customer: 'Mike Chen', phone: '(555) 234-5678', items: '1x OG Kush (7g), 3x Pre-rolls', status: 'en-route', amount: '$89.00', driver: 'Lisa Anderson', time: '45 minutes ago', address: '456 Oak Ave, Beverly Hills, CA' },
+    { id: '#ORD-003', customer: 'Emma Wilson', phone: '(555) 345-6789', items: '1x Sativa Mix (3.5g), 2x Gummies (5mg)', status: 'pending', amount: '$156.25', driver: 'Not assigned', time: '30 minutes ago', address: '789 Pine Rd, Santa Monica, CA' },
+    { id: '#ORD-004', customer: 'David Brown', phone: '(555) 456-7890', items: '1x Indica Special (7g), 1x Tincture', status: 'preparing', amount: '$203.75', driver: 'Not assigned', time: '15 minutes ago', address: '321 Elm St, Hollywood, CA' },
+    { id: '#ORD-005', customer: 'Jessica Taylor', phone: '(555) 567-8901', items: '2x Hybrid Mix (3.5g), 4x Chocolates', status: 'cancelled', amount: '$178.00', driver: 'N/A', time: '1 hour ago', address: '654 Birch Ln, West Hollywood, CA' },
+  ];
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'delivered': return 'bg-green-100 text-green-800';
+      case 'en-route': return 'bg-blue-100 text-blue-800';
+      case 'preparing': return 'bg-purple-100 text-purple-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Order Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Pending Orders</div>
+              <div className="text-2xl font-bold text-yellow-600 mt-1">8</div>
+            </div>
+            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">In Transit</div>
+              <div className="text-2xl font-bold text-blue-600 mt-1">15</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 17l4 4 4-4m-4-5v9m-6-9a8 8 0 1116 0v9" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Delivered Today</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">42</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Total Revenue</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">$4,829</div>
+            </div>
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Orders Table */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">All Orders</h3>
+          <div className="flex space-x-3">
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option>All Status</option>
+              <option>Pending</option>
+              <option>Preparing</option>
+              <option>En Route</option>
+              <option>Delivered</option>
+            </select>
+            <button className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+              Export Orders
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {allOrders.map((order, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{order.customer}</div>
+                    <div className="text-sm text-gray-500">{order.phone}</div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{order.items}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                      {order.status.charAt(0).toUpperCase() + order.status.slice(1).replace('-', ' ')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.driver}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex space-x-2">
+                      <button 
+                        className="text-green-600 hover:text-green-900 transition-colors"
+                        onClick={() => setSlideCard({
+                          isOpen: true,
+                          title: `Order ${order.id} Details`,
+                          content: (
+                            <div className="space-y-6">
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-3">Customer Information</h4>
+                                <div className="space-y-2">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Name:</span>
+                                    <span className="font-medium">{order.customer}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Phone:</span>
+                                    <span className="font-medium">{order.phone}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Address:</span>
+                                    <span className="font-medium text-right">{order.address}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-3">Order Details</h4>
+                                <div className="space-y-2">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Items:</span>
+                                    <span className="font-medium text-right">{order.items}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Total:</span>
+                                    <span className="font-medium text-green-600">{order.amount}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Status:</span>
+                                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                    </span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Driver:</span>
+                                    <span className="font-medium">{order.driver}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Order Time:</span>
+                                    <span className="font-medium">{order.time}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-3 pt-4">
+                                <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                  Update Order Status
+                                </button>
+                                <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                  Contact Customer
+                                </button>
+                                <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                  Assign Driver
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      >
+                        View
+                      </button>
+                      <button className="text-blue-600 hover:text-blue-900 transition-colors">Edit</button>
+                      {order.status === 'pending' && (
+                        <button className="text-red-600 hover:text-red-900 transition-colors">Cancel</button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Products Catalog Component
+const ProductsCatalog = ({ setSlideCard }) => {
+  const products = [
+    { id: 'PRD-001', name: 'Blue Dream', category: 'Flower', strain: 'Hybrid', thc: '18-22%', cbd: '0.1%', price: '$45.00', stock: 28, status: 'active', image: '🌿' },
+    { id: 'PRD-002', name: 'OG Kush', category: 'Flower', strain: 'Indica', thc: '20-24%', cbd: '0.2%', price: '$50.00', stock: 15, status: 'active', image: '🌿' },
+    { id: 'PRD-003', name: 'Sour Diesel', category: 'Flower', strain: 'Sativa', thc: '19-23%', cbd: '0.1%', price: '$48.00', stock: 0, status: 'out-of-stock', image: '🌿' },
+    { id: 'PRD-004', name: 'CBD Gummies', category: 'Edibles', strain: 'N/A', thc: '0%', cbd: '10mg', price: '$25.00', stock: 45, status: 'active', image: '🍬' },
+    { id: 'PRD-005', name: 'Pre-Roll Pack', category: 'Pre-Rolls', strain: 'Mixed', thc: '18-20%', cbd: '0.1%', price: '$35.00', stock: 22, status: 'active', image: '🚬' },
+  ];
+
+  const categories = ['All', 'Flower', 'Edibles', 'Pre-Rolls', 'Concentrates', 'Accessories'];
+
+  return (
+    <div className="space-y-6">
+      {/* Product Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Total Products</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">127</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M6 7h12" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Active Products</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">98</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Low Stock</div>
+              <div className="text-2xl font-bold text-yellow-600 mt-1">12</div>
+            </div>
+            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Out of Stock</div>
+              <div className="text-2xl font-bold text-red-600 mt-1">17</div>
+            </div>
+            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Products Management */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Product Catalog</h3>
+          <div className="flex space-x-3">
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              {categories.map(cat => <option key={cat}>{cat}</option>)}
+            </select>
+            <button 
+              className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+              onClick={() => setSlideCard({
+                isOpen: true,
+                title: 'Add New Product',
+                content: (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
+                      <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter product name" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                      <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option>Flower</option>
+                        <option>Edibles</option>
+                        <option>Pre-Rolls</option>
+                        <option>Concentrates</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Strain Type</label>
+                      <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option>Indica</option>
+                        <option>Sativa</option>
+                        <option>Hybrid</option>
+                        <option>N/A</option>
+                      </select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">THC %</label>
+                        <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="20-24%" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">CBD %</label>
+                        <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="0.1%" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Price</label>
+                        <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="$45.00" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Initial Stock</label>
+                        <input type="number" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="25" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                      <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows="3" placeholder="Product description..."></textarea>
+                    </div>
+                    <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                      Add Product
+                    </button>
+                  </div>
+                )
+              })}
+            >
+              Add Product
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Strain</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">THC/CBD</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {products.map((product, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="text-2xl mr-3">{product.image}</div>
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                        <div className="text-sm text-gray-500">{product.id}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.category}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.strain}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.thc} / {product.cbd}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{product.price}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`text-sm font-medium ${product.stock === 0 ? 'text-red-600' : product.stock < 10 ? 'text-yellow-600' : 'text-green-600'}`}>
+                      {product.stock} units
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                      product.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {product.status === 'active' ? 'Active' : 'Out of Stock'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button 
+                      className="text-green-600 hover:text-green-900 transition-colors mr-3"
+                      onClick={() => setSlideCard({
+                        isOpen: true,
+                        title: `Edit ${product.name}`,
+                        content: (
+                          <div className="space-y-4">
+                            <div className="text-center">
+                              <div className="text-4xl mb-2">{product.image}</div>
+                              <h3 className="text-lg font-semibold">{product.name}</h3>
+                              <p className="text-gray-500">{product.id}</p>
+                            </div>
+                            <div className="space-y-3">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Category:</span>
+                                <span className="font-medium">{product.category}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Strain:</span>
+                                <span className="font-medium">{product.strain}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">THC:</span>
+                                <span className="font-medium">{product.thc}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">CBD:</span>
+                                <span className="font-medium">{product.cbd}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Price:</span>
+                                <span className="font-medium text-green-600">{product.price}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">Stock:</span>
+                                <span className={`font-medium ${product.stock === 0 ? 'text-red-600' : product.stock < 10 ? 'text-yellow-600' : 'text-green-600'}`}>
+                                  {product.stock} units
+                                </span>
+                              </div>
+                            </div>
+                            <div className="space-y-3 pt-4">
+                              <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                Edit Product
+                              </button>
+                              <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                Update Stock
+                              </button>
+                              <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                View Analytics
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    >
+                      Edit
+                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 transition-colors mr-3">Stock</button>
+                    <button className="text-red-600 hover:text-red-900 transition-colors">Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Dashboard Main Component
 const DashboardMain = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -375,19 +843,9 @@ const DashboardMain = () => {
       case 'dashboard':
         return <DashboardOverview setSlideCard={setSlideCard} />;
       case 'orders':
-        return (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Management</h2>
-            <p className="text-gray-600">Manage all your cannabis orders and deliveries here.</p>
-          </div>
-        );
+        return <OrdersManagement setSlideCard={setSlideCard} />;
       case 'products':
-        return (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Product Catalog</h2>
-            <p className="text-gray-600">Manage your cannabis products, strains, and inventory.</p>
-          </div>
-        );
+        return <ProductsCatalog setSlideCard={setSlideCard} />;
       case 'storefront':
         return (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
