@@ -1701,6 +1701,345 @@ const PaymentsManagement = ({ setSlideCard }) => {
   );
 };
 
+// Customers Management Component  
+const CustomersManagement = ({ setSlideCard }) => {
+  const customers = [
+    { id: 'CUST-001', name: 'Sarah Johnson', email: 'sarah@email.com', phone: '(555) 123-4567', orders: 18, totalSpent: '$2,345.50', avgOrder: '$130.31', lastOrder: '2 hours ago', status: 'active', loyalty: 'gold', joined: '2024-01-15' },
+    { id: 'CUST-002', name: 'Mike Chen', email: 'mike@email.com', phone: '(555) 234-5678', orders: 45, totalSpent: '$5,678.25', avgOrder: '$126.18', lastOrder: '45 minutes ago', status: 'active', loyalty: 'platinum', joined: '2023-08-22' },
+    { id: 'CUST-003', name: 'Emma Wilson', email: 'emma@email.com', phone: '(555) 345-6789', orders: 12, totalSpent: '$1,567.75', avgOrder: '$130.65', lastOrder: '30 minutes ago', status: 'active', loyalty: 'silver', joined: '2024-03-10' },
+    { id: 'CUST-004', name: 'David Brown', email: 'david@email.com', phone: '(555) 456-7890', orders: 8, totalSpent: '$945.50', avgOrder: '$118.19', lastOrder: '1 week ago', status: 'inactive', loyalty: 'bronze', joined: '2024-05-05' },
+    { id: 'CUST-005', name: 'Jessica Taylor', email: 'jessica@email.com', phone: '(555) 567-8901', orders: 22, totalSpent: '$3,234.75', avgOrder: '$147.03', lastOrder: '3 days ago', status: 'active', loyalty: 'gold', joined: '2023-12-18' },
+  ];
+
+  const loyaltyPrograms = [
+    { tier: 'Bronze', customers: 145, minSpent: '$0', discount: '5%', color: 'bg-amber-100 text-amber-800' },
+    { tier: 'Silver', customers: 89, minSpent: '$500', discount: '10%', color: 'bg-gray-100 text-gray-800' },
+    { tier: 'Gold', customers: 34, minSpent: '$1,500', discount: '15%', color: 'bg-yellow-100 text-yellow-800' },
+    { tier: 'Platinum', customers: 12, minSpent: '$3,000', discount: '20%', color: 'bg-purple-100 text-purple-800' },
+  ];
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'inactive': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getLoyaltyColor = (loyalty) => {
+    switch(loyalty) {
+      case 'bronze': return 'bg-amber-100 text-amber-800';
+      case 'silver': return 'bg-gray-100 text-gray-800';
+      case 'gold': return 'bg-yellow-100 text-yellow-800';
+      case 'platinum': return 'bg-purple-100 text-purple-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Customer Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Total Customers</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">280</div>
+              <div className="text-sm text-green-600 mt-1">+15 this month</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Active Customers</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">234</div>
+              <div className="text-sm text-gray-500 mt-1">83.6% of total</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Avg. Order Value</div>
+              <div className="text-2xl font-bold text-purple-600 mt-1">$128.50</div>
+              <div className="text-sm text-green-600 mt-1">+8.2% from last month</div>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Repeat Customers</div>
+              <div className="text-2xl font-bold text-orange-600 mt-1">67%</div>
+              <div className="text-sm text-gray-500 mt-1">188 customers</div>
+            </div>
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Loyalty Programs */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Loyalty Programs</h3>
+          <button 
+            className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+            onClick={() => setSlideCard({
+              isOpen: true,
+              title: 'Loyalty Program Settings',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-yellow-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Loyalty Program Configuration</h3>
+                    <p className="text-gray-600">Manage loyalty tiers and rewards</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {loyaltyPrograms.map((program, index) => (
+                      <div key={index} className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <h4 className="font-semibold text-gray-900">{program.tier}</h4>
+                          <span className={`px-2 py-1 text-xs font-semibold rounded-full ${program.color}`}>
+                            {program.customers} customers
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Minimum Spent:</span>
+                            <input type="text" className="w-20 text-sm border border-gray-300 rounded px-2 py-1" defaultValue={program.minSpent} />
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Discount:</span>
+                            <input type="text" className="w-20 text-sm border border-gray-300 rounded px-2 py-1" defaultValue={program.discount} />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="space-y-3 pt-4">
+                    <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                      Update Loyalty Programs
+                    </button>
+                    <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                      Send Loyalty Rewards
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          >
+            Manage Loyalty
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {loyaltyPrograms.map((program, index) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div className="flex justify-between items-center mb-2">
+                <h4 className="font-semibold text-gray-900">{program.tier}</h4>
+                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${program.color}`}>
+                  {program.customers}
+                </span>
+              </div>
+              <div className="space-y-1">
+                <div className="text-sm text-gray-600">Min: {program.minSpent}</div>
+                <div className="text-sm text-gray-600">Discount: {program.discount}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Customers Table */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Customer Database</h3>
+          <div className="flex space-x-3">
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option>All Customers</option>
+              <option>Active</option>
+              <option>Inactive</option>
+              <option>VIP</option>
+            </select>
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option>All Loyalty</option>
+              <option>Bronze</option>
+              <option>Silver</option>
+              <option>Gold</option>
+              <option>Platinum</option>
+            </select>
+            <button className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+              Export
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loyalty</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {customers.map((customer, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                        {customer.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{customer.name}</div>
+                        <div className="text-sm text-gray-500">{customer.id}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{customer.email}</div>
+                    <div className="text-sm text-gray-500">{customer.phone}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{customer.orders}</div>
+                    <div className="text-sm text-gray-500">Avg: {customer.avgOrder}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-green-600">{customer.totalSpent}</div>
+                    <div className="text-sm text-gray-500">Last: {customer.lastOrder}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getLoyaltyColor(customer.loyalty)}`}>
+                      {customer.loyalty.charAt(0).toUpperCase() + customer.loyalty.slice(1)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(customer.status)}`}>
+                      {customer.status.charAt(0).toUpperCase() + customer.status.slice(1)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button 
+                      className="text-green-600 hover:text-green-900 transition-colors mr-3"
+                      onClick={() => setSlideCard({
+                        isOpen: true,
+                        title: `Customer ${customer.name}`,
+                        content: (
+                          <div className="space-y-6">
+                            <div className="text-center">
+                              <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">
+                                {customer.name.split(' ').map(n => n[0]).join('')}
+                              </div>
+                              <h3 className="text-lg font-semibold">{customer.name}</h3>
+                              <p className="text-gray-500">{customer.id}</p>
+                            </div>
+                            
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-3">Contact Information</h4>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Email:</span>
+                                  <span className="font-medium">{customer.email}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Phone:</span>
+                                  <span className="font-medium">{customer.phone}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Member Since:</span>
+                                  <span className="font-medium">{customer.joined}</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-3">Order History</h4>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Total Orders:</span>
+                                  <span className="font-medium">{customer.orders}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Total Spent:</span>
+                                  <span className="font-medium text-green-600">{customer.totalSpent}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Avg Order:</span>
+                                  <span className="font-medium">{customer.avgOrder}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Last Order:</span>
+                                  <span className="font-medium">{customer.lastOrder}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Loyalty Tier:</span>
+                                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getLoyaltyColor(customer.loyalty)}`}>
+                                    {customer.loyalty.charAt(0).toUpperCase() + customer.loyalty.slice(1)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-3 pt-4">
+                              <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                View All Orders
+                              </button>
+                              <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                Send Message
+                              </button>
+                              <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                Update Loyalty Tier
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    >
+                      View
+                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 transition-colors mr-3">Message</button>
+                    <button className="text-purple-600 hover:text-purple-900 transition-colors">Rewards</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Dashboard Main Component
 const DashboardMain = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
