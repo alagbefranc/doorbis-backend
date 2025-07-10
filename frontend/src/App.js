@@ -1488,6 +1488,9 @@ const ProductsCatalog = ({ setSlideCard }) => {
   const fetchProducts = async () => {
     try {
       const result = await ApiService.getProducts();
+      if (result.success) {
+        setProducts(result.data);
+      } else {
         setError('Failed to load products');
       }
     } catch (error) {
