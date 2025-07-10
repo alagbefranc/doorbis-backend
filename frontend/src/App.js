@@ -191,6 +191,7 @@ const SlidingCard = ({ isOpen, onClose, title, children, width = "w-96" }) => {
 // Dashboard Overview Component
 const DashboardOverview = ({ setSlideCard }) => {
   const [analyticsData, setAnalyticsData] = useState(null);
+  const [topProducts, setTopProducts] = useState([]);
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -213,6 +214,16 @@ const DashboardOverview = ({ setSlideCard }) => {
         console.log('Analytics data set:', analyticsResult.data);
       } else {
         console.error('Analytics failed:', analyticsResult.error);
+      }
+      
+      // Fetch top products
+      const topProductsResult = await ApiService.getTopProducts();
+      console.log('Top products result:', topProductsResult);
+      if (topProductsResult.success) {
+        setTopProducts(topProductsResult.data.slice(0, 5)); // Get top 5
+        console.log('Top products set:', topProductsResult.data);
+      } else {
+        console.error('Top products failed:', topProductsResult.error);
       }
       
       // Fetch recent orders  
@@ -258,33 +269,29 @@ const DashboardOverview = ({ setSlideCard }) => {
     );
   }
 
-  // Use real data if available, fallback to default values
+  // Use ONLY real data from backend - no fallback dummy data
   const overviewCards = [
     { 
       title: 'Total Orders', 
-      value: analyticsData?.total_orders || '0', 
-      change: '+12.5%', // Will be implemented later
+      value: analyticsData?.total_orders?.toString() || '0', 
       color: 'green', 
       icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' 
     },
     { 
-      title: 'Revenue', 
+      title: 'Monthly Revenue', 
       value: analyticsData?.monthly_revenue ? `$${analyticsData.monthly_revenue.toFixed(2)}` : '$0.00', 
-      change: '+8.2%', // Will be implemented later
       color: 'blue', 
       icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1' 
     },
     { 
-      title: 'Delivery Performance', 
-      value: analyticsData?.delivery_performance ? `${analyticsData.delivery_performance.toFixed(1)}%` : '0%', 
-      change: '+2.1%', // Will be implemented later
+      title: 'Avg Order Value', 
+      value: analyticsData?.avg_order_value ? `$${analyticsData.avg_order_value.toFixed(2)}` : '$0.00', 
       color: 'purple', 
       icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' 
     },
     { 
       title: 'Customer Satisfaction', 
-      value: analyticsData?.customer_satisfaction ? `${analyticsData.customer_satisfaction}/5` : '0/5', 
-      change: '+0.1', // Will be implemented later
+      value: analyticsData?.customer_satisfaction ? `${analyticsData.customer_satisfaction.toFixed(1)}/5` : '0/5', 
       color: 'orange', 
       icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' 
     }
@@ -309,20 +316,15 @@ const DashboardOverview = ({ setSlideCard }) => {
                   </div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">This Month</span>
+                      <span className="text-gray-600">Current</span>
                       <span className="font-semibold">{card.value}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Last Month</span>
-                      <span className="font-semibold">$72,145</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Growth</span>
-                      <span className="text-green-600 font-semibold">{card.change}</span>
+                    <div className="text-sm text-gray-500">
+                      Based on real-time data from your backend
                     </div>
                   </div>
                   <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <span className="text-gray-500">Chart visualization would go here</span>
+                    <span className="text-gray-500">Chart visualization coming soon</span>
                   </div>
                 </div>
               )
@@ -332,7 +334,6 @@ const DashboardOverview = ({ setSlideCard }) => {
               <div>
                 <div className="text-sm font-medium text-gray-600">{card.title}</div>
                 <div className="text-2xl font-bold text-gray-900 mt-1">{card.value}</div>
-                <div className="text-sm text-green-600 mt-1">{card.change} from last month</div>
               </div>
               <div className={`w-12 h-12 bg-gradient-to-br from-${card.color}-400 to-${card.color}-600 rounded-lg flex items-center justify-center`}>
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -350,8 +351,8 @@ const DashboardOverview = ({ setSlideCard }) => {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Sales Overview</h3>
           <div className="h-64 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center">
             <div className="text-center">
-              <div className="text-green-600 font-semibold">Revenue Chart</div>
-              <div className="text-sm text-gray-500 mt-1">Interactive chart would be displayed here</div>
+              <div className="text-green-600 font-semibold">Revenue: {analyticsData?.monthly_revenue ? `$${analyticsData.monthly_revenue.toFixed(2)}` : '$0.00'}</div>
+              <div className="text-sm text-gray-500 mt-1">Live data from backend</div>
             </div>
           </div>
         </div>
@@ -359,15 +360,31 @@ const DashboardOverview = ({ setSlideCard }) => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Products</h3>
           <div className="space-y-4">
-            {['Blue Dream', 'OG Kush', 'Sativa Mix', 'CBD Gummies'].map((product, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-lg"></div>
-                  <span className="font-medium text-gray-900">{product}</span>
+            {topProducts.length > 0 ? (
+              topProducts.map((product, index) => (
+                <div key={product.product_name || index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center text-white font-semibold text-xs">
+                      {index + 1}
+                    </div>
+                    <span className="font-medium text-gray-900">{product.product_name}</span>
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {product.total_sales} sales - ${product.total_revenue ? product.total_revenue.toFixed(2) : '0.00'}
+                  </div>
                 </div>
-                <div className="text-sm text-gray-500">${(Math.random() * 1000 + 500).toFixed(0)}</div>
+              ))
+            ) : (
+              <div className="text-center text-gray-500">
+                <p>No product data available</p>
+                <button 
+                  onClick={fetchDashboardData} 
+                  className="mt-2 text-green-600 hover:text-green-800"
+                >
+                  Refresh Data
+                </button>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -378,84 +395,97 @@ const DashboardOverview = ({ setSlideCard }) => {
           <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {recentOrders.map((order, index) => (
-                <tr key={order.id || index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.customer_name || 'Unknown Customer'}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{order.items_summary || 'No items'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                      order.status === 'en-route' ? 'bg-blue-100 text-blue-800' :
-                      order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${order.total_amount ? order.total_amount.toFixed(2) : '0.00'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button 
-                      className="text-green-600 hover:text-green-900 transition-colors"
-                      onClick={() => setSlideCard({
-                        isOpen: true,
-                        title: `Order ${order.id}`,
-                        content: (
-                          <div className="space-y-4">
-                            <div>
-                              <h4 className="font-semibold text-gray-900">Customer Information</h4>
-                              <div className="mt-2 space-y-1">
-                                <div className="text-sm">Name: {order.customer_name || 'Unknown'}</div>
-                                <div className="text-sm text-gray-600">Phone: {order.customer_phone || 'N/A'}</div>
-                                <div className="text-sm text-gray-600">Email: {order.customer_email || 'N/A'}</div>
-                              </div>
-                            </div>
-                            <div>
-                              <h4 className="font-semibold text-gray-900">Order Details</h4>
-                              <div className="mt-2 space-y-1">
-                                <div className="text-sm">Items: {order.items_summary || 'No items'}</div>
-                                <div className="text-sm">Amount: ${order.total_amount ? order.total_amount.toFixed(2) : '0.00'}</div>
-                                <div className="text-sm">Status: {order.status || 'Unknown'}</div>
-                                <div className="text-sm text-gray-600">Ordered: {order.created_at ? new Date(order.created_at).toLocaleString() : 'Unknown'}</div>
-                              </div>
-                            </div>
-                            <div className="flex space-x-2 pt-4">
-                              <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                                Update Status
-                              </button>
-                              <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
-                                Contact Customer
-                              </button>
-                            </div>
-                          </div>
-                        )
-                      })}
-                    >
-                      View
-                    </button>
-                  </td>
+          {recentOrders.length > 0 ? (
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {recentOrders.map((order, index) => (
+                  <tr key={order.id || index} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.customer_name || 'Unknown Customer'}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{order.items_summary || 'No items'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                        order.status === 'en-route' ? 'bg-blue-100 text-blue-800' :
+                        order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      ${order.total_amount ? order.total_amount.toFixed(2) : '0.00'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button 
+                        className="text-green-600 hover:text-green-900 transition-colors"
+                        onClick={() => setSlideCard({
+                          isOpen: true,
+                          title: `Order ${order.id}`,
+                          content: (
+                            <div className="space-y-4">
+                              <div>
+                                <h4 className="font-semibold text-gray-900">Customer Information</h4>
+                                <div className="mt-2 space-y-1">
+                                  <div className="text-sm">Name: {order.customer_name || 'Unknown'}</div>
+                                  <div className="text-sm text-gray-600">Phone: {order.customer_phone || 'N/A'}</div>
+                                  <div className="text-sm text-gray-600">Email: {order.customer_email || 'N/A'}</div>
+                                </div>
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900">Order Details</h4>
+                                <div className="mt-2 space-y-1">
+                                  <div className="text-sm">Items: {order.items_summary || 'No items'}</div>
+                                  <div className="text-sm">Amount: ${order.total_amount ? order.total_amount.toFixed(2) : '0.00'}</div>
+                                  <div className="text-sm">Status: {order.status || 'Unknown'}</div>
+                                  <div className="text-sm text-gray-600">Ordered: {order.created_at ? new Date(order.created_at).toLocaleString() : 'Unknown'}</div>
+                                </div>
+                              </div>
+                              <div className="flex space-x-2 pt-4">
+                                <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                  Update Status
+                                </button>
+                                <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                  Contact Customer
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="p-8 text-center text-gray-500">
+              <p>No recent orders available</p>
+              <button 
+                onClick={fetchDashboardData} 
+                className="mt-2 text-green-600 hover:text-green-800"
+              >
+                Refresh Data
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
+};
 };
 
 // Orders Management Component
