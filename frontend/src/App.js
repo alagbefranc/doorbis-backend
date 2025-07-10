@@ -581,6 +581,14 @@ const OrdersManagement = ({ setSlideCard }) => {
   );
 };
 
+// Additional Page Components (Simplified for now)
+const FeaturesPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>Features Page</h1></div>;
+const DispensariesPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>Dispensaries Page</h1></div>;
+const DriversPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>Drivers Page</h1></div>;
+const PricingPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>Pricing Page</h1></div>;
+const FAQPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>FAQ Page</h1></div>;
+const SignUpPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>SignUp Page</h1></div>;
+
 // Add Product Form Component
 const AddProductForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
