@@ -7,29 +7,6 @@ from database import get_database
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
-@router.get("/demo", response_model=List[Product])
-async def get_demo_products():
-    """Get demo products without authentication"""
-    db = await get_database()
-    products = await db.products.find({}).to_list(1000)
-    return [Product(**product) for product in products]
-
-@router.get("/demo/stats")
-async def get_demo_product_stats():
-    """Get demo product statistics without authentication"""
-    db = await get_database()
-    total_products = await db.products.count_documents({})
-    active_products = await db.products.count_documents({"status": "active"})
-    low_stock = await db.products.count_documents({"stock": {"$lt": 10, "$gt": 0}})
-    out_of_stock = await db.products.count_documents({"stock": 0})
-    
-    return {
-        "total_products": total_products,
-        "active_products": active_products,
-        "low_stock": low_stock,
-        "out_of_stock": out_of_stock
-    }
-
 @router.get("/", response_model=List[Product])
 async def get_products(
     current_user: dict = Depends(get_current_active_user)
