@@ -3,7 +3,7 @@ const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
 class ApiService {
   constructor() {
-    this.token = localStorage.getItem('auth_token') || 'demo-token-for-testing';
+    this.token = localStorage.getItem('auth_token');
   }
 
   // Authentication methods
