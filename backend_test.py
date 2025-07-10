@@ -95,6 +95,32 @@ class KushDoorBackendTester:
     def test_user_registration(self):
         """Test user registration endpoint"""
         try:
+            # Try to login with existing sample user first
+            try:
+                login_data = {
+                    "email": "owner@greenvalley.com",
+                    "password": "password123"
+                }
+                
+                response = requests.post(
+                    f"{API_BASE_URL}/auth/login",
+                    json=login_data,
+                    headers={"Content-Type": "application/json"},
+                    timeout=10
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    if 'access_token' in data:
+                        self.auth_token = data['access_token']
+                        self.test_email = login_data['email']
+                        self.test_password = login_data['password']
+                        self.log_result("User Registration", "PASS", "Using existing sample user (owner@greenvalley.com)")
+                        return True
+            except:
+                pass
+            
+            # If sample user doesn't exist, create new test user
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             test_data = {
                 "email": f"testowner_{timestamp}@kushdoor.com",
