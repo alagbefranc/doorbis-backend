@@ -875,6 +875,8 @@ class KushDoorBackendTester:
         except requests.exceptions.RequestException as e:
             self.log_result("Sample Data Verification", "FAIL", f"Request failed: {str(e)}")
             return False
+    
+    def test_error_handling(self):
         """Test error handling for invalid requests"""
         try:
             # Test invalid endpoint
