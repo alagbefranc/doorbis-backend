@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 
 // Navigation Component
 const Navigation = () => {
@@ -30,9 +30,9 @@ const Navigation = () => {
           <option value="en">EN</option>
           <option value="es">ES</option>
         </select>
-        <button className="border border-white/40 text-white/80 px-4 py-1 rounded-full hover:bg-white/10 transition-colors font-manrope text-sm">
+        <Link to="/login" className="border border-white/40 text-white/80 px-4 py-1 rounded-full hover:bg-white/10 transition-colors font-manrope text-sm">
           Login
-        </button>
+        </Link>
       </div>
     </nav>
   );
@@ -145,6 +145,805 @@ const HomePage = () => {
         </div>
       </div>
       
+      <footer className="fixed bottom-4 left-6 text-xs text-white/50 font-manrope z-10">
+        ✦ Built for Local Highs, 2025
+      </footer>
+      
+      <div className="fixed bottom-4 right-6 text-xs text-white/50 font-manrope z-10">
+        © DoorBis, 2025
+      </div>
+    </div>
+  );
+};
+
+// Login Page Component
+const LoginPage = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    remember: false
+  });
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // Simulate login success
+      console.log('Login successful:', formData);
+      navigate('/dashboard');
+    }
+  };
+
+  return (
+    <div className="page-container">
+      <div className="fixed inset-0 w-full h-full z-0">
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1648824572347-6edd9a108e28')`
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/70 to-black/90"></div>
+        
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="floating-leaf floating-leaf-1"></div>
+          <div className="floating-leaf floating-leaf-2"></div>
+          <div className="floating-leaf floating-leaf-3"></div>
+        </div>
+      </div>
+
+      <main className="relative z-10 min-h-screen flex items-center justify-center pt-20 pb-12">
+        <div className="container mx-auto px-8">
+          <div className="max-w-md mx-auto">
+            <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+              <div className="glass-card p-8 rounded-xl">
+                {/* Header */}
+                <div className="text-center mb-8">
+                  <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <h1 className="font-unbounded text-3xl font-light text-white mb-2">
+                    Welcome Back
+                  </h1>
+                  <p className="font-manrope text-white/70 text-sm">
+                    Sign in to your dispensary dashboard
+                  </p>
+                </div>
+
+                {/* Login Form */}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label className="block font-manrope text-white/80 text-sm mb-2">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                        errors.email ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                      }`}
+                      placeholder="your@email.com"
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-red-400 text-sm font-manrope">{errors.email}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block font-manrope text-white/80 text-sm mb-2">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                        errors.password ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                      }`}
+                      placeholder="••••••••"
+                    />
+                    {errors.password && (
+                      <p className="mt-1 text-red-400 text-sm font-manrope">{errors.password}</p>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        name="remember"
+                        id="remember"
+                        checked={formData.remember}
+                        onChange={handleInputChange}
+                        className="w-4 h-4 rounded border-white/20 bg-white/10 text-green-400 focus:ring-green-400 focus:ring-2"
+                      />
+                      <label htmlFor="remember" className="ml-2 font-manrope text-white/80 text-sm">
+                        Remember me
+                      </label>
+                    </div>
+                    <Link to="/forgot-password" className="font-manrope text-green-400 hover:text-green-300 text-sm transition-colors">
+                      Forgot password?
+                    </Link>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
+                  >
+                    Sign In →
+                  </button>
+                </form>
+
+                {/* Divider */}
+                <div className="flex items-center my-6">
+                  <div className="flex-1 border-t border-white/20"></div>
+                  <span className="px-4 text-white/50 font-manrope text-sm">or</span>
+                  <div className="flex-1 border-t border-white/20"></div>
+                </div>
+
+                {/* Social Login */}
+                <div className="space-y-3">
+                  <button className="w-full border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold flex items-center justify-center space-x-2 hover:bg-white/10 transition-colors">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    <span>Continue with Google</span>
+                  </button>
+                  
+                  <button className="w-full border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold flex items-center justify-center space-x-2 hover:bg-white/10 transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                    </svg>
+                    <span>Continue with Twitter</span>
+                  </button>
+                </div>
+
+                {/* Sign Up Link */}
+                <div className="text-center mt-8 pt-6 border-t border-white/20">
+                  <p className="font-manrope text-white/70 text-sm">
+                    Don't have an account?{' '}
+                    <Link to="/signup" className="text-green-400 hover:text-green-300 font-semibold transition-colors">
+                      Sign up for free
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer className="fixed bottom-4 left-6 text-xs text-white/50 font-manrope z-10">
+        ✦ Built for Local Highs, 2025
+      </footer>
+      
+      <div className="fixed bottom-4 right-6 text-xs text-white/50 font-manrope z-10">
+        © DoorBis, 2025
+      </div>
+    </div>
+  );
+};
+
+// Signup Page Component
+const SignupPage = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    // Step 1: Basic Info
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    
+    // Step 2: Business Info
+    businessName: '',
+    businessType: 'dispensary',
+    licenseNumber: '',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    
+    // Step 3: Preferences
+    monthlyVolume: '',
+    currentSolution: '',
+    hearAboutUs: '',
+    agreedToTerms: false,
+    marketingEmails: true
+  });
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const validateStep = (stepNumber) => {
+    const newErrors = {};
+    
+    if (stepNumber === 1) {
+      if (!formData.firstName) newErrors.firstName = 'First name is required';
+      if (!formData.lastName) newErrors.lastName = 'Last name is required';
+      if (!formData.email) {
+        newErrors.email = 'Email is required';
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Please enter a valid email';
+      }
+      if (!formData.password) {
+        newErrors.password = 'Password is required';
+      } else if (formData.password.length < 8) {
+        newErrors.password = 'Password must be at least 8 characters';
+      }
+      if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match';
+      }
+    }
+    
+    if (stepNumber === 2) {
+      if (!formData.businessName) newErrors.businessName = 'Business name is required';
+      if (!formData.licenseNumber) newErrors.licenseNumber = 'License number is required';
+      if (!formData.address) newErrors.address = 'Address is required';
+      if (!formData.city) newErrors.city = 'City is required';
+      if (!formData.state) newErrors.state = 'State is required';
+      if (!formData.zipCode) newErrors.zipCode = 'ZIP code is required';
+    }
+    
+    if (stepNumber === 3) {
+      if (!formData.monthlyVolume) newErrors.monthlyVolume = 'Please select monthly volume';
+      if (!formData.agreedToTerms) newErrors.agreedToTerms = 'You must agree to the terms';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const nextStep = () => {
+    if (validateStep(step)) {
+      setStep(step + 1);
+    }
+  };
+
+  const prevStep = () => {
+    setStep(step - 1);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateStep(3)) {
+      // Simulate signup success
+      console.log('Signup successful:', formData);
+      navigate('/welcome');
+    }
+  };
+
+  const renderStep = () => {
+    switch(step) {
+      case 1:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <h1 className="font-unbounded text-3xl font-light text-white mb-2">
+                Create Account
+              </h1>
+              <p className="font-manrope text-white/70 text-sm">
+                Step 1 of 3: Personal Information
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block font-manrope text-white/80 text-sm mb-2">First Name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                    errors.firstName ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                  }`}
+                  placeholder="John"
+                />
+                {errors.firstName && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.firstName}</p>}
+              </div>
+              <div>
+                <label className="block font-manrope text-white/80 text-sm mb-2">Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                    errors.lastName ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                  }`}
+                  placeholder="Doe"
+                />
+                {errors.lastName && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.lastName}</p>}
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                  errors.email ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                }`}
+                placeholder="john@dispensary.com"
+              />
+              {errors.email && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.email}</p>}
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                  errors.password ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                }`}
+                placeholder="••••••••"
+              />
+              {errors.password && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.password}</p>}
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                  errors.confirmPassword ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                }`}
+                placeholder="••••••••"
+              />
+              {errors.confirmPassword && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.confirmPassword}</p>}
+            </div>
+
+            <button
+              type="button"
+              onClick={nextStep}
+              className="w-full bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
+            >
+              Continue →
+            </button>
+          </div>
+        );
+        
+      case 2:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <h1 className="font-unbounded text-3xl font-light text-white mb-2">
+                Business Details
+              </h1>
+              <p className="font-manrope text-white/70 text-sm">
+                Step 2 of 3: Tell us about your business
+              </p>
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">Business Name</label>
+              <input
+                type="text"
+                name="businessName"
+                value={formData.businessName}
+                onChange={handleInputChange}
+                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                  errors.businessName ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                }`}
+                placeholder="Green Valley Dispensary"
+              />
+              {errors.businessName && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.businessName}</p>}
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">Business Type</label>
+              <select
+                name="businessType"
+                value={formData.businessType}
+                onChange={handleInputChange}
+                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-400 transition-colors"
+              >
+                <option value="dispensary">Dispensary</option>
+                <option value="delivery">Delivery Service</option>
+                <option value="cultivation">Cultivation</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="testing">Testing Lab</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">License Number</label>
+              <input
+                type="text"
+                name="licenseNumber"
+                value={formData.licenseNumber}
+                onChange={handleInputChange}
+                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                  errors.licenseNumber ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                }`}
+                placeholder="C10-0000001-LIC"
+              />
+              {errors.licenseNumber && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.licenseNumber}</p>}
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                  errors.address ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                }`}
+                placeholder="123 Main Street"
+              />
+              {errors.address && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.address}</p>}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block font-manrope text-white/80 text-sm mb-2">City</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleInputChange}
+                  className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                    errors.city ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                  }`}
+                  placeholder="Los Angeles"
+                />
+                {errors.city && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.city}</p>}
+              </div>
+              <div>
+                <label className="block font-manrope text-white/80 text-sm mb-2">State</label>
+                <input
+                  type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleInputChange}
+                  className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                    errors.state ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                  }`}
+                  placeholder="CA"
+                />
+                {errors.state && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.state}</p>}
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">ZIP Code</label>
+              <input
+                type="text"
+                name="zipCode"
+                value={formData.zipCode}
+                onChange={handleInputChange}
+                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
+                  errors.zipCode ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                }`}
+                placeholder="90210"
+              />
+              {errors.zipCode && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.zipCode}</p>}
+            </div>
+
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={prevStep}
+                className="flex-1 border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors"
+              >
+                ← Back
+              </button>
+              <button
+                type="button"
+                onClick={nextStep}
+                className="flex-1 bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
+              >
+                Continue →
+              </button>
+            </div>
+          </div>
+        );
+        
+      case 3:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h1 className="font-unbounded text-3xl font-light text-white mb-2">
+                Almost Done!
+              </h1>
+              <p className="font-manrope text-white/70 text-sm">
+                Step 3 of 3: Final details
+              </p>
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">Monthly Sales Volume</label>
+              <select
+                name="monthlyVolume"
+                value={formData.monthlyVolume}
+                onChange={handleInputChange}
+                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors ${
+                  errors.monthlyVolume ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
+                }`}
+              >
+                <option value="">Select monthly volume</option>
+                <option value="under-50k">Under $50,000</option>
+                <option value="50k-100k">$50,000 - $100,000</option>
+                <option value="100k-250k">$100,000 - $250,000</option>
+                <option value="250k-500k">$250,000 - $500,000</option>
+                <option value="500k-1m">$500,000 - $1,000,000</option>
+                <option value="over-1m">Over $1,000,000</option>
+              </select>
+              {errors.monthlyVolume && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.monthlyVolume}</p>}
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">Current Solution</label>
+              <select
+                name="currentSolution"
+                value={formData.currentSolution}
+                onChange={handleInputChange}
+                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-400 transition-colors"
+              >
+                <option value="">Select current solution</option>
+                <option value="none">No current solution</option>
+                <option value="weedmaps">Weedmaps</option>
+                <option value="leafly">Leafly</option>
+                <option value="dutchie">Dutchie</option>
+                <option value="treez">Treez</option>
+                <option value="cova">Cova</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-manrope text-white/80 text-sm mb-2">How did you hear about us?</label>
+              <select
+                name="hearAboutUs"
+                value={formData.hearAboutUs}
+                onChange={handleInputChange}
+                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-400 transition-colors"
+              >
+                <option value="">Select an option</option>
+                <option value="google">Google Search</option>
+                <option value="social">Social Media</option>
+                <option value="referral">Referral</option>
+                <option value="industry-event">Industry Event</option>
+                <option value="advertisement">Advertisement</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-start">
+                <input
+                  type="checkbox"
+                  name="agreedToTerms"
+                  id="agreedToTerms"
+                  checked={formData.agreedToTerms}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 mt-1 rounded border-white/20 bg-white/10 text-green-400 focus:ring-green-400 focus:ring-2"
+                />
+                <label htmlFor="agreedToTerms" className="ml-2 font-manrope text-white/80 text-sm">
+                  I agree to the <Link to="/terms" className="text-green-400 hover:text-green-300 transition-colors">Terms of Service</Link> and <Link to="/privacy" className="text-green-400 hover:text-green-300 transition-colors">Privacy Policy</Link>
+                </label>
+              </div>
+              {errors.agreedToTerms && <p className="text-red-400 text-sm font-manrope">{errors.agreedToTerms}</p>}
+              
+              <div className="flex items-start">
+                <input
+                  type="checkbox"
+                  name="marketingEmails"
+                  id="marketingEmails"
+                  checked={formData.marketingEmails}
+                  onChange={handleInputChange}
+                  className="w-4 h-4 mt-1 rounded border-white/20 bg-white/10 text-green-400 focus:ring-green-400 focus:ring-2"
+                />
+                <label htmlFor="marketingEmails" className="ml-2 font-manrope text-white/80 text-sm">
+                  I'd like to receive product updates and marketing emails
+                </label>
+              </div>
+            </div>
+
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={prevStep}
+                className="flex-1 border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors"
+              >
+                ← Back
+              </button>
+              <button
+                type="submit"
+                className="flex-1 bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
+              >
+                Create Account →
+              </button>
+            </div>
+          </div>
+        );
+        
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="page-container">
+      <div className="fixed inset-0 w-full h-full z-0">
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1622704776938-bed6cd156e04')`
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/70 to-black/90"></div>
+        
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="floating-leaf floating-leaf-1"></div>
+          <div className="floating-leaf floating-leaf-2"></div>
+          <div className="floating-leaf floating-leaf-3"></div>
+        </div>
+      </div>
+
+      <main className="relative z-10 min-h-screen flex items-center justify-center pt-20 pb-12">
+        <div className="container mx-auto px-8">
+          <div className="max-w-lg mx-auto">
+            <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+              {/* Progress Bar */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-manrope text-white/60 text-sm">Step {step} of 3</span>
+                  <span className="font-manrope text-white/60 text-sm">{Math.round((step / 3) * 100)}%</span>
+                </div>
+                <div className="w-full bg-white/10 rounded-full h-2">
+                  <div 
+                    className="bg-green-400 h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${(step / 3) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              <div className="glass-card p-8 rounded-xl">
+                <form onSubmit={handleSubmit}>
+                  {renderStep()}
+                </form>
+
+                {/* Social Signup (only on step 1) */}
+                {step === 1 && (
+                  <>
+                    <div className="flex items-center my-6">
+                      <div className="flex-1 border-t border-white/20"></div>
+                      <span className="px-4 text-white/50 font-manrope text-sm">or</span>
+                      <div className="flex-1 border-t border-white/20"></div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <button type="button" className="w-full border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold flex items-center justify-center space-x-2 hover:bg-white/10 transition-colors">
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span>Sign up with Google</span>
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {/* Login Link */}
+                <div className="text-center mt-8 pt-6 border-t border-white/20">
+                  <p className="font-manrope text-white/70 text-sm">
+                    Already have an account?{' '}
+                    <Link to="/login" className="text-green-400 hover:text-green-300 font-semibold transition-colors">
+                      Sign in
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
       <footer className="fixed bottom-4 left-6 text-xs text-white/50 font-manrope z-10">
         ✦ Built for Local Highs, 2025
       </footer>
@@ -862,6 +1661,8 @@ function App() {
           <Route path="/drivers" element={<DriversPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/faq" element={<FAQPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
         </Routes>
         <AccessModal />
       </BrowserRouter>
