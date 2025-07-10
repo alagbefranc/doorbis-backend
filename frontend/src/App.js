@@ -3726,7 +3726,8 @@ const AppContent = () => {
     <Router>
       <Routes>
         <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/dashboard" />} />
-        <Route path="/dashboard" element={isAuthenticated ? <DashboardMain /> : <Navigate to="/login" />} />
+        <Route path="/dashboard" element={<DashboardMain />} />
+        <Route path="/demo" element={<DashboardMain />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/features" element={<FeaturesPage />} />
         <Route path="/dispensaries" element={<DispensariesPage />} />
