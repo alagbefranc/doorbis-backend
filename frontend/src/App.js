@@ -833,6 +833,482 @@ const ProductsCatalog = ({ setSlideCard }) => {
   );
 };
 
+// Storefront Settings Component
+const StorefrontSettings = ({ setSlideCard }) => {
+  return (
+    <div className="space-y-6">
+      {/* Storefront Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">QR Scans Today</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">245</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Site Visitors</div>
+              <div className="text-2xl font-bold text-blue-600 mt-1">1,892</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Conversion Rate</div>
+              <div className="text-2xl font-bold text-purple-600 mt-1">8.4%</div>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Avg. Order Value</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">$67.50</div>
+            </div>
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Storefront Configuration */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Store Information</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Store Name</label>
+              <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="Green Valley Dispensary" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Store Description</label>
+              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows="3" defaultValue="Premium cannabis dispensary serving Los Angeles with the finest selection of flowers, edibles, and concentrates."></textarea>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Store URL</label>
+              <div className="flex">
+                <span className="inline-flex items-center px-3 py-2 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                  kush.doorbis.com/
+                </span>
+                <input type="text" className="flex-1 border border-gray-300 rounded-r-lg px-3 py-2" defaultValue="green-valley" />
+              </div>
+            </div>
+            <button 
+              className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              onClick={() => setSlideCard({
+                isOpen: true,
+                title: 'Preview Your Storefront',
+                content: (
+                  <div className="space-y-4">
+                    <div className="bg-gray-100 rounded-lg p-6 text-center">
+                      <div className="text-6xl mb-4">🌿</div>
+                      <h2 className="text-xl font-bold text-gray-900 mb-2">Green Valley Dispensary</h2>
+                      <p className="text-gray-600 mb-4">Premium cannabis dispensary serving Los Angeles</p>
+                      <div className="bg-white rounded-lg p-4 shadow">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="border rounded-lg p-3">
+                            <div className="text-2xl mb-2">🌿</div>
+                            <div className="font-medium">Blue Dream</div>
+                            <div className="text-green-600">$45.00</div>
+                          </div>
+                          <div className="border rounded-lg p-3">
+                            <div className="text-2xl mb-2">🌿</div>
+                            <div className="font-medium">OG Kush</div>
+                            <div className="text-green-600">$50.00</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                      Visit Live Site
+                    </button>
+                  </div>
+                )
+              })}
+            >
+              Preview Storefront
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">QR Code & Marketing</h3>
+          <div className="space-y-4">
+            <div className="text-center">
+              <div className="w-32 h-32 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                <div className="text-4xl">📱</div>
+              </div>
+              <p className="text-sm text-gray-600 mb-4">QR Code for your storefront</p>
+              <button 
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                onClick={() => setSlideCard({
+                  isOpen: true,
+                  title: 'Download QR Code',
+                  content: (
+                    <div className="space-y-4 text-center">
+                      <div className="w-48 h-48 bg-gray-100 rounded-lg mx-auto flex items-center justify-center">
+                        <div className="text-6xl">📱</div>
+                      </div>
+                      <h3 className="text-lg font-semibold">Green Valley Dispensary QR</h3>
+                      <p className="text-gray-600">Customers scan this to access your digital storefront</p>
+                      <div className="space-y-2">
+                        <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                          Download PNG
+                        </button>
+                        <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                          Download SVG
+                        </button>
+                        <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                          Print Ready PDF
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              >
+                Download QR Code
+              </button>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Marketing Message</label>
+              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows="3" placeholder="Add a custom message that appears when customers scan your QR code"></textarea>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Social Media Links</label>
+              <div className="space-y-2">
+                <input type="url" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Instagram URL" />
+                <input type="url" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Facebook URL" />
+                <input type="url" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Twitter URL" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Operating Hours */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Operating Hours</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, index) => (
+            <div key={day} className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <input type="checkbox" className="w-4 h-4 text-green-600" defaultChecked={index < 6} />
+                <span className="font-medium text-gray-900">{day}</span>
+              </div>
+              <div className="flex space-x-2">
+                <input type="time" className="border border-gray-300 rounded px-2 py-1 text-sm" defaultValue="09:00" />
+                <span className="text-gray-500">-</span>
+                <input type="time" className="border border-gray-300 rounded px-2 py-1 text-sm" defaultValue="21:00" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Drivers Management Component
+const DriversManagement = ({ setSlideCard }) => {
+  const drivers = [
+    { id: 'DRV-001', name: 'Mike Rodriguez', phone: '(555) 123-4567', email: 'mike@email.com', status: 'active', orders: 28, rating: 4.9, earnings: '$1,247', location: 'Downtown LA', vehicle: '2022 Honda Civic' },
+    { id: 'DRV-002', name: 'Lisa Anderson', phone: '(555) 234-5678', email: 'lisa@email.com', status: 'on-delivery', orders: 45, rating: 4.8, earnings: '$2,156', location: 'Beverly Hills', vehicle: '2021 Toyota Prius' },
+    { id: 'DRV-003', name: 'Carlos Martinez', phone: '(555) 345-6789', email: 'carlos@email.com', status: 'offline', orders: 62, rating: 4.7, earnings: '$2,894', location: 'Santa Monica', vehicle: '2020 Tesla Model 3' },
+    { id: 'DRV-004', name: 'Jennifer Lee', phone: '(555) 456-7890', email: 'jennifer@email.com', status: 'active', orders: 33, rating: 4.9, earnings: '$1,567', location: 'Hollywood', vehicle: '2023 Nissan Sentra' },
+  ];
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'on-delivery': return 'bg-blue-100 text-blue-800';
+      case 'offline': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Driver Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Total Drivers</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">23</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Active Now</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">18</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">On Delivery</div>
+              <div className="text-2xl font-bold text-blue-600 mt-1">7</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 17l4 4 4-4m-4-5v9m-6-9a8 8 0 1116 0v9" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Avg Rating</div>
+              <div className="text-2xl font-bold text-yellow-600 mt-1">4.8</div>
+            </div>
+            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Drivers Table */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Driver Management</h3>
+          <div className="flex space-x-3">
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option>All Drivers</option>
+              <option>Active</option>
+              <option>On Delivery</option>
+              <option>Offline</option>
+            </select>
+            <button 
+              className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+              onClick={() => setSlideCard({
+                isOpen: true,
+                title: 'Add New Driver',
+                content: (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="John" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Doe" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                      <input type="email" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="john@email.com" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                      <input type="tel" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="(555) 123-4567" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle</label>
+                      <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="2022 Honda Civic" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">License Number</label>
+                      <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="D1234567" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Service Area</label>
+                      <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option>Downtown LA</option>
+                        <option>Beverly Hills</option>
+                        <option>Santa Monica</option>
+                        <option>Hollywood</option>
+                        <option>West Hollywood</option>
+                      </select>
+                    </div>
+                    <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                      Add Driver
+                    </button>
+                  </div>
+                )
+              })}
+            >
+              Add Driver
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Earnings</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {drivers.map((driver, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                        {driver.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{driver.name}</div>
+                        <div className="text-sm text-gray-500">{driver.id}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{driver.phone}</div>
+                    <div className="text-sm text-gray-500">{driver.email}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(driver.status)}`}>
+                      {driver.status.charAt(0).toUpperCase() + driver.status.slice(1).replace('-', ' ')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{driver.orders}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <span className="text-sm font-medium text-gray-900">{driver.rating}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{driver.earnings}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button 
+                      className="text-green-600 hover:text-green-900 transition-colors mr-3"
+                      onClick={() => setSlideCard({
+                        isOpen: true,
+                        title: `Driver ${driver.name}`,
+                        content: (
+                          <div className="space-y-6">
+                            <div className="text-center">
+                              <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">
+                                {driver.name.split(' ').map(n => n[0]).join('')}
+                              </div>
+                              <h3 className="text-lg font-semibold">{driver.name}</h3>
+                              <p className="text-gray-500">{driver.id}</p>
+                            </div>
+                            
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-3">Contact Information</h4>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Phone:</span>
+                                  <span className="font-medium">{driver.phone}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Email:</span>
+                                  <span className="font-medium">{driver.email}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Vehicle:</span>
+                                  <span className="font-medium">{driver.vehicle}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Location:</span>
+                                  <span className="font-medium">{driver.location}</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-3">Performance</h4>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Total Orders:</span>
+                                  <span className="font-medium">{driver.orders}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Rating:</span>
+                                  <span className="font-medium text-yellow-600">{driver.rating} ⭐</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Total Earnings:</span>
+                                  <span className="font-medium text-green-600">{driver.earnings}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Status:</span>
+                                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(driver.status)}`}>
+                                    {driver.status.charAt(0).toUpperCase() + driver.status.slice(1)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-3 pt-4">
+                              <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                View Live Location
+                              </button>
+                              <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                Assign Order
+                              </button>
+                              <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                Send Message
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    >
+                      View
+                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 transition-colors mr-3">Edit</button>
+                    <button className="text-red-600 hover:text-red-900 transition-colors">Deactivate</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Dashboard Main Component
 const DashboardMain = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -847,19 +1323,9 @@ const DashboardMain = () => {
       case 'products':
         return <ProductsCatalog setSlideCard={setSlideCard} />;
       case 'storefront':
-        return (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Storefront Settings</h2>
-            <p className="text-gray-600">Customize your public cannabis storefront and QR codes.</p>
-          </div>
-        );
+        return <StorefrontSettings setSlideCard={setSlideCard} />;
       case 'drivers':
-        return (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Driver Management</h2>
-            <p className="text-gray-600">Manage your delivery drivers and assignments.</p>
-          </div>
-        );
+        return <DriversManagement setSlideCard={setSlideCard} />;
       case 'payments':
         return (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
