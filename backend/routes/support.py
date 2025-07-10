@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List
-from ..models.support import SupportTicket, SupportTicketCreate, SupportTicketUpdate, KnowledgeBase, KnowledgeBaseCreate, KnowledgeBaseUpdate
-from ..auth.auth import get_current_active_user
+from models.support import SupportTicket, SupportTicketCreate, SupportTicketUpdate, KnowledgeBase, KnowledgeBaseCreate, KnowledgeBaseUpdate
+from auth.auth import get_current_active_user
 
 router = APIRouter(prefix="/support", tags=["Support"])
 
