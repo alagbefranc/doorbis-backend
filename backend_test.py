@@ -1013,7 +1013,7 @@ class KushDoorBackendTester:
             self.test_support_endpoints()
             
             print("\n📊 Testing Analytics...")
-            self.test_analytics_endpoints()
+            self.test_analytics_comprehensive()
         
         # Test system configuration
         print("\n⚙️ Testing System Configuration...")
