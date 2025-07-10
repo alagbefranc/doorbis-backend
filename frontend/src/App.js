@@ -1327,12 +1327,7 @@ const DashboardMain = () => {
       case 'drivers':
         return <DriversManagement setSlideCard={setSlideCard} />;
       case 'payments':
-        return (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Payments & Billing</h2>
-            <p className="text-gray-600">View payments, Stripe integration, and financial reports.</p>
-          </div>
-        );
+        return <PaymentsManagement setSlideCard={setSlideCard} />;
       case 'customers':
         return (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
