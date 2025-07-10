@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
-import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import './App.css';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LoginPage from './components/LoginPage';
+import ApiService from './services/api';
 
 // Navigation Component
 const Navigation = () => {
