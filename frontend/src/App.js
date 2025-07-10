@@ -581,6 +581,297 @@ const OrdersManagement = ({ setSlideCard }) => {
   );
 };
 
+// Add Product Form Component
+const AddProductForm = ({ onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    category: 'Flower',
+    strain: 'Hybrid',
+    thc_percentage: '',
+    cbd_percentage: '',
+    price: '',
+    stock: '',
+    description: '',
+    image_emoji: '🌿'
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit({
+      ...formData,
+      price: parseFloat(formData.price),
+      stock: parseInt(formData.stock)
+    });
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="text-center">
+        <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <span className="text-2xl">{formData.image_emoji}</span>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Add New Product</h3>
+        <p className="text-gray-600">Add a new cannabis product to your inventory</p>
+      </div>
+      
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
+            <input 
+              type="text" 
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2" 
+              placeholder="e.g., Blue Dream" 
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <select 
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            >
+              <option>Flower</option>
+              <option>Edibles</option>
+              <option>Pre-Rolls</option>
+              <option>Concentrates</option>
+              <option>Accessories</option>
+            </select>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Strain Type</label>
+            <select 
+              name="strain"
+              value={formData.strain}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            >
+              <option>Indica</option>
+              <option>Sativa</option>
+              <option>Hybrid</option>
+              <option>N/A</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">THC %</label>
+            <input 
+              type="text" 
+              name="thc_percentage"
+              value={formData.thc_percentage}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2" 
+              placeholder="e.g., 18-24%" 
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">CBD %</label>
+            <input 
+              type="text" 
+              name="cbd_percentage"
+              value={formData.cbd_percentage}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2" 
+              placeholder="e.g., 0.1%" 
+              required
+            />
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Price ($)</label>
+            <input 
+              type="number" 
+              step="0.01"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2" 
+              placeholder="45.00" 
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Stock Quantity</label>
+            <input 
+              type="number" 
+              name="stock"
+              value={formData.stock}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2" 
+              placeholder="25" 
+              required
+            />
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea 
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2" 
+            rows="3" 
+            placeholder="Product description..."
+          ></textarea>
+        </div>
+      </div>
+      
+      <div className="space-y-3 pt-4">
+        <button 
+          type="submit"
+          className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+        >
+          Add Product
+        </button>
+        <button 
+          type="button"
+          onClick={onCancel}
+          className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+};
+
+// Edit Product Form Component
+const EditProductForm = ({ product, onSubmit, onCancel }) => {
+  const [formData, setFormData] = useState({
+    name: product.name || '',
+    category: product.category || 'Flower',
+    strain: product.strain || 'Hybrid',
+    thc_percentage: product.thc_percentage || '',
+    cbd_percentage: product.cbd_percentage || '',
+    price: product.price || '',
+    stock: product.stock || '',
+    description: product.description || '',
+    status: product.status || 'active'
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit({
+      ...formData,
+      price: parseFloat(formData.price),
+      stock: parseInt(formData.stock)
+    });
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="text-center">
+        <div className="text-4xl mb-4">{product.image_emoji}</div>
+        <h3 className="text-lg font-semibold">{product.name}</h3>
+        <p className="text-gray-500">{product.category} • {product.strain}</p>
+      </div>
+      
+      <div className="bg-gray-50 rounded-lg p-4">
+        <h4 className="font-semibold text-gray-900 mb-2">Current Details</h4>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="text-gray-600">THC:</span>
+            <span className="font-medium ml-2">{product.thc_percentage}</span>
+          </div>
+          <div>
+            <span className="text-gray-600">CBD:</span>
+            <span className="font-medium ml-2">{product.cbd_percentage}</span>
+          </div>
+          <div>
+            <span className="text-gray-600">Price:</span>
+            <span className="font-medium ml-2">${product.price}</span>
+          </div>
+          <div>
+            <span className="text-gray-600">Stock:</span>
+            <span className="font-medium ml-2">{product.stock} units</span>
+          </div>
+        </div>
+      </div>
+      
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Price ($)</label>
+            <input 
+              type="number" 
+              step="0.01"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Stock</label>
+            <input 
+              type="number" 
+              name="stock"
+              value={formData.stock}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            />
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+          <select 
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="discontinued">Discontinued</option>
+          </select>
+        </div>
+      </div>
+      
+      <div className="space-y-3 pt-4">
+        <button 
+          type="submit"
+          className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+        >
+          Update Product
+        </button>
+        <button 
+          type="button"
+          onClick={onCancel}
+          className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+};
+
 // Products Catalog Component
 const ProductsCatalog = ({ setSlideCard }) => {
   const products = [
