@@ -280,13 +280,7 @@ test_plan:
     - "Backend API Database Integration"
     - "Remaining CRUD Operations"
     - "Authentication System Completion"
-  stuck_tasks:
-    - "Orders CRUD API"
-    - "Customers CRUD API"
-    - "Drivers CRUD API"
-    - "Payments API"
-    - "Support API"
-    - "Analytics API"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
