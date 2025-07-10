@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('auth_token');
     if (token) {
       ApiService.token = token;
+      setIsAuthenticated(true);
       loadUser();
     } else {
       setLoading(false);
@@ -37,11 +38,13 @@ export const AuthProvider = ({ children }) => {
         // Token might be invalid, clear it
         localStorage.removeItem('auth_token');
         ApiService.token = null;
+        setIsAuthenticated(false);
       }
     } catch (error) {
       console.error('Error loading user:', error);
       localStorage.removeItem('auth_token');
       ApiService.token = null;
+      setIsAuthenticated(false);
     } finally {
       setLoading(false);
     }
@@ -49,8 +52,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      setLoading(true);
       const result = await ApiService.login(email, password);
       if (result.success) {
+        setIsAuthenticated(true);
         await loadUser();
         return { success: true };
       } else {
@@ -58,6 +63,8 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       return { success: false, error: error.message };
+    } finally {
+      setLoading(false);
     }
   };
 
