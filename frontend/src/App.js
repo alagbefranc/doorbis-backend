@@ -730,13 +730,427 @@ const OrdersManagement = ({ setSlideCard }) => {
   );
 };
 
-// Additional Page Components (Simplified for now)
-const FeaturesPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>Features Page</h1></div>;
-const DispensariesPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>Dispensaries Page</h1></div>;
-const DriversPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>Drivers Page</h1></div>;
-const PricingPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>Pricing Page</h1></div>;
-const FAQPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>FAQ Page</h1></div>;
-const SignUpPage = () => <div className="min-h-screen bg-gray-100 flex items-center justify-center"><h1>SignUp Page</h1></div>;
+// Features Page Component
+const FeaturesPage = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700">
+      <Navigation />
+      <div className="container mx-auto px-8 pt-32 pb-16">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="font-unbounded text-5xl md:text-6xl font-light text-white mb-8 text-center">
+            Features
+          </h1>
+          <p className="font-manrope text-lg text-white/80 mb-12 text-center leading-relaxed">
+            Discover how DoorBis transforms cannabis commerce with cutting-edge technology
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="glass-card p-6 rounded-xl">
+              <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-2xl">🌿</span>
+              </div>
+              <h3 className="font-unbounded text-xl text-white mb-3">QR Storefront</h3>
+              <p className="font-manrope text-white/70 text-sm">No app downloads needed. Customers scan QR codes to access your digital storefront instantly.</p>
+            </div>
+            
+            <div className="glass-card p-6 rounded-xl">
+              <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-2xl">🚚</span>
+              </div>
+              <h3 className="font-unbounded text-xl text-white mb-3">Local Driver Network</h3>
+              <p className="font-manrope text-white/70 text-sm">Connect with verified local drivers for same-day delivery across your service area.</p>
+            </div>
+            
+            <div className="glass-card p-6 rounded-xl">
+              <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-2xl">📊</span>
+              </div>
+              <h3 className="font-unbounded text-xl text-white mb-3">Analytics Dashboard</h3>
+              <p className="font-manrope text-white/70 text-sm">Track sales, inventory, and customer insights with real-time analytics.</p>
+            </div>
+            
+            <div className="glass-card p-6 rounded-xl">
+              <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-2xl">💳</span>
+              </div>
+              <h3 className="font-unbounded text-xl text-white mb-3">Secure Payments</h3>
+              <p className="font-manrope text-white/70 text-sm">Integrated payment processing with compliance and security built-in.</p>
+            </div>
+            
+            <div className="glass-card p-6 rounded-xl">
+              <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-2xl">🏪</span>
+              </div>
+              <h3 className="font-unbounded text-xl text-white mb-3">Branded Storefront</h3>
+              <p className="font-manrope text-white/70 text-sm">Each dispensary gets a unique subdomain with custom branding and styling.</p>
+            </div>
+            
+            <div className="glass-card p-6 rounded-xl">
+              <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-2xl">📱</span>
+              </div>
+              <h3 className="font-unbounded text-xl text-white mb-3">Mobile Optimized</h3>
+              <p className="font-manrope text-white/70 text-sm">Perfect experience on all devices without requiring app installations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Dispensaries Page Component
+const DispensariesPage = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700">
+      <Navigation />
+      <div className="container mx-auto px-8 pt-32 pb-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="font-unbounded text-5xl md:text-6xl font-light text-white mb-8">
+            For Dispensaries
+          </h1>
+          <p className="font-manrope text-lg text-white/80 mb-12 leading-relaxed">
+            Transform your cannabis business with digital commerce solutions
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+            <div>
+              <h3 className="font-unbounded text-2xl text-green-400 mb-6">Why Choose DoorBis?</h3>
+              <ul className="space-y-4 font-manrope text-white/80">
+                <li className="flex items-start space-x-3">
+                  <span className="text-green-400 mt-1">✓</span>
+                  <span>No app development costs - instant QR-based storefront</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-green-400 mt-1">✓</span>
+                  <span>Integrated local driver network for deliveries</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-green-400 mt-1">✓</span>
+                  <span>Real-time inventory and sales analytics</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-green-400 mt-1">✓</span>
+                  <span>Compliant payment processing built-in</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-green-400 mt-1">✓</span>
+                  <span>Custom branding with kush.doorbis.com/yourstore</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="font-unbounded text-2xl text-green-400 mb-6">Getting Started</h3>
+              <div className="space-y-6">
+                <div className="glass-card p-4 rounded-lg">
+                  <div className="font-semibold text-white mb-2">1. Sign Up</div>
+                  <div className="text-white/70 text-sm">Create your dispensary account in minutes</div>
+                </div>
+                <div className="glass-card p-4 rounded-lg">
+                  <div className="font-semibold text-white mb-2">2. Setup Inventory</div>
+                  <div className="text-white/70 text-sm">Upload your products and set pricing</div>
+                </div>
+                <div className="glass-card p-4 rounded-lg">
+                  <div className="font-semibold text-white mb-2">3. Go Live</div>
+                  <div className="text-white/70 text-sm">Start taking orders immediately</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-12">
+            <Link
+              to="/dashboard"
+              className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
+            >
+              Start Your Store →
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Drivers Page Component
+const DriversPage = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700">
+      <Navigation />
+      <div className="container mx-auto px-8 pt-32 pb-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="font-unbounded text-5xl md:text-6xl font-light text-white mb-8">
+            For Drivers
+          </h1>
+          <p className="font-manrope text-lg text-white/80 mb-12 leading-relaxed">
+            Join the local cannabis delivery network and earn with flexible scheduling
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="glass-card p-6 rounded-xl">
+              <div className="text-3xl mb-4">💰</div>
+              <h3 className="font-unbounded text-xl text-white mb-3">Competitive Pay</h3>
+              <p className="font-manrope text-white/70 text-sm">Earn competitive rates plus tips for each delivery in your area.</p>
+            </div>
+            
+            <div className="glass-card p-6 rounded-xl">
+              <div className="text-3xl mb-4">⏰</div>
+              <h3 className="font-unbounded text-xl text-white mb-3">Flexible Schedule</h3>
+              <p className="font-manrope text-white/70 text-sm">Work when you want, where you want. Set your own availability.</p>
+            </div>
+            
+            <div className="glass-card p-6 rounded-xl">
+              <div className="text-3xl mb-4">🛡️</div>
+              <h3 className="font-unbounded text-xl text-white mb-3">Safe & Legal</h3>
+              <p className="font-manrope text-white/70 text-sm">All deliveries are compliant with local cannabis regulations.</p>
+            </div>
+          </div>
+          
+          <div className="text-left max-w-2xl mx-auto">
+            <h3 className="font-unbounded text-2xl text-green-400 mb-6 text-center">Requirements</h3>
+            <ul className="space-y-3 font-manrope text-white/80">
+              <li className="flex items-center space-x-3">
+                <span className="text-green-400">✓</span>
+                <span>Valid driver's license and insurance</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <span className="text-green-400">✓</span>
+                <span>Reliable vehicle for deliveries</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <span className="text-green-400">✓</span>
+                <span>18+ years old with clean background check</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <span className="text-green-400">✓</span>
+                <span>Cannabis delivery license (where required)</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div className="mt-12">
+            <button className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25">
+              Apply to Drive →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Pricing Page Component
+const PricingPage = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700">
+      <Navigation />
+      <div className="container mx-auto px-8 pt-32 pb-16">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="font-unbounded text-5xl md:text-6xl font-light text-white mb-8">
+            Pricing
+          </h1>
+          <p className="font-manrope text-lg text-white/80 mb-12 leading-relaxed">
+            Simple, transparent pricing that grows with your business
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="glass-card p-8 rounded-xl">
+              <h3 className="font-unbounded text-2xl text-white mb-4">Starter</h3>
+              <div className="text-4xl font-bold text-green-400 mb-6">$99<span className="text-lg text-white/60">/mo</span></div>
+              <ul className="space-y-3 font-manrope text-white/80 text-sm mb-8">
+                <li>✓ QR Storefront</li>
+                <li>✓ Up to 100 products</li>
+                <li>✓ Basic analytics</li>
+                <li>✓ Payment processing</li>
+                <li>✓ Email support</li>
+              </ul>
+              <button className="w-full border border-green-400 text-green-400 px-6 py-3 rounded-lg hover:bg-green-400 hover:text-black transition-colors">
+                Start Free Trial
+              </button>
+            </div>
+            
+            <div className="glass-card p-8 rounded-xl border-2 border-green-400 relative">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-green-400 text-black px-4 py-1 rounded-full text-sm font-semibold">
+                Most Popular
+              </div>
+              <h3 className="font-unbounded text-2xl text-white mb-4">Professional</h3>
+              <div className="text-4xl font-bold text-green-400 mb-6">$199<span className="text-lg text-white/60">/mo</span></div>
+              <ul className="space-y-3 font-manrope text-white/80 text-sm mb-8">
+                <li>✓ Everything in Starter</li>
+                <li>✓ Unlimited products</li>
+                <li>✓ Advanced analytics</li>
+                <li>✓ Driver network access</li>
+                <li>✓ Priority support</li>
+                <li>✓ Custom branding</li>
+              </ul>
+              <button className="w-full bg-green-400 text-black px-6 py-3 rounded-lg hover:bg-green-300 transition-colors">
+                Start Free Trial
+              </button>
+            </div>
+            
+            <div className="glass-card p-8 rounded-xl">
+              <h3 className="font-unbounded text-2xl text-white mb-4">Enterprise</h3>
+              <div className="text-4xl font-bold text-green-400 mb-6">Custom</div>
+              <ul className="space-y-3 font-manrope text-white/80 text-sm mb-8">
+                <li>✓ Everything in Professional</li>
+                <li>✓ Multi-location support</li>
+                <li>✓ API access</li>
+                <li>✓ Dedicated account manager</li>
+                <li>✓ 24/7 phone support</li>
+                <li>✓ Custom integrations</li>
+              </ul>
+              <button className="w-full border border-green-400 text-green-400 px-6 py-3 rounded-lg hover:bg-green-400 hover:text-black transition-colors">
+                Contact Sales
+              </button>
+            </div>
+          </div>
+          
+          <div className="mt-12 text-white/60 text-sm">
+            <p>All plans include 14-day free trial • No setup fees • Cancel anytime</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// FAQ Page Component
+const FAQPage = () => {
+  const faqs = [
+    {
+      question: "How quickly can I get started?",
+      answer: "You can have your QR storefront live within 24 hours of signing up. Simply upload your products, set your pricing, and start taking orders."
+    },
+    {
+      question: "Do my customers need to download an app?",
+      answer: "No! That's the beauty of DoorBis. Customers simply scan a QR code to access your mobile-optimized storefront directly in their browser."
+    },
+    {
+      question: "How does the driver network work?",
+      answer: "We connect you with verified local drivers in your area. When you receive an order, nearby drivers are notified and can accept the delivery job."
+    },
+    {
+      question: "Is the platform compliant with cannabis regulations?",
+      answer: "Yes, DoorBis is built with compliance in mind. We ensure all transactions and deliveries meet local cannabis regulations and licensing requirements."
+    },
+    {
+      question: "What payment methods are supported?",
+      answer: "We support all major payment methods including credit cards, debit cards, and digital wallets, with secure processing and compliance built-in."
+    },
+    {
+      question: "Can I customize my storefront?",
+      answer: "Absolutely! Each dispensary gets custom branding, and Professional+ plans include advanced customization options for your storefront appearance."
+    }
+  ];
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700">
+      <Navigation />
+      <div className="container mx-auto px-8 pt-32 pb-16">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="font-unbounded text-5xl md:text-6xl font-light text-white mb-8 text-center">
+            FAQ
+          </h1>
+          <p className="font-manrope text-lg text-white/80 mb-12 text-center leading-relaxed">
+            Common questions about DoorBis cannabis commerce platform
+          </p>
+          
+          <div className="space-y-6">
+            {faqs.map((faq, index) => (
+              <div key={index} className="glass-card p-6 rounded-xl">
+                <h3 className="font-unbounded text-lg text-white mb-3">{faq.question}</h3>
+                <p className="font-manrope text-white/80 text-sm leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-12 text-center">
+            <p className="font-manrope text-white/80 mb-6">Still have questions?</p>
+            <button className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25">
+              Contact Support →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// SignUp Page Component  
+const SignUpPage = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700">
+      <Navigation />
+      <div className="container mx-auto px-8 pt-32 pb-16">
+        <div className="max-w-md mx-auto">
+          <div className="glass-card p-8 rounded-xl">
+            <h1 className="font-unbounded text-3xl text-white mb-6 text-center">
+              Join DoorBis
+            </h1>
+            <p className="font-manrope text-white/80 text-center mb-8">
+              Start your cannabis commerce journey today
+            </p>
+            
+            <form className="space-y-6">
+              <div>
+                <label className="block font-manrope text-white/80 text-sm mb-2">Dispensary Name</label>
+                <input 
+                  type="text" 
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-green-400 transition-colors"
+                  placeholder="Your dispensary name"
+                />
+              </div>
+              
+              <div>
+                <label className="block font-manrope text-white/80 text-sm mb-2">Email Address</label>
+                <input 
+                  type="email" 
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-green-400 transition-colors"
+                  placeholder="your@email.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block font-manrope text-white/80 text-sm mb-2">Password</label>
+                <input 
+                  type="password" 
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-green-400 transition-colors"
+                  placeholder="Create a secure password"
+                />
+              </div>
+              
+              <div>
+                <label className="block font-manrope text-white/80 text-sm mb-2">Phone Number</label>
+                <input 
+                  type="tel" 
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-green-400 transition-colors"
+                  placeholder="(555) 123-4567"
+                />
+              </div>
+              
+              <button 
+                type="submit"
+                className="w-full bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-colors"
+              >
+                Create Account
+              </button>
+            </form>
+            
+            <div className="mt-6 text-center">
+              <p className="font-manrope text-white/60 text-sm">
+                Already have an account?{' '}
+                <Link to="/login" className="text-green-400 hover:text-green-300">
+                  Sign in
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Add Product Form Component
 const AddProductForm = ({ onSubmit, onCancel }) => {
