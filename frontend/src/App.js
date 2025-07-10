@@ -1721,12 +1721,7 @@ const DashboardMain = () => {
       case 'payments':
         return <PaymentsManagement setSlideCard={setSlideCard} />;
       case 'customers':
-        return (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Customer Database</h2>
-            <p className="text-gray-600">Manage customer information and loyalty programs.</p>
-          </div>
-        );
+        return <CustomersManagement setSlideCard={setSlideCard} />;
       case 'analytics':
         return (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
