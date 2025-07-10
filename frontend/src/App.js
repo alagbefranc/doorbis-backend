@@ -2355,12 +2355,7 @@ const DashboardMain = () => {
       case 'analytics':
         return <AnalyticsReports setSlideCard={setSlideCard} />;
       case 'support':
-        return (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Support Center</h2>
-            <p className="text-gray-600">Handle customer support and tickets.</p>
-          </div>
-        );
+        return <SupportCenter setSlideCard={setSlideCard} />;
       case 'settings':
         return (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
