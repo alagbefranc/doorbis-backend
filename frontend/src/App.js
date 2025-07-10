@@ -503,7 +503,8 @@ const OrdersManagement = ({ setSlideCard }) => {
     try {
       const result = await ApiService.getOrders();
       if (result.success) {
-        setOrders(result.data.orders || []);
+        // Backend returns array directly
+        setOrders(result.data || []);
       } else {
         setError('Failed to load orders');
       }
