@@ -3312,22 +3312,46 @@ const AccessModal = () => {
 };
 
 // Main App Component
-function App() {
+const AppContent = () => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-green-400/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-8 h-8 border-2 border-green-400 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <p className="text-green-100">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="kush-door-app">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
-            <>
-              <Navigation />
-              <HomePage />
-              <AccessModal />
-            </>
-          } />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/dashboard" element={<DashboardMain />} />
-        </Routes>
-      </BrowserRouter>
+    <Router>
+      <Routes>
+        <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/dashboard" />} />
+        <Route path="/dashboard" element={isAuthenticated ? <DashboardMain /> : <Navigate to="/login" />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/features" element={<FeaturesPage />} />
+        <Route path="/dispensaries" element={<DispensariesPage />} />
+        <Route path="/drivers" element={<DriversPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
     </div>
   );
 }
