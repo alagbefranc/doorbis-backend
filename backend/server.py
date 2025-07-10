@@ -51,19 +51,6 @@ app.add_middleware(
 async def get_database():
     return db
 
-# Update all route dependencies to use the database
-def setup_route_dependencies():
-    """Setup database dependencies for all routes"""
-    # Use dependency overrides for all routers
-    auth_router.dependency_overrides[routes.auth.get_database] = get_database
-    products_router.dependency_overrides[routes.products.get_database] = get_database
-    orders_router.dependency_overrides[routes.orders.get_database] = get_database
-    customers_router.dependency_overrides[routes.customers.get_database] = get_database
-    drivers_router.dependency_overrides[routes.drivers.get_database] = get_database
-    payments_router.dependency_overrides[routes.payments.get_database] = get_database
-    support_router.dependency_overrides[routes.support.get_database] = get_database
-    analytics_router.dependency_overrides[routes.analytics.get_database] = get_database
-
 # Import all route modules
 import routes.auth
 import routes.products
@@ -74,8 +61,15 @@ import routes.payments
 import routes.support
 import routes.analytics
 
-# Setup dependencies
-setup_route_dependencies()
+# Monkey patch the get_database function in each module
+routes.auth.get_database = get_database
+routes.products.get_database = get_database
+routes.orders.get_database = get_database
+routes.customers.get_database = get_database
+routes.drivers.get_database = get_database
+routes.payments.get_database = get_database
+routes.support.get_database = get_database
+routes.analytics.get_database = get_database
 
 # Update auth dependency as well
 import auth.auth
