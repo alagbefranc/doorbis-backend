@@ -6,30 +6,12 @@ from pathlib import Path
 backend_dir = Path(__file__).parent
 sys.path.insert(0, str(backend_dir))
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
 import logging
-from dotenv import load_dotenv
+from database import get_database, database
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
-
-# MongoDB connection
-mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-db_name = os.environ.get('DB_NAME', 'kush_door')
-client = AsyncIOMotorClient(mongo_url)
-db = client[db_name]
-
-# Global database function that can be imported by routes
-async def get_database():
-    return db
-
-# Set up the database function in a global module that routes can import
-import builtins
-builtins.get_database = get_database
-
-# Import all route modules after setting up the global database function
+# Import all route modules
 from routes.auth import router as auth_router
 from routes.products import router as products_router
 from routes.orders import router as orders_router
@@ -38,10 +20,6 @@ from routes.drivers import router as drivers_router
 from routes.payments import router as payments_router
 from routes.support import router as support_router
 from routes.analytics import router as analytics_router
-
-# Update auth dependency as well
-import auth.auth
-auth.auth.get_database = get_database
 
 # Create the main app
 app = FastAPI(
@@ -78,6 +56,7 @@ async def root():
 async def health_check():
     try:
         # Test database connection
+        db = await get_database()
         await db.command("ping")
         return {
             "status": "healthy",
@@ -101,10 +80,8 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def startup_event():
     logger.info("Starting Kush Door API server...")
-    logger.info(f"Connected to MongoDB: {mongo_url}")
-    logger.info(f"Database: {db_name}")
+    logger.info("Database connection configured")
 
 @app.on_event("shutdown")
 async def shutdown_event():
     logger.info("Shutting down Kush Door API server...")
-    client.close()
