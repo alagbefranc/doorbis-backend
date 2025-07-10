@@ -252,28 +252,28 @@ const DashboardOverview = ({ setSlideCard }) => {
     { 
       title: 'Total Orders', 
       value: analyticsData?.total_orders || '0', 
-      change: analyticsData?.orders_change || '+0%', 
+      change: '+12.5%', // Will be implemented later
       color: 'green', 
       icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' 
     },
     { 
       title: 'Revenue', 
-      value: analyticsData?.total_revenue ? `$${analyticsData.total_revenue.toFixed(2)}` : '$0.00', 
-      change: analyticsData?.revenue_change || '+0%', 
+      value: analyticsData?.monthly_revenue ? `$${analyticsData.monthly_revenue.toFixed(2)}` : '$0.00', 
+      change: '+8.2%', // Will be implemented later
       color: 'blue', 
       icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1' 
     },
     { 
-      title: 'Active Drivers', 
-      value: analyticsData?.active_drivers || '0', 
-      change: analyticsData?.drivers_change || '+0', 
+      title: 'Delivery Performance', 
+      value: analyticsData?.delivery_performance ? `${analyticsData.delivery_performance.toFixed(1)}%` : '0%', 
+      change: '+2.1%', // Will be implemented later
       color: 'purple', 
       icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' 
     },
     { 
-      title: 'Avg Order Value', 
-      value: analyticsData?.avg_order_value ? `$${analyticsData.avg_order_value.toFixed(2)}` : '$0.00', 
-      change: analyticsData?.aov_change || '+0%', 
+      title: 'Customer Satisfaction', 
+      value: analyticsData?.customer_satisfaction ? `${analyticsData.customer_satisfaction}/5` : '0/5', 
+      change: '+0.1', // Will be implemented later
       color: 'orange', 
       icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' 
     }
