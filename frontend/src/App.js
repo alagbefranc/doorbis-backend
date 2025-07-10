@@ -882,13 +882,108 @@ const EditProductForm = ({ product, onSubmit, onCancel }) => {
 
 // Products Catalog Component
 const ProductsCatalog = ({ setSlideCard }) => {
-  const products = [
-    { id: 'PRD-001', name: 'Blue Dream', category: 'Flower', strain: 'Hybrid', thc: '18-22%', cbd: '0.1%', price: '$45.00', stock: 28, status: 'active', image: '🌿' },
-    { id: 'PRD-002', name: 'OG Kush', category: 'Flower', strain: 'Indica', thc: '20-24%', cbd: '0.2%', price: '$50.00', stock: 15, status: 'active', image: '🌿' },
-    { id: 'PRD-003', name: 'Sour Diesel', category: 'Flower', strain: 'Sativa', thc: '19-23%', cbd: '0.1%', price: '$48.00', stock: 0, status: 'out-of-stock', image: '🌿' },
-    { id: 'PRD-004', name: 'CBD Gummies', category: 'Edibles', strain: 'N/A', thc: '0%', cbd: '10mg', price: '$25.00', stock: 45, status: 'active', image: '🍬' },
-    { id: 'PRD-005', name: 'Pre-Roll Pack', category: 'Pre-Rolls', strain: 'Mixed', thc: '18-20%', cbd: '0.1%', price: '$35.00', stock: 22, status: 'active', image: '🚬' },
-  ];
+  const [products, setProducts] = useState([]);
+  const [productStats, setProductStats] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetchProducts();
+    fetchProductStats();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const result = await ApiService.getProducts();
+      if (result.success) {
+        setProducts(result.data);
+      } else {
+        setError('Failed to load products');
+      }
+    } catch (error) {
+      setError('Error loading products');
+    }
+  };
+
+  const fetchProductStats = async () => {
+    try {
+      const result = await ApiService.getProductStats();
+      if (result.success) {
+        setProductStats(result.data);
+      }
+    } catch (error) {
+      console.error('Error loading product stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateProduct = async (productData) => {
+    try {
+      const result = await ApiService.createProduct(productData);
+      if (result.success) {
+        setProducts([...products, result.data]);
+        setSlideCard({ isOpen: false });
+        fetchProductStats();
+      } else {
+        alert('Failed to create product: ' + result.error);
+      }
+    } catch (error) {
+      alert('Error creating product');
+    }
+  };
+
+  const handleUpdateProduct = async (productId, productData) => {
+    try {
+      const result = await ApiService.updateProduct(productId, productData);
+      if (result.success) {
+        setProducts(products.map(p => p.id === productId ? result.data : p));
+        setSlideCard({ isOpen: false });
+      } else {
+        alert('Failed to update product: ' + result.error);
+      }
+    } catch (error) {
+      alert('Error updating product');
+    }
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      try {
+        const result = await ApiService.deleteProduct(productId);
+        if (result.success) {
+          setProducts(products.filter(p => p.id !== productId));
+          fetchProductStats();
+        } else {
+          alert('Failed to delete product');
+        }
+      } catch (error) {
+        alert('Error deleting product');
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+        <p className="text-red-800">{error}</p>
+        <button 
+          onClick={() => { setError(''); fetchProducts(); fetchProductStats(); }}
+          className="mt-2 text-red-600 hover:text-red-800"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
 
   const categories = ['All', 'Flower', 'Edibles', 'Pre-Rolls', 'Concentrates', 'Accessories'];
 
