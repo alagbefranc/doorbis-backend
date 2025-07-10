@@ -84,13 +84,8 @@ routes.support.get_database = get_database
 routes.analytics.get_database = get_database
 
 # Update auth dependency as well
-from auth.auth import get_current_user, get_current_active_user
-
-async def get_current_user_with_db(credentials, db=Depends(get_database)):
-    return await get_current_user(credentials, db)
-
-async def get_current_active_user_with_db(current_user=Depends(get_current_user_with_db)):
-    return await get_current_active_user(current_user)
+import auth.auth
+auth.auth.get_database = get_database
 
 # Include all routers with /api prefix
 app.include_router(auth_router, prefix="/api")
