@@ -3,29 +3,26 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List
 from models.customer import Customer, CustomerCreate, CustomerUpdate
 from auth.auth import get_current_active_user
+from database import get_database
 
 router = APIRouter(prefix="/customers", tags=["Customers"])
 
-async def get_database():
-    # This will be injected by dependency
-    pass
-
 @router.get("/", response_model=List[Customer])
 async def get_customers(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get all customers for the current user's store"""
+    db = await get_database()
     customers = await db.customers.find({"user_id": current_user["id"]}).to_list(1000)
     return [Customer(**customer) for customer in customers]
 
 @router.post("/", response_model=Customer)
 async def create_customer(
     customer_data: CustomerCreate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Create a new customer"""
+    db = await get_database()
     # Check if customer already exists
     existing_customer = await db.customers.find_one({
         "email": customer_data.email,
@@ -49,10 +46,10 @@ async def create_customer(
 @router.get("/{customer_id}", response_model=Customer)
 async def get_customer(
     customer_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get a specific customer"""
+    db = await get_database()
     customer = await db.customers.find_one({
         "id": customer_id,
         "user_id": current_user["id"]
@@ -70,10 +67,10 @@ async def get_customer(
 async def update_customer(
     customer_id: str,
     customer_update: CustomerUpdate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Update a customer"""
+    db = await get_database()
     # Check if customer exists and belongs to user
     existing_customer = await db.customers.find_one({
         "id": customer_id,
@@ -105,10 +102,10 @@ async def update_customer(
 @router.delete("/{customer_id}")
 async def delete_customer(
     customer_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Delete a customer"""
+    db = await get_database()
     result = await db.customers.delete_one({
         "id": customer_id,
         "user_id": current_user["id"]
@@ -124,10 +121,10 @@ async def delete_customer(
 
 @router.get("/stats/overview")
 async def get_customer_stats(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get customer statistics overview"""
+    db = await get_database()
     total_customers = await db.customers.count_documents({"user_id": current_user["id"]})
     active_customers = await db.customers.count_documents({
         "user_id": current_user["id"],
@@ -160,10 +157,10 @@ async def get_customer_stats(
 
 @router.get("/loyalty/tiers")
 async def get_loyalty_tiers(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get loyalty tier statistics"""
+    db = await get_database()
     bronze_count = await db.customers.count_documents({
         "user_id": current_user["id"],
         "loyalty_tier": "bronze"

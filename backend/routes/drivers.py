@@ -3,29 +3,26 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List
 from models.driver import Driver, DriverCreate, DriverUpdate
 from auth.auth import get_current_active_user
+from database import get_database
 
 router = APIRouter(prefix="/drivers", tags=["Drivers"])
 
-async def get_database():
-    # This will be injected by dependency
-    pass
-
 @router.get("/", response_model=List[Driver])
 async def get_drivers(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get all drivers for the current user's store"""
+    db = await get_database()
     drivers = await db.drivers.find({"user_id": current_user["id"]}).to_list(1000)
     return [Driver(**driver) for driver in drivers]
 
 @router.post("/", response_model=Driver)
 async def create_driver(
     driver_data: DriverCreate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Create a new driver"""
+    db = await get_database()
     # Check if driver already exists
     existing_driver = await db.drivers.find_one({
         "email": driver_data.email,
@@ -49,10 +46,10 @@ async def create_driver(
 @router.get("/{driver_id}", response_model=Driver)
 async def get_driver(
     driver_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get a specific driver"""
+    db = await get_database()
     driver = await db.drivers.find_one({
         "id": driver_id,
         "user_id": current_user["id"]
@@ -70,10 +67,10 @@ async def get_driver(
 async def update_driver(
     driver_id: str,
     driver_update: DriverUpdate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Update a driver"""
+    db = await get_database()
     # Check if driver exists and belongs to user
     existing_driver = await db.drivers.find_one({
         "id": driver_id,
@@ -105,10 +102,10 @@ async def update_driver(
 @router.delete("/{driver_id}")
 async def delete_driver(
     driver_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Delete a driver"""
+    db = await get_database()
     result = await db.drivers.delete_one({
         "id": driver_id,
         "user_id": current_user["id"]
@@ -124,10 +121,10 @@ async def delete_driver(
 
 @router.get("/stats/overview")
 async def get_driver_stats(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get driver statistics overview"""
+    db = await get_database()
     total_drivers = await db.drivers.count_documents({"user_id": current_user["id"]})
     active_drivers = await db.drivers.count_documents({
         "user_id": current_user["id"],
@@ -157,10 +154,10 @@ async def get_driver_stats(
 async def update_driver_status(
     driver_id: str,
     status: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Update driver status"""
+    db = await get_database()
     valid_statuses = ["active", "on-delivery", "offline"]
     if status not in valid_statuses:
         raise HTTPException(

@@ -4,29 +4,26 @@ from typing import List
 from datetime import datetime
 from models.order import Order, OrderCreate, OrderUpdate
 from auth.auth import get_current_active_user
+from database import get_database
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
-async def get_database():
-    # This will be injected by dependency
-    pass
-
 @router.get("/", response_model=List[Order])
 async def get_orders(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get all orders for the current user's store"""
+    db = await get_database()
     orders = await db.orders.find({"user_id": current_user["id"]}).to_list(1000)
     return [Order(**order) for order in orders]
 
 @router.post("/", response_model=Order)
 async def create_order(
     order_data: OrderCreate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Create a new order"""
+    db = await get_database()
     order_dict = order_data.dict()
     order_dict["user_id"] = current_user["id"]
     
@@ -41,10 +38,10 @@ async def create_order(
 @router.get("/{order_id}", response_model=Order)
 async def get_order(
     order_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get a specific order"""
+    db = await get_database()
     order = await db.orders.find_one({
         "id": order_id,
         "user_id": current_user["id"]
@@ -62,10 +59,10 @@ async def get_order(
 async def update_order(
     order_id: str,
     order_update: OrderUpdate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Update an order"""
+    db = await get_database()
     # Check if order exists and belongs to user
     existing_order = await db.orders.find_one({
         "id": order_id,
@@ -97,10 +94,10 @@ async def update_order(
 @router.delete("/{order_id}")
 async def delete_order(
     order_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Delete an order"""
+    db = await get_database()
     result = await db.orders.delete_one({
         "id": order_id,
         "user_id": current_user["id"]
@@ -116,10 +113,10 @@ async def delete_order(
 
 @router.get("/stats/overview")
 async def get_order_stats(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get order statistics overview"""
+    db = await get_database()
     total_orders = await db.orders.count_documents({"user_id": current_user["id"]})
     pending_orders = await db.orders.count_documents({
         "user_id": current_user["id"],
