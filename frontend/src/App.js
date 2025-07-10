@@ -2958,8 +2958,8 @@ const CustomersManagement = ({ setSlideCard }) => {
     </div>
   );
 };
-              <div className="text-2xl font-bold text-green-600 mt-1">234</div>
-              <div className="text-sm text-gray-500 mt-1">83.6% of total</div>
+
+// Products Catalog Component
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
