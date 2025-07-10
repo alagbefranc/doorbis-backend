@@ -115,6 +115,52 @@ async def get_sales_performance(
     
     return results
 
+@router.get("/order-stats")
+async def get_order_stats(
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Get order statistics"""
+    db = await get_database()
+    
+    # Get total orders
+    total_orders = await db.orders.count_documents({"user_id": current_user["id"]})
+    
+    # Get pending orders
+    pending_orders = await db.orders.count_documents({
+        "user_id": current_user["id"],
+        "status": "pending"
+    })
+    
+    # Get in-transit orders
+    in_transit_orders = await db.orders.count_documents({
+        "user_id": current_user["id"],
+        "status": {"$in": ["en-route", "preparing"]}
+    })
+    
+    # Get delivered orders today
+    today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    delivered_today = await db.orders.count_documents({
+        "user_id": current_user["id"],
+        "status": "delivered",
+        "updated_at": {"$gte": today_start}
+    })
+    
+    # Get total revenue
+    revenue_pipeline = [
+        {"$match": {"user_id": current_user["id"]}},
+        {"$group": {"_id": None, "total_revenue": {"$sum": "$total"}}}
+    ]
+    revenue_result = await db.orders.aggregate(revenue_pipeline).to_list(1)
+    total_revenue = revenue_result[0]["total_revenue"] if revenue_result else 0
+    
+    return {
+        "total_orders": total_orders,
+        "pending_orders": pending_orders,
+        "in_transit_orders": in_transit_orders,
+        "delivered_today": delivered_today,
+        "total_revenue": round(total_revenue, 2)
+    }
+
 @router.get("/top-products")
 async def get_top_products(
     current_user: dict = Depends(get_current_active_user)
