@@ -13,13 +13,17 @@ from auth.auth import (
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-async def get_database():
-    # This will be injected by dependency
-    pass
+# This will be injected by the main server
+get_database = None
 
 @router.post("/register", response_model=dict)
-async def register(user_data: UserCreate, db: AsyncIOMotorDatabase = Depends(get_database)):
+async def register(user_data: UserCreate):
     """Register a new user"""
+    if get_database is None:
+        raise HTTPException(status_code=500, detail="Database not configured")
+    
+    db = await get_database()
+    
     # Check if user already exists
     existing_user = await db.users.find_one({"email": user_data.email})
     if existing_user:
@@ -48,8 +52,13 @@ async def register(user_data: UserCreate, db: AsyncIOMotorDatabase = Depends(get
     return {"message": "User registered successfully", "user_id": new_user.id}
 
 @router.post("/login", response_model=Token)
-async def login(user_credentials: UserLogin, db: AsyncIOMotorDatabase = Depends(get_database)):
+async def login(user_credentials: UserLogin):
     """Login user and return access token"""
+    if get_database is None:
+        raise HTTPException(status_code=500, detail="Database not configured")
+    
+    db = await get_database()
+    
     user = await authenticate_user(db, user_credentials.email, user_credentials.password)
     if not user:
         raise HTTPException(
