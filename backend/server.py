@@ -1,20 +1,26 @@
+import sys
+import os
+from pathlib import Path
+
+# Add the backend directory to Python path
+backend_dir = Path(__file__).parent
+sys.path.insert(0, str(backend_dir))
+
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-import os
 import logging
-from pathlib import Path
 from dotenv import load_dotenv
 
 # Import all route modules
-from .routes.auth import router as auth_router
-from .routes.products import router as products_router
-from .routes.orders import router as orders_router
-from .routes.customers import router as customers_router
-from .routes.drivers import router as drivers_router
-from .routes.payments import router as payments_router
-from .routes.support import router as support_router
-from .routes.analytics import router as analytics_router
+from routes.auth import router as auth_router
+from routes.products import router as products_router
+from routes.orders import router as orders_router
+from routes.customers import router as customers_router
+from routes.drivers import router as drivers_router
+from routes.payments import router as payments_router
+from routes.support import router as support_router
+from routes.analytics import router as analytics_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
