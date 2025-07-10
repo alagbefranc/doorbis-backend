@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
-from ..auth.auth import get_current_active_user
+from auth.auth import get_current_active_user
 
 router = APIRouter(prefix="/analytics", tags=["Analytics"])
 
