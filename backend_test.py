@@ -638,7 +638,9 @@ class KushDoorBackendTester:
                 "subject": "Payment Processing Issue",
                 "description": "Customer unable to complete payment for order #12345",
                 "priority": "high",
-                "category": "payment"
+                "category": "payment",
+                "customer_name": "Jane Smith",
+                "customer_email": "jane.smith@email.com"
             }
             
             response = requests.post(
