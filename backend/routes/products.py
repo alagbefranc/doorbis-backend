@@ -6,9 +6,8 @@ from auth.auth import get_current_active_user
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
-async def get_database():
-    # This will be injected by dependency
-    pass
+# Use the global database function
+get_database = getattr(__builtins__, 'get_database', None)
 
 @router.get("/", response_model=List[Product])
 async def get_products(
