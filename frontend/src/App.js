@@ -2693,20 +2693,64 @@ const PaymentsManagement = ({ setSlideCard }) => {
 
 // Customers Management Component  
 const CustomersManagement = ({ setSlideCard }) => {
-  const customers = [
-    { id: 'CUST-001', name: 'Sarah Johnson', email: 'sarah@email.com', phone: '(555) 123-4567', orders: 18, totalSpent: '$2,345.50', avgOrder: '$130.31', lastOrder: '2 hours ago', status: 'active', loyalty: 'gold', joined: '2024-01-15' },
-    { id: 'CUST-002', name: 'Mike Chen', email: 'mike@email.com', phone: '(555) 234-5678', orders: 45, totalSpent: '$5,678.25', avgOrder: '$126.18', lastOrder: '45 minutes ago', status: 'active', loyalty: 'platinum', joined: '2023-08-22' },
-    { id: 'CUST-003', name: 'Emma Wilson', email: 'emma@email.com', phone: '(555) 345-6789', orders: 12, totalSpent: '$1,567.75', avgOrder: '$130.65', lastOrder: '30 minutes ago', status: 'active', loyalty: 'silver', joined: '2024-03-10' },
-    { id: 'CUST-004', name: 'David Brown', email: 'david@email.com', phone: '(555) 456-7890', orders: 8, totalSpent: '$945.50', avgOrder: '$118.19', lastOrder: '1 week ago', status: 'inactive', loyalty: 'bronze', joined: '2024-05-05' },
-    { id: 'CUST-005', name: 'Jessica Taylor', email: 'jessica@email.com', phone: '(555) 567-8901', orders: 22, totalSpent: '$3,234.75', avgOrder: '$147.03', lastOrder: '3 days ago', status: 'active', loyalty: 'gold', joined: '2023-12-18' },
-  ];
+  const [customers, setCustomers] = useState([]);
+  const [customerStats, setCustomerStats] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const loyaltyPrograms = [
-    { tier: 'Bronze', customers: 145, minSpent: '$0', discount: '5%', color: 'bg-amber-100 text-amber-800' },
-    { tier: 'Silver', customers: 89, minSpent: '$500', discount: '10%', color: 'bg-gray-100 text-gray-800' },
-    { tier: 'Gold', customers: 34, minSpent: '$1,500', discount: '15%', color: 'bg-yellow-100 text-yellow-800' },
-    { tier: 'Platinum', customers: 12, minSpent: '$3,000', discount: '20%', color: 'bg-purple-100 text-purple-800' },
-  ];
+  useEffect(() => {
+    fetchCustomers();
+    fetchCustomerStats();
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      const result = await ApiService.getCustomers();
+      if (result.success) {
+        setCustomers(result.data || []);
+      } else {
+        setError('Failed to load customers');
+      }
+    } catch (error) {
+      setError('Error loading customers');
+      console.error('Customers fetch error:', error);
+    }
+  };
+
+  const fetchCustomerStats = async () => {
+    try {
+      const result = await ApiService.getCustomerStats();
+      if (result.success) {
+        setCustomerStats(result.data || {});
+      }
+    } catch (error) {
+      console.error('Customer stats fetch error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+        <p className="text-red-800">{error}</p>
+        <button 
+          onClick={() => { setError(''); fetchCustomers(); fetchCustomerStats(); }}
+          className="mt-2 text-red-600 hover:text-red-800"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
 
   const getStatusColor = (status) => {
     switch(status) {
@@ -2734,8 +2778,8 @@ const CustomersManagement = ({ setSlideCard }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-gray-600">Total Customers</div>
-              <div className="text-2xl font-bold text-gray-900 mt-1">280</div>
-              <div className="text-sm text-green-600 mt-1">+15 this month</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">{customerStats.total_customers || 0}</div>
+              <div className="text-sm text-green-600 mt-1">+{customerStats.new_customers || 0} this month</div>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2748,6 +2792,172 @@ const CustomersManagement = ({ setSlideCard }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-gray-600">Active Customers</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">{customerStats.active_customers || 0}</div>
+              <div className="text-sm text-gray-500 mt-1">{customerStats.active_percentage || 0}% of total</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Average Order Value</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">${customerStats.avg_order_value ? customerStats.avg_order_value.toFixed(2) : '0.00'}</div>
+              <div className="text-sm text-gray-500 mt-1">Per customer</div>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Lifetime Value</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">${customerStats.lifetime_value ? customerStats.lifetime_value.toFixed(2) : '0.00'}</div>
+              <div className="text-sm text-gray-500 mt-1">Total revenue</div>
+            </div>
+            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Customers Table */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">Customer Management</h3>
+        </div>
+        <div className="overflow-x-auto">
+          {customers.length > 0 ? (
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {customers.map((customer, index) => (
+                  <tr key={customer.id || index} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{customer.name}</div>
+                      <div className="text-sm text-gray-500">Joined: {customer.created_at ? new Date(customer.created_at).toLocaleDateString() : 'N/A'}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{customer.email}</div>
+                      <div className="text-sm text-gray-500">{customer.phone || 'N/A'}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {customer.orders_count || 0}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      ${customer.total_spent ? customer.total_spent.toFixed(2) : '0.00'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(customer.status || 'active')}`}>
+                        {customer.status || 'Active'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex space-x-2">
+                        <button 
+                          className="text-green-600 hover:text-green-900 transition-colors"
+                          onClick={() => setSlideCard({
+                            isOpen: true,
+                            title: `Customer ${customer.name}`,
+                            content: (
+                              <div className="space-y-6">
+                                <div>
+                                  <h4 className="font-semibold text-gray-900 mb-3">Contact Information</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Name:</span>
+                                      <span className="font-medium">{customer.name}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Email:</span>
+                                      <span className="font-medium">{customer.email}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Phone:</span>
+                                      <span className="font-medium">{customer.phone || 'N/A'}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <h4 className="font-semibold text-gray-900 mb-3">Order History</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Total Orders:</span>
+                                      <span className="font-medium">{customer.orders_count || 0}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Total Spent:</span>
+                                      <span className="font-medium text-green-600">${customer.total_spent ? customer.total_spent.toFixed(2) : '0.00'}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Average Order:</span>
+                                      <span className="font-medium">${customer.avg_order_value ? customer.avg_order_value.toFixed(2) : '0.00'}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Last Order:</span>
+                                      <span className="font-medium">{customer.last_order ? new Date(customer.last_order).toLocaleDateString() : 'N/A'}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="space-y-3 pt-4">
+                                  <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                    View Order History
+                                  </button>
+                                  <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                    Send Message
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          })}
+                        >
+                          View
+                        </button>
+                        <button className="text-blue-600 hover:text-blue-900 transition-colors">Edit</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="p-8 text-center text-gray-500">
+              <p>No customers available</p>
+              <button 
+                onClick={() => { fetchCustomers(); fetchCustomerStats(); }} 
+                className="mt-2 text-green-600 hover:text-green-800"
+              >
+                Refresh Data
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
               <div className="text-2xl font-bold text-green-600 mt-1">234</div>
               <div className="text-sm text-gray-500 mt-1">83.6% of total</div>
             </div>
