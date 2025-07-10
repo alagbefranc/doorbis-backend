@@ -1309,6 +1309,398 @@ const DriversManagement = ({ setSlideCard }) => {
   );
 };
 
+// Payments Management Component
+const PaymentsManagement = ({ setSlideCard }) => {
+  const transactions = [
+    { id: 'TXN-001', order: '#ORD-001', customer: 'Sarah Johnson', amount: '$127.50', fee: '$3.82', net: '$123.68', status: 'completed', method: 'Card', date: '2 hours ago', stripeId: 'pi_1234567890' },
+    { id: 'TXN-002', order: '#ORD-002', customer: 'Mike Chen', amount: '$89.00', fee: '$2.67', net: '$86.33', status: 'completed', method: 'Card', date: '45 minutes ago', stripeId: 'pi_1234567891' },
+    { id: 'TXN-003', order: '#ORD-003', customer: 'Emma Wilson', amount: '$156.25', fee: '$4.69', net: '$151.56', status: 'pending', method: 'Card', date: '30 minutes ago', stripeId: 'pi_1234567892' },
+    { id: 'TXN-004', order: '#ORD-004', customer: 'David Brown', amount: '$203.75', fee: '$6.11', net: '$197.64', status: 'completed', method: 'Card', date: '15 minutes ago', stripeId: 'pi_1234567893' },
+    { id: 'TXN-005', order: '#ORD-005', customer: 'Jessica Taylor', amount: '$178.00', fee: '$5.34', net: '$172.66', status: 'refunded', method: 'Card', date: '1 hour ago', stripeId: 'pi_1234567894' },
+  ];
+
+  const payouts = [
+    { id: 'PO-001', amount: '$2,847.50', fee: '$12.50', net: '$2,835.00', status: 'paid', date: 'Today', account: '****1234', transactions: 45 },
+    { id: 'PO-002', amount: '$3,156.25', fee: '$13.75', net: '$3,142.50', status: 'pending', date: 'Tomorrow', account: '****1234', transactions: 52 },
+    { id: 'PO-003', amount: '$2,234.75', fee: '$11.25', net: '$2,223.50', status: 'paid', date: 'Yesterday', account: '****1234', transactions: 38 },
+  ];
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'completed': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'refunded': return 'bg-red-100 text-red-800';
+      case 'paid': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Payment Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Total Revenue</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">$24,789</div>
+              <div className="text-sm text-green-600 mt-1">+12.5% from last month</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Processing Fees</div>
+              <div className="text-2xl font-bold text-blue-600 mt-1">$743</div>
+              <div className="text-sm text-gray-500 mt-1">2.99% average</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Pending Payouts</div>
+              <div className="text-2xl font-bold text-yellow-600 mt-1">$3,142</div>
+              <div className="text-sm text-gray-500 mt-1">Next: Tomorrow</div>
+            </div>
+            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Refunds</div>
+              <div className="text-2xl font-bold text-red-600 mt-1">$356</div>
+              <div className="text-sm text-gray-500 mt-1">3 this month</div>
+            </div>
+            <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Payment Method Configuration */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Payment Configuration</h3>
+          <button 
+            className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+            onClick={() => setSlideCard({
+              isOpen: true,
+              title: 'Stripe Integration Settings',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Stripe Configuration</h3>
+                    <p className="text-gray-600">Manage your payment processing settings</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Stripe Account ID</label>
+                      <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="acct_1234567890" readOnly />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Publishable Key</label>
+                      <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="pk_live_51..." readOnly />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Processing Rate</label>
+                      <div className="flex items-center space-x-2">
+                        <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" defaultValue="2.9" />
+                        <span className="text-gray-500">% + $0.30</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Payout Schedule</label>
+                      <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
+                        <option>Daily</option>
+                        <option>Weekly</option>
+                        <option>Monthly</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3 pt-4">
+                    <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                      Update Settings
+                    </button>
+                    <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                      Test Connection
+                    </button>
+                    <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                      View Stripe Dashboard
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          >
+            Configure Stripe
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900">Credit & Debit Cards</div>
+                  <div className="text-sm text-gray-500">Visa, Mastercard, American Express</div>
+                </div>
+              </div>
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900">Digital Wallets</div>
+                  <div className="text-sm text-gray-500">Apple Pay, Google Pay</div>
+                </div>
+              </div>
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h4 className="font-medium text-gray-900 mb-2">Current Processing Rate</h4>
+              <div className="text-2xl font-bold text-gray-900">2.9% + $0.30</div>
+              <div className="text-sm text-gray-500 mt-1">Per successful transaction</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h4 className="font-medium text-gray-900 mb-2">Payout Schedule</h4>
+              <div className="text-lg font-semibold text-gray-900">Daily</div>
+              <div className="text-sm text-gray-500 mt-1">Next payout: Tomorrow</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Transactions */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Recent Transactions</h3>
+          <div className="flex space-x-3">
+            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option>All Transactions</option>
+              <option>Completed</option>
+              <option>Pending</option>
+              <option>Refunded</option>
+            </select>
+            <button className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+              Export
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {transactions.map((transaction, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{transaction.id}</div>
+                    <div className="text-sm text-gray-500">{transaction.order}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{transaction.customer}</div>
+                    <div className="text-sm text-gray-500">{transaction.date}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{transaction.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{transaction.fee}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">{transaction.net}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
+                      {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button 
+                      className="text-green-600 hover:text-green-900 transition-colors mr-3"
+                      onClick={() => setSlideCard({
+                        isOpen: true,
+                        title: `Transaction ${transaction.id}`,
+                        content: (
+                          <div className="space-y-6">
+                            <div className="text-center">
+                              <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                </svg>
+                              </div>
+                              <h3 className="text-lg font-semibold text-gray-900 mb-2">{transaction.id}</h3>
+                              <p className="text-gray-600">Transaction Details</p>
+                            </div>
+                            
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-3">Payment Information</h4>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Customer:</span>
+                                  <span className="font-medium">{transaction.customer}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Order:</span>
+                                  <span className="font-medium">{transaction.order}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Amount:</span>
+                                  <span className="font-medium">{transaction.amount}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Processing Fee:</span>
+                                  <span className="font-medium">{transaction.fee}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Net Amount:</span>
+                                  <span className="font-medium text-green-600">{transaction.net}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Payment Method:</span>
+                                  <span className="font-medium">{transaction.method}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Stripe ID:</span>
+                                  <span className="font-medium text-sm">{transaction.stripeId}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Status:</span>
+                                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
+                                    {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="space-y-3 pt-4">
+                              <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                View in Stripe Dashboard
+                              </button>
+                              {transaction.status === 'completed' && (
+                                <button className="w-full border border-red-300 text-red-700 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors">
+                                  Issue Refund
+                                </button>
+                              )}
+                              <button className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                Download Receipt
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    >
+                      View
+                    </button>
+                    {transaction.status === 'completed' && (
+                      <button className="text-red-600 hover:text-red-900 transition-colors">Refund</button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Payouts */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">Payouts</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payout ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {payouts.map((payout, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{payout.id}</div>
+                    <div className="text-sm text-gray-500">{payout.transactions} transactions</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{payout.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{payout.fee}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">{payout.net}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(payout.status)}`}>
+                      {payout.status.charAt(0).toUpperCase() + payout.status.slice(1)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{payout.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button className="text-green-600 hover:text-green-900 transition-colors">View</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Dashboard Main Component
 const DashboardMain = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
