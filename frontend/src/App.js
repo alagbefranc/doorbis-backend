@@ -38,7 +38,434 @@ const Navigation = () => {
   );
 };
 
-// Home Page Component
+// Dashboard Sidebar Component
+const DashboardSidebar = ({ activeSection, setActiveSection }) => {
+  const menuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: 'M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z' },
+    { id: 'orders', label: 'Orders', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
+    { id: 'products', label: 'Products', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M6 7h12' },
+    { id: 'storefront', label: 'Storefront', icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+    { id: 'drivers', label: 'Drivers', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+    { id: 'payments', label: 'Payments', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
+    { id: 'customers', label: 'Customers', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z' },
+    { id: 'analytics', label: 'Analytics', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+    { id: 'support', label: 'Support', icon: 'M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { id: 'settings', label: 'Settings', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z' }
+  ];
+
+  return (
+    <div className="fixed left-0 top-0 h-screen w-64 bg-zinc-900 text-white z-40">
+      <div className="p-6">
+        <Link to="/" className="flex items-center space-x-3">
+          <div className="w-8 h-8 text-green-400">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6h2V7zm0 8h-2v2h2v-2z"/>
+            </svg>
+          </div>
+          <span className="font-unbounded text-white text-lg font-light">DoorBis</span>
+        </Link>
+        <div className="mt-2 text-xs text-gray-400">Cannabis Commerce Platform</div>
+      </div>
+      
+      <nav className="mt-8">
+        {menuItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setActiveSection(item.id)}
+            className={`w-full flex items-center space-x-3 px-6 py-3 text-left transition-colors hover:bg-zinc-800 ${
+              activeSection === item.id ? 'bg-green-600/20 border-r-2 border-green-400 text-green-400' : 'text-gray-300'
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+            </svg>
+            <span className="font-manrope">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+      
+      <div className="absolute bottom-0 left-0 right-0 p-6">
+        <div className="bg-gradient-to-r from-green-600 to-green-500 rounded-lg p-4 text-white">
+          <div className="text-sm font-semibold">Green Valley Dispensary</div>
+          <div className="text-xs text-green-100">Premium Plan • Active</div>
+        </div>
+        <Link 
+          to="/login" 
+          className="mt-4 flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          <span className="text-sm font-manrope">Logout</span>
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+// Dashboard Top Bar Component
+const DashboardTopBar = ({ activeSection }) => {
+  const getSectionTitle = () => {
+    switch(activeSection) {
+      case 'dashboard': return 'Dashboard Overview';
+      case 'orders': return 'Order Management';
+      case 'products': return 'Product Catalog';
+      case 'storefront': return 'Storefront Settings';
+      case 'drivers': return 'Driver Management';
+      case 'payments': return 'Payments & Billing';
+      case 'customers': return 'Customer Database';
+      case 'analytics': return 'Analytics & Reports';
+      case 'support': return 'Support Center';
+      case 'settings': return 'Account Settings';
+      default: return 'Dashboard';
+    }
+  };
+
+  return (
+    <div className="sticky top-0 z-30 h-16 px-6 bg-white shadow-sm border-b border-gray-200 flex items-center justify-between">
+      <div>
+        <h1 className="text-xl font-semibold text-gray-900 font-manrope">{getSectionTitle()}</h1>
+        <div className="text-sm text-gray-500">Manage your cannabis business</div>
+      </div>
+      
+      <div className="flex items-center space-x-4">
+        <button className="relative p-2 text-gray-400 hover:text-gray-500 transition-colors">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4 4h7v7H4V4z" />
+          </svg>
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
+        </button>
+        
+        <button className="relative p-2 text-gray-400 hover:text-gray-500 transition-colors">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4 4h7v7H4V4z" />
+          </svg>
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+        </button>
+        
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+            <span className="text-white text-sm font-semibold">JD</span>
+          </div>
+          <div className="hidden sm:block">
+            <div className="text-sm font-medium text-gray-900">John Doe</div>
+            <div className="text-xs text-gray-500">Store Manager</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Sliding Card Component
+const SlidingCard = ({ isOpen, onClose, title, children, width = "w-96" }) => {
+  return (
+    <div className={`fixed inset-y-0 right-0 z-50 ${width} bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
+      isOpen ? 'translate-x-0' : 'translate-x-full'
+    }`}>
+      <div className="h-full flex flex-col">
+        <div className="px-6 py-4 bg-gradient-to-r from-green-600 to-green-500 text-white">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold font-manrope">{title}</h3>
+            <button 
+              onClick={onClose}
+              className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto p-6">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Dashboard Overview Component
+const DashboardOverview = ({ setSlideCard }) => {
+  const overviewCards = [
+    { title: 'Total Orders', value: '1,247', change: '+12.5%', color: 'green', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
+    { title: 'Revenue', value: '$84,329', change: '+8.2%', color: 'blue', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1' },
+    { title: 'Active Drivers', value: '23', change: '+2', color: 'purple', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+    { title: 'Live Visitors', value: '127', change: '+5.1%', color: 'orange', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' }
+  ];
+
+  const recentOrders = [
+    { id: '#ORD-001', customer: 'Sarah Johnson', items: '2x Blue Dream, 1x Edibles', status: 'delivered', amount: '$127.50', time: '2 hours ago' },
+    { id: '#ORD-002', customer: 'Mike Chen', items: '1x OG Kush, 3x Pre-rolls', status: 'en-route', amount: '$89.00', time: '45 minutes ago' },
+    { id: '#ORD-003', customer: 'Emma Wilson', items: '1x Sativa Mix, 2x Gummies', status: 'pending', amount: '$156.25', time: '30 minutes ago' },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {overviewCards.map((card, index) => (
+          <div 
+            key={index} 
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+            onClick={() => setSlideCard({
+              isOpen: true,
+              title: `${card.title} Details`,
+              content: (
+                <div className="space-y-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-600">{card.value}</div>
+                    <div className="text-sm text-gray-500">Current Value</div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">This Month</span>
+                      <span className="font-semibold">{card.value}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Last Month</span>
+                      <span className="font-semibold">$72,145</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Growth</span>
+                      <span className="text-green-600 font-semibold">{card.change}</span>
+                    </div>
+                  </div>
+                  <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <span className="text-gray-500">Chart visualization would go here</span>
+                  </div>
+                </div>
+              )
+            })}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm font-medium text-gray-600">{card.title}</div>
+                <div className="text-2xl font-bold text-gray-900 mt-1">{card.value}</div>
+                <div className="text-sm text-green-600 mt-1">{card.change} from last month</div>
+              </div>
+              <div className={`w-12 h-12 bg-gradient-to-br from-${card.color}-400 to-${card.color}-600 rounded-lg flex items-center justify-center`}>
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={card.icon} />
+                </svg>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Sales Overview</h3>
+          <div className="h-64 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-green-600 font-semibold">Revenue Chart</div>
+              <div className="text-sm text-gray-500 mt-1">Interactive chart would be displayed here</div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Products</h3>
+          <div className="space-y-4">
+            {['Blue Dream', 'OG Kush', 'Sativa Mix', 'CBD Gummies'].map((product, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-lg"></div>
+                  <span className="font-medium text-gray-900">{product}</span>
+                </div>
+                <div className="text-sm text-gray-500">${(Math.random() * 1000 + 500).toFixed(0)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Orders */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {recentOrders.map((order, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.customer}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{order.items}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                      order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                      order.status === 'en-route' ? 'bg-blue-100 text-blue-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{order.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button 
+                      className="text-green-600 hover:text-green-900 transition-colors"
+                      onClick={() => setSlideCard({
+                        isOpen: true,
+                        title: `Order ${order.id}`,
+                        content: (
+                          <div className="space-y-4">
+                            <div>
+                              <h4 className="font-semibold text-gray-900">Customer Information</h4>
+                              <div className="mt-2 space-y-1">
+                                <div className="text-sm">Name: {order.customer}</div>
+                                <div className="text-sm text-gray-600">Phone: (555) 123-4567</div>
+                                <div className="text-sm text-gray-600">Email: customer@email.com</div>
+                              </div>
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900">Order Details</h4>
+                              <div className="mt-2 space-y-1">
+                                <div className="text-sm">Items: {order.items}</div>
+                                <div className="text-sm">Amount: {order.amount}</div>
+                                <div className="text-sm">Status: {order.status}</div>
+                                <div className="text-sm text-gray-600">Ordered: {order.time}</div>
+                              </div>
+                            </div>
+                            <div className="flex space-x-2 pt-4">
+                              <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                Update Status
+                              </button>
+                              <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                Contact Customer
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Dashboard Main Component
+const DashboardMain = () => {
+  const [activeSection, setActiveSection] = useState('dashboard');
+  const [slideCard, setSlideCard] = useState({ isOpen: false, title: '', content: null });
+
+  const renderContent = () => {
+    switch(activeSection) {
+      case 'dashboard':
+        return <DashboardOverview setSlideCard={setSlideCard} />;
+      case 'orders':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Management</h2>
+            <p className="text-gray-600">Manage all your cannabis orders and deliveries here.</p>
+          </div>
+        );
+      case 'products':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Product Catalog</h2>
+            <p className="text-gray-600">Manage your cannabis products, strains, and inventory.</p>
+          </div>
+        );
+      case 'storefront':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Storefront Settings</h2>
+            <p className="text-gray-600">Customize your public cannabis storefront and QR codes.</p>
+          </div>
+        );
+      case 'drivers':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Driver Management</h2>
+            <p className="text-gray-600">Manage your delivery drivers and assignments.</p>
+          </div>
+        );
+      case 'payments':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Payments & Billing</h2>
+            <p className="text-gray-600">View payments, Stripe integration, and financial reports.</p>
+          </div>
+        );
+      case 'customers':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Customer Database</h2>
+            <p className="text-gray-600">Manage customer information and loyalty programs.</p>
+          </div>
+        );
+      case 'analytics':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Analytics & Reports</h2>
+            <p className="text-gray-600">View detailed analytics and business insights.</p>
+          </div>
+        );
+      case 'support':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Support Center</h2>
+            <p className="text-gray-600">Handle customer support and tickets.</p>
+          </div>
+        );
+      case 'settings':
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Account Settings</h2>
+            <p className="text-gray-600">Manage your account, preferences, and team settings.</p>
+          </div>
+        );
+      default:
+        return <DashboardOverview setSlideCard={setSlideCard} />;
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen w-screen bg-gray-50 text-gray-900">
+      <DashboardSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
+      
+      <div className="flex-1 ml-64">
+        <DashboardTopBar activeSection={activeSection} />
+        
+        <main className="p-6 overflow-y-auto">
+          {renderContent()}
+        </main>
+      </div>
+
+      <SlidingCard
+        isOpen={slideCard.isOpen}
+        onClose={() => setSlideCard({ isOpen: false, title: '', content: null })}
+        title={slideCard.title}
+      >
+        {slideCard.content}
+      </SlidingCard>
+    </div>
+  );
+};
+
+// Home Page Component (keeping existing pages)
 const HomePage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -90,49 +517,15 @@ const HomePage = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <button 
-                  onClick={handleGetAccess}
-                  className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
+                <Link
+                  to="/dashboard"
+                  className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25 text-center"
                 >
-                  Get Early Access →
-                </button>
+                  View Dashboard →
+                </Link>
                 <button className="border border-white/40 text-white px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors">
                   Book Demo
                 </button>
-              </div>
-            </div>
-            
-            <div className={`mt-16 transform transition-all duration-1000 delay-500 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="glass-card p-6 rounded-xl">
-                  <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
-                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <h3 className="font-unbounded text-white text-lg font-light mb-2">QR-Powered</h3>
-                  <p className="font-manrope text-white/70 text-sm">Instant digital storefronts accessible via QR codes</p>
-                </div>
-                
-                <div className="glass-card p-6 rounded-xl">
-                  <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
-                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="font-unbounded text-white text-lg font-light mb-2">Local Drivers</h3>
-                  <p className="font-manrope text-white/70 text-sm">Hire and manage local delivery drivers seamlessly</p>
-                </div>
-                
-                <div className="glass-card p-6 rounded-xl">
-                  <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
-                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="font-unbounded text-white text-lg font-light mb-2">Zero Downloads</h3>
-                  <p className="font-manrope text-white/70 text-sm">No app installation required for customers</p>
-                </div>
               </div>
             </div>
           </div>
@@ -181,7 +574,6 @@ const LoginPage = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -212,8 +604,7 @@ const LoginPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Simulate login success
-      console.log('Login successful:', formData);
+      // Simulate login success and redirect to dashboard
       navigate('/dashboard');
     }
   };
@@ -241,7 +632,6 @@ const LoginPage = () => {
           <div className="max-w-md mx-auto">
             <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               <div className="glass-card p-8 rounded-xl">
-                {/* Header */}
                 <div className="text-center mb-8">
                   <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -256,7 +646,6 @@ const LoginPage = () => {
                   </p>
                 </div>
 
-                {/* Login Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label className="block font-manrope text-white/80 text-sm mb-2">
@@ -323,34 +712,6 @@ const LoginPage = () => {
                   </button>
                 </form>
 
-                {/* Divider */}
-                <div className="flex items-center my-6">
-                  <div className="flex-1 border-t border-white/20"></div>
-                  <span className="px-4 text-white/50 font-manrope text-sm">or</span>
-                  <div className="flex-1 border-t border-white/20"></div>
-                </div>
-
-                {/* Social Login */}
-                <div className="space-y-3">
-                  <button className="w-full border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold flex items-center justify-center space-x-2 hover:bg-white/10 transition-colors">
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    <span>Continue with Google</span>
-                  </button>
-                  
-                  <button className="w-full border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold flex items-center justify-center space-x-2 hover:bg-white/10 transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                    </svg>
-                    <span>Continue with Twitter</span>
-                  </button>
-                </div>
-
-                {/* Sign Up Link */}
                 <div className="text-center mt-8 pt-6 border-t border-white/20">
                   <p className="font-manrope text-white/70 text-sm">
                     Don't have an account?{' '}
@@ -372,1219 +733,6 @@ const LoginPage = () => {
       <div className="fixed bottom-4 right-6 text-xs text-white/50 font-manrope z-10">
         © DoorBis, 2025
       </div>
-    </div>
-  );
-};
-
-// Signup Page Component
-const SignupPage = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    // Step 1: Basic Info
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    
-    // Step 2: Business Info
-    businessName: '',
-    businessType: 'dispensary',
-    licenseNumber: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    
-    // Step 3: Preferences
-    monthlyVolume: '',
-    currentSolution: '',
-    hearAboutUs: '',
-    agreedToTerms: false,
-    marketingEmails: true
-  });
-  const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-    
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
-  };
-
-  const validateStep = (stepNumber) => {
-    const newErrors = {};
-    
-    if (stepNumber === 1) {
-      if (!formData.firstName) newErrors.firstName = 'First name is required';
-      if (!formData.lastName) newErrors.lastName = 'Last name is required';
-      if (!formData.email) {
-        newErrors.email = 'Email is required';
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = 'Please enter a valid email';
-      }
-      if (!formData.password) {
-        newErrors.password = 'Password is required';
-      } else if (formData.password.length < 8) {
-        newErrors.password = 'Password must be at least 8 characters';
-      }
-      if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Passwords do not match';
-      }
-    }
-    
-    if (stepNumber === 2) {
-      if (!formData.businessName) newErrors.businessName = 'Business name is required';
-      if (!formData.licenseNumber) newErrors.licenseNumber = 'License number is required';
-      if (!formData.address) newErrors.address = 'Address is required';
-      if (!formData.city) newErrors.city = 'City is required';
-      if (!formData.state) newErrors.state = 'State is required';
-      if (!formData.zipCode) newErrors.zipCode = 'ZIP code is required';
-    }
-    
-    if (stepNumber === 3) {
-      if (!formData.monthlyVolume) newErrors.monthlyVolume = 'Please select monthly volume';
-      if (!formData.agreedToTerms) newErrors.agreedToTerms = 'You must agree to the terms';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const nextStep = () => {
-    if (validateStep(step)) {
-      setStep(step + 1);
-    }
-  };
-
-  const prevStep = () => {
-    setStep(step - 1);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateStep(3)) {
-      // Simulate signup success
-      console.log('Signup successful:', formData);
-      navigate('/welcome');
-    }
-  };
-
-  const renderStep = () => {
-    switch(step) {
-      case 1:
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-              <h1 className="font-unbounded text-3xl font-light text-white mb-2">
-                Create Account
-              </h1>
-              <p className="font-manrope text-white/70 text-sm">
-                Step 1 of 3: Personal Information
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block font-manrope text-white/80 text-sm mb-2">First Name</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                    errors.firstName ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                  }`}
-                  placeholder="John"
-                />
-                {errors.firstName && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.firstName}</p>}
-              </div>
-              <div>
-                <label className="block font-manrope text-white/80 text-sm mb-2">Last Name</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                    errors.lastName ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                  }`}
-                  placeholder="Doe"
-                />
-                {errors.lastName && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.lastName}</p>}
-              </div>
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">Email Address</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                  errors.email ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                }`}
-                placeholder="john@dispensary.com"
-              />
-              {errors.email && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.email}</p>}
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                  errors.password ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                }`}
-                placeholder="••••••••"
-              />
-              {errors.password && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.password}</p>}
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                  errors.confirmPassword ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                }`}
-                placeholder="••••••••"
-              />
-              {errors.confirmPassword && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.confirmPassword}</p>}
-            </div>
-
-            <button
-              type="button"
-              onClick={nextStep}
-              className="w-full bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
-            >
-              Continue →
-            </button>
-          </div>
-        );
-        
-      case 2:
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-              </div>
-              <h1 className="font-unbounded text-3xl font-light text-white mb-2">
-                Business Details
-              </h1>
-              <p className="font-manrope text-white/70 text-sm">
-                Step 2 of 3: Tell us about your business
-              </p>
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">Business Name</label>
-              <input
-                type="text"
-                name="businessName"
-                value={formData.businessName}
-                onChange={handleInputChange}
-                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                  errors.businessName ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                }`}
-                placeholder="Green Valley Dispensary"
-              />
-              {errors.businessName && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.businessName}</p>}
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">Business Type</label>
-              <select
-                name="businessType"
-                value={formData.businessType}
-                onChange={handleInputChange}
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-400 transition-colors"
-              >
-                <option value="dispensary">Dispensary</option>
-                <option value="delivery">Delivery Service</option>
-                <option value="cultivation">Cultivation</option>
-                <option value="manufacturing">Manufacturing</option>
-                <option value="testing">Testing Lab</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">License Number</label>
-              <input
-                type="text"
-                name="licenseNumber"
-                value={formData.licenseNumber}
-                onChange={handleInputChange}
-                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                  errors.licenseNumber ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                }`}
-                placeholder="C10-0000001-LIC"
-              />
-              {errors.licenseNumber && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.licenseNumber}</p>}
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">Address</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                  errors.address ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                }`}
-                placeholder="123 Main Street"
-              />
-              {errors.address && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.address}</p>}
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block font-manrope text-white/80 text-sm mb-2">City</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                    errors.city ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                  }`}
-                  placeholder="Los Angeles"
-                />
-                {errors.city && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.city}</p>}
-              </div>
-              <div>
-                <label className="block font-manrope text-white/80 text-sm mb-2">State</label>
-                <input
-                  type="text"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                    errors.state ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                  }`}
-                  placeholder="CA"
-                />
-                {errors.state && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.state}</p>}
-              </div>
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">ZIP Code</label>
-              <input
-                type="text"
-                name="zipCode"
-                value={formData.zipCode}
-                onChange={handleInputChange}
-                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none transition-colors ${
-                  errors.zipCode ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                }`}
-                placeholder="90210"
-              />
-              {errors.zipCode && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.zipCode}</p>}
-            </div>
-
-            <div className="flex space-x-4">
-              <button
-                type="button"
-                onClick={prevStep}
-                className="flex-1 border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors"
-              >
-                ← Back
-              </button>
-              <button
-                type="button"
-                onClick={nextStep}
-                className="flex-1 bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
-              >
-                Continue →
-              </button>
-            </div>
-          </div>
-        );
-        
-      case 3:
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h1 className="font-unbounded text-3xl font-light text-white mb-2">
-                Almost Done!
-              </h1>
-              <p className="font-manrope text-white/70 text-sm">
-                Step 3 of 3: Final details
-              </p>
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">Monthly Sales Volume</label>
-              <select
-                name="monthlyVolume"
-                value={formData.monthlyVolume}
-                onChange={handleInputChange}
-                className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors ${
-                  errors.monthlyVolume ? 'border-red-400 focus:border-red-400' : 'border-white/20 focus:border-green-400'
-                }`}
-              >
-                <option value="">Select monthly volume</option>
-                <option value="under-50k">Under $50,000</option>
-                <option value="50k-100k">$50,000 - $100,000</option>
-                <option value="100k-250k">$100,000 - $250,000</option>
-                <option value="250k-500k">$250,000 - $500,000</option>
-                <option value="500k-1m">$500,000 - $1,000,000</option>
-                <option value="over-1m">Over $1,000,000</option>
-              </select>
-              {errors.monthlyVolume && <p className="mt-1 text-red-400 text-sm font-manrope">{errors.monthlyVolume}</p>}
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">Current Solution</label>
-              <select
-                name="currentSolution"
-                value={formData.currentSolution}
-                onChange={handleInputChange}
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-400 transition-colors"
-              >
-                <option value="">Select current solution</option>
-                <option value="none">No current solution</option>
-                <option value="weedmaps">Weedmaps</option>
-                <option value="leafly">Leafly</option>
-                <option value="dutchie">Dutchie</option>
-                <option value="treez">Treez</option>
-                <option value="cova">Cova</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-manrope text-white/80 text-sm mb-2">How did you hear about us?</label>
-              <select
-                name="hearAboutUs"
-                value={formData.hearAboutUs}
-                onChange={handleInputChange}
-                className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-400 transition-colors"
-              >
-                <option value="">Select an option</option>
-                <option value="google">Google Search</option>
-                <option value="social">Social Media</option>
-                <option value="referral">Referral</option>
-                <option value="industry-event">Industry Event</option>
-                <option value="advertisement">Advertisement</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <input
-                  type="checkbox"
-                  name="agreedToTerms"
-                  id="agreedToTerms"
-                  checked={formData.agreedToTerms}
-                  onChange={handleInputChange}
-                  className="w-4 h-4 mt-1 rounded border-white/20 bg-white/10 text-green-400 focus:ring-green-400 focus:ring-2"
-                />
-                <label htmlFor="agreedToTerms" className="ml-2 font-manrope text-white/80 text-sm">
-                  I agree to the <Link to="/terms" className="text-green-400 hover:text-green-300 transition-colors">Terms of Service</Link> and <Link to="/privacy" className="text-green-400 hover:text-green-300 transition-colors">Privacy Policy</Link>
-                </label>
-              </div>
-              {errors.agreedToTerms && <p className="text-red-400 text-sm font-manrope">{errors.agreedToTerms}</p>}
-              
-              <div className="flex items-start">
-                <input
-                  type="checkbox"
-                  name="marketingEmails"
-                  id="marketingEmails"
-                  checked={formData.marketingEmails}
-                  onChange={handleInputChange}
-                  className="w-4 h-4 mt-1 rounded border-white/20 bg-white/10 text-green-400 focus:ring-green-400 focus:ring-2"
-                />
-                <label htmlFor="marketingEmails" className="ml-2 font-manrope text-white/80 text-sm">
-                  I'd like to receive product updates and marketing emails
-                </label>
-              </div>
-            </div>
-
-            <div className="flex space-x-4">
-              <button
-                type="button"
-                onClick={prevStep}
-                className="flex-1 border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors"
-              >
-                ← Back
-              </button>
-              <button
-                type="submit"
-                className="flex-1 bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25"
-              >
-                Create Account →
-              </button>
-            </div>
-          </div>
-        );
-        
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="page-container">
-      <div className="fixed inset-0 w-full h-full z-0">
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1622704776938-bed6cd156e04')`
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/70 to-black/90"></div>
-        
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="floating-leaf floating-leaf-1"></div>
-          <div className="floating-leaf floating-leaf-2"></div>
-          <div className="floating-leaf floating-leaf-3"></div>
-        </div>
-      </div>
-
-      <main className="relative z-10 min-h-screen flex items-center justify-center pt-20 pb-12">
-        <div className="container mx-auto px-8">
-          <div className="max-w-lg mx-auto">
-            <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-              {/* Progress Bar */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-manrope text-white/60 text-sm">Step {step} of 3</span>
-                  <span className="font-manrope text-white/60 text-sm">{Math.round((step / 3) * 100)}%</span>
-                </div>
-                <div className="w-full bg-white/10 rounded-full h-2">
-                  <div 
-                    className="bg-green-400 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${(step / 3) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="glass-card p-8 rounded-xl">
-                <form onSubmit={handleSubmit}>
-                  {renderStep()}
-                </form>
-
-                {/* Social Signup (only on step 1) */}
-                {step === 1 && (
-                  <>
-                    <div className="flex items-center my-6">
-                      <div className="flex-1 border-t border-white/20"></div>
-                      <span className="px-4 text-white/50 font-manrope text-sm">or</span>
-                      <div className="flex-1 border-t border-white/20"></div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <button type="button" className="w-full border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold flex items-center justify-center space-x-2 hover:bg-white/10 transition-colors">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                        </svg>
-                        <span>Sign up with Google</span>
-                      </button>
-                    </div>
-                  </>
-                )}
-
-                {/* Login Link */}
-                <div className="text-center mt-8 pt-6 border-t border-white/20">
-                  <p className="font-manrope text-white/70 text-sm">
-                    Already have an account?{' '}
-                    <Link to="/login" className="text-green-400 hover:text-green-300 font-semibold transition-colors">
-                      Sign in
-                    </Link>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <footer className="fixed bottom-4 left-6 text-xs text-white/50 font-manrope z-10">
-        ✦ Built for Local Highs, 2025
-      </footer>
-      
-      <div className="fixed bottom-4 right-6 text-xs text-white/50 font-manrope z-10">
-        © DoorBis, 2025
-      </div>
-    </div>
-  );
-};
-
-// Features Page Component
-const FeaturesPage = () => {
-  const features = [
-    {
-      title: "QR-Powered Storefronts",
-      description: "Instant digital storefronts accessible via QR codes. No app downloads, no friction.",
-      icon: "M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z",
-      image: "https://images.unsplash.com/photo-1622704776938-bed6cd156e04"
-    },
-    {
-      title: "Real-Time Inventory",
-      description: "Sync your inventory across all channels. Track stock levels and get alerts automatically.",
-      icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M6 7h12",
-      image: "https://images.unsplash.com/photo-1648824572347-6edd9a108e28"
-    },
-    {
-      title: "Driver Dispatch System",
-      description: "Automated driver assignment and route optimization for efficient deliveries.",
-      icon: "M13 10V3L4 14h7v7l9-11h-7z",
-      image: "https://images.unsplash.com/photo-1551825687-f9de1603ed8b"
-    },
-    {
-      title: "Analytics Dashboard",
-      description: "Comprehensive insights into sales, customer behavior, and delivery performance.",
-      icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f"
-    },
-    {
-      title: "Compliance Management",
-      description: "Built-in compliance tools to ensure you meet all local and state regulations.",
-      icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
-      image: "https://images.pexels.com/photos/257904/pexels-photo-257904.jpeg"
-    },
-    {
-      title: "Customer Communication",
-      description: "Automated SMS and email notifications for order updates and delivery tracking.",
-      icon: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z",
-      image: "https://images.pexels.com/photos/6169056/pexels-photo-6169056.jpeg"
-    }
-  ];
-
-  return (
-    <div className="page-container">
-      <div className="fixed inset-0 w-full h-full z-0">
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1460925895917-afdab827c52f')`
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/70 to-black/90"></div>
-      </div>
-
-      <main className="relative z-10 min-h-screen pt-32 pb-20">
-        <div className="container mx-auto px-8">
-          <div className="text-center mb-16">
-            <h1 className="font-unbounded text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white mb-6">
-              Features Built for
-              <span className="block text-green-400">Cannabis Commerce</span>
-            </h1>
-            <p className="font-manrope text-lg text-white/80 max-w-2xl mx-auto">
-              Everything you need to digitize your dispensary and scale your delivery operations.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="glass-card p-8 rounded-xl group hover:scale-105 transition-all duration-300">
-                <div 
-                  className="w-full h-48 bg-cover bg-center rounded-lg mb-6"
-                  style={{ backgroundImage: `url('${feature.image}')` }}
-                />
-                <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={feature.icon} />
-                  </svg>
-                </div>
-                <h3 className="font-unbounded text-white text-xl font-light mb-4">{feature.title}</h3>
-                <p className="font-manrope text-white/70 text-sm leading-relaxed">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-16">
-            <button className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25">
-              Start Free Trial →
-            </button>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-// For Dispensaries Page Component
-const DispensariesPage = () => {
-  const benefits = [
-    {
-      title: "Increase Revenue by 40%",
-      description: "Average dispensaries see 40% revenue increase within 3 months of launch.",
-      stat: "40%",
-      icon: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-    },
-    {
-      title: "Reduce Operational Costs",
-      description: "Streamline operations with automated inventory and delivery management.",
-      stat: "30%",
-      icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-    },
-    {
-      title: "Expand Customer Base",
-      description: "Reach new customers through digital discovery and seamless ordering.",
-      stat: "2x",
-      icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-    }
-  ];
-
-  return (
-    <div className="page-container">
-      <div className="fixed inset-0 w-full h-full z-0">
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1622704776938-bed6cd156e04')`
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/70 to-black/90"></div>
-      </div>
-
-      <main className="relative z-10 min-h-screen pt-32 pb-20">
-        <div className="container mx-auto px-8">
-          <div className="text-center mb-16">
-            <h1 className="font-unbounded text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white mb-6">
-              Transform Your
-              <span className="block text-green-400">Dispensary Business</span>
-            </h1>
-            <p className="font-manrope text-lg text-white/80 max-w-2xl mx-auto">
-              Join 500+ dispensaries using DoorBis to scale their operations and increase revenue.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="glass-card p-8 rounded-xl text-center">
-                <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={benefit.icon} />
-                  </svg>
-                </div>
-                <div className="text-4xl font-unbounded text-green-400 font-light mb-2">{benefit.stat}</div>
-                <h3 className="font-unbounded text-white text-xl font-light mb-4">{benefit.title}</h3>
-                <p className="font-manrope text-white/70 text-sm leading-relaxed">{benefit.description}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="glass-card p-12 rounded-xl mb-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="font-unbounded text-3xl font-light text-white mb-6">
-                  Complete Cannabis Commerce Platform
-                </h2>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="font-manrope text-white/80">QR-powered digital storefronts</span>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="font-manrope text-white/80">Automated inventory management</span>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="font-manrope text-white/80">Driver dispatch and delivery tracking</span>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="font-manrope text-white/80">Compliance and reporting tools</span>
-                  </div>
-                </div>
-              </div>
-              <div 
-                className="w-full h-80 bg-cover bg-center rounded-lg"
-                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1648824572347-6edd9a108e28')` }}
-              />
-            </div>
-          </div>
-
-          <div className="text-center">
-            <button className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25 mr-4">
-              Get Started →
-            </button>
-            <button className="border border-white/40 text-white px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors">
-              Schedule Demo
-            </button>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-// For Drivers Page Component
-const DriversPage = () => {
-  const driverBenefits = [
-    {
-      title: "Flexible Schedule",
-      description: "Work when you want, where you want. Set your own hours and delivery radius.",
-      icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-    },
-    {
-      title: "Competitive Pay",
-      description: "Earn $20-35/hour including tips. Weekly payouts directly to your account.",
-      icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-    },
-    {
-      title: "Smart Routing",
-      description: "AI-powered route optimization to maximize your earnings and minimize drive time.",
-      icon: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-    },
-    {
-      title: "Real-Time Support",
-      description: "24/7 driver support team ready to help with any delivery or technical issues.",
-      icon: "M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z"
-    }
-  ];
-
-  return (
-    <div className="page-container">
-      <div className="fixed inset-0 w-full h-full z-0">
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1551825687-f9de1603ed8b')`
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/70 to-black/90"></div>
-      </div>
-
-      <main className="relative z-10 min-h-screen pt-32 pb-20">
-        <div className="container mx-auto px-8">
-          <div className="text-center mb-16">
-            <h1 className="font-unbounded text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white mb-6">
-              Drive for
-              <span className="block text-green-400">Cannabis Commerce</span>
-            </h1>
-            <p className="font-manrope text-lg text-white/80 max-w-2xl mx-auto mb-8">
-              Join the fastest-growing network of cannabis delivery drivers. Earn more, work flexibly, and be part of the future of local commerce.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25">
-                Apply Now →
-              </button>
-              <button className="border border-white/40 text-white px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors">
-                Learn More
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            {driverBenefits.map((benefit, index) => (
-              <div key={index} className="glass-card p-6 rounded-xl text-center">
-                <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={benefit.icon} />
-                  </svg>
-                </div>
-                <h3 className="font-unbounded text-white text-lg font-light mb-3">{benefit.title}</h3>
-                <p className="font-manrope text-white/70 text-sm leading-relaxed">{benefit.description}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="glass-card p-12 rounded-xl mb-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div 
-                className="w-full h-80 bg-cover bg-center rounded-lg"
-                style={{ backgroundImage: `url('https://images.pexels.com/photos/6169056/pexels-photo-6169056.jpeg')` }}
-              />
-              <div>
-                <h2 className="font-unbounded text-3xl font-light text-white mb-6">
-                  Requirements & Getting Started
-                </h2>
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="font-manrope text-white/80">Valid driver's license & insurance</span>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="font-manrope text-white/80">Background check (we'll handle this)</span>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="font-manrope text-white/80">Smartphone with GPS</span>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="font-manrope text-white/80">Must be 21+ years old</span>
-                  </div>
-                </div>
-                <div className="bg-green-400/10 border border-green-400/20 rounded-lg p-4">
-                  <p className="font-manrope text-green-400 text-sm">
-                    <strong>Quick Start:</strong> Complete application in 10 minutes, get approved within 24 hours, start earning same day.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <h2 className="font-unbounded text-2xl font-light text-white mb-4">Ready to Start Driving?</h2>
-            <p className="font-manrope text-white/70 mb-8">Join thousands of drivers already earning with DoorBis</p>
-            <button className="bg-green-400 text-black px-8 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25">
-              Apply to Drive →
-            </button>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-// Pricing Page Component
-const PricingPage = () => {
-  const pricingTiers = [
-    {
-      name: "Starter",
-      price: "$99",
-      period: "/month",
-      description: "Perfect for new dispensaries getting started",
-      features: [
-        "QR-powered digital storefront",
-        "Up to 100 products",
-        "Basic analytics dashboard",
-        "Email support",
-        "5% transaction fee"
-      ],
-      recommended: false
-    },
-    {
-      name: "Professional",
-      price: "$199",
-      period: "/month",
-      description: "Best for growing dispensaries",
-      features: [
-        "Everything in Starter",
-        "Unlimited products",
-        "Advanced analytics & reporting",
-        "Driver dispatch system",
-        "Priority support",
-        "3% transaction fee",
-        "Custom branding"
-      ],
-      recommended: true
-    },
-    {
-      name: "Enterprise",
-      price: "Custom",
-      period: "",
-      description: "For large operations and chains",
-      features: [
-        "Everything in Professional",
-        "Multi-location management",
-        "White-label solution",
-        "Dedicated account manager",
-        "Custom integrations",
-        "1% transaction fee",
-        "24/7 phone support"
-      ],
-      recommended: false
-    }
-  ];
-
-  return (
-    <div className="page-container">
-      <div className="fixed inset-0 w-full h-full z-0">
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.pexels.com/photos/257904/pexels-photo-257904.jpeg')`
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/70 to-black/90"></div>
-      </div>
-
-      <main className="relative z-10 min-h-screen pt-32 pb-20">
-        <div className="container mx-auto px-8">
-          <div className="text-center mb-16">
-            <h1 className="font-unbounded text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white mb-6">
-              Simple, Transparent
-              <span className="block text-green-400">Pricing</span>
-            </h1>
-            <p className="font-manrope text-lg text-white/80 max-w-2xl mx-auto">
-              Choose the plan that fits your dispensary's needs. All plans include 30-day free trial.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {pricingTiers.map((tier, index) => (
-              <div key={index} className={`glass-card p-8 rounded-xl relative ${tier.recommended ? 'border-2 border-green-400' : ''}`}>
-                {tier.recommended && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-green-400 text-black px-4 py-1 rounded-full text-sm font-semibold">
-                      Most Popular
-                    </div>
-                  </div>
-                )}
-                <div className="text-center mb-8">
-                  <h3 className="font-unbounded text-2xl font-light text-white mb-2">{tier.name}</h3>
-                  <div className="mb-4">
-                    <span className="font-unbounded text-4xl font-light text-green-400">{tier.price}</span>
-                    <span className="font-manrope text-white/70">{tier.period}</span>
-                  </div>
-                  <p className="font-manrope text-white/70 text-sm">{tier.description}</p>
-                </div>
-                
-                <div className="space-y-4 mb-8">
-                  {tier.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-start space-x-3">
-                      <div className="w-5 h-5 bg-green-400 rounded-full flex items-center justify-center mt-0.5">
-                        <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <span className="font-manrope text-white/80 text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <button className={`w-full py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider transition-all duration-300 ${
-                  tier.recommended 
-                    ? 'bg-green-400 text-black hover:bg-green-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25' 
-                    : 'border border-white/40 text-white hover:bg-white/10'
-                }`}>
-                  {tier.name === 'Enterprise' ? 'Contact Sales' : 'Start Free Trial'}
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <div className="glass-card p-8 rounded-xl text-center">
-            <h2 className="font-unbounded text-2xl font-light text-white mb-4">
-              All Plans Include
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-3">
-                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <span className="font-manrope text-white/80 text-sm">SSL Security</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-3">
-                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <span className="font-manrope text-white/80 text-sm">Compliance Tools</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-3">
-                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                </div>
-                <span className="font-manrope text-white/80 text-sm">Auto Updates</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-green-400/20 rounded-lg flex items-center justify-center mb-3">
-                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 12h.01M12 12h.01M12 12h.01" />
-                  </svg>
-                </div>
-                <span className="font-manrope text-white/80 text-sm">24/7 Monitoring</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-// FAQ Page Component
-const FAQPage = () => {
-  const [openFAQ, setOpenFAQ] = useState(null);
-
-  const faqs = [
-    {
-      question: "How does the QR-powered storefront work?",
-      answer: "Customers scan a QR code at your dispensary or from your marketing materials to access your digital storefront. They can browse products, place orders, and pay - all without downloading an app. Your staff can manage inventory and orders in real-time through our dashboard."
-    },
-    {
-      question: "What are the compliance requirements?",
-      answer: "Our platform is built with cannabis compliance in mind. We support track-and-trace integration, age verification, local tax calculations, and reporting requirements. We stay updated with regulations in all legal cannabis markets."
-    },
-    {
-      question: "How do I manage delivery drivers?",
-      answer: "Our driver dispatch system automatically assigns orders to available drivers based on location and capacity. You can track deliveries in real-time, communicate with drivers, and manage payments all from your dashboard."
-    },
-    {
-      question: "What payment methods do you support?",
-      answer: "We support all major payment methods including credit cards, debit cards, digital wallets, and cash payments. All transactions are secure and compliant with banking regulations."
-    },
-    {
-      question: "How long does setup take?",
-      answer: "Most dispensaries are live within 24-48 hours. Our team handles the technical setup while you focus on uploading your products and customizing your storefront. We provide full onboarding support."
-    },
-    {
-      question: "Can I integrate with my existing POS system?",
-      answer: "Yes! We integrate with most major cannabis POS systems including Dutchie, Treez, Cova, and more. This ensures your inventory stays synchronized across all sales channels."
-    },
-    {
-      question: "What kind of analytics do you provide?",
-      answer: "Our analytics dashboard provides insights into sales performance, customer behavior, delivery metrics, inventory turnover, and more. You can export reports for accounting and compliance purposes."
-    },
-    {
-      question: "Is there a contract or can I cancel anytime?",
-      answer: "All our plans are month-to-month with no long-term contracts. You can upgrade, downgrade, or cancel your subscription at any time. We believe in earning your business every month."
-    }
-  ];
-
-  return (
-    <div className="page-container">
-      <div className="fixed inset-0 w-full h-full z-0">
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1631112086050-4ca0b7ac73f3')`
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/70 to-black/90"></div>
-      </div>
-
-      <main className="relative z-10 min-h-screen pt-32 pb-20">
-        <div className="container mx-auto px-8">
-          <div className="text-center mb-16">
-            <h1 className="font-unbounded text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-white mb-6">
-              Frequently Asked
-              <span className="block text-green-400">Questions</span>
-            </h1>
-            <p className="font-manrope text-lg text-white/80 max-w-2xl mx-auto">
-              Get answers to common questions about our cannabis commerce platform.
-            </p>
-          </div>
-
-          <div className="max-w-3xl mx-auto">
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <div key={index} className="glass-card rounded-xl overflow-hidden">
-                  <button
-                    className="w-full p-6 text-left flex justify-between items-center hover:bg-white/5 transition-colors"
-                    onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
-                  >
-                    <h3 className="font-unbounded text-white text-lg font-light pr-4">
-                      {faq.question}
-                    </h3>
-                    <div className={`transform transition-transform duration-300 ${openFAQ === index ? 'rotate-180' : ''}`}>
-                      <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </button>
-                  {openFAQ === index && (
-                    <div className="px-6 pb-6">
-                      <p className="font-manrope text-white/80 leading-relaxed">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="text-center mt-16">
-            <div className="glass-card p-8 rounded-xl max-w-2xl mx-auto">
-              <h2 className="font-unbounded text-2xl font-light text-white mb-4">
-                Still Have Questions?
-              </h2>
-              <p className="font-manrope text-white/70 mb-6">
-                Our team is here to help. Get in touch and we'll answer any questions you have.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-green-400 text-black px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-green-300 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-400/25">
-                  Contact Support
-                </button>
-                <button className="border border-white/40 text-white px-6 py-3 rounded-lg font-manrope text-sm font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors">
-                  Schedule Demo
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
     </div>
   );
 };
@@ -1653,18 +801,17 @@ function App() {
   return (
     <div className="kush-door-app">
       <BrowserRouter>
-        <Navigation />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/features" element={<FeaturesPage />} />
-          <Route path="/dispensaries" element={<DispensariesPage />} />
-          <Route path="/drivers" element={<DriversPage />} />
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/" element={
+            <>
+              <Navigation />
+              <HomePage />
+              <AccessModal />
+            </>
+          } />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/dashboard" element={<DashboardMain />} />
         </Routes>
-        <AccessModal />
       </BrowserRouter>
     </div>
   );
