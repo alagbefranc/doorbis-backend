@@ -12,7 +12,24 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import logging
 from dotenv import load_dotenv
 
-# Import all route modules
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
+
+# MongoDB connection
+mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+db_name = os.environ.get('DB_NAME', 'kush_door')
+client = AsyncIOMotorClient(mongo_url)
+db = client[db_name]
+
+# Global database function that can be imported by routes
+async def get_database():
+    return db
+
+# Set up the database function in a global module that routes can import
+import builtins
+builtins.get_database = get_database
+
+# Import all route modules after setting up the global database function
 from routes.auth import router as auth_router
 from routes.products import router as products_router
 from routes.orders import router as orders_router
@@ -22,14 +39,9 @@ from routes.payments import router as payments_router
 from routes.support import router as support_router
 from routes.analytics import router as analytics_router
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
-
-# MongoDB connection
-mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-db_name = os.environ.get('DB_NAME', 'kush_door')
-client = AsyncIOMotorClient(mongo_url)
-db = client[db_name]
+# Update auth dependency as well
+import auth.auth
+auth.auth.get_database = get_database
 
 # Create the main app
 app = FastAPI(
@@ -46,34 +58,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Database dependency
-async def get_database():
-    return db
-
-# Import all route modules
-import routes.auth
-import routes.products
-import routes.orders
-import routes.customers
-import routes.drivers
-import routes.payments
-import routes.support
-import routes.analytics
-
-# Monkey patch the get_database function in each module
-routes.auth.get_database = get_database
-routes.products.get_database = get_database
-routes.orders.get_database = get_database
-routes.customers.get_database = get_database
-routes.drivers.get_database = get_database
-routes.payments.get_database = get_database
-routes.support.get_database = get_database
-routes.analytics.get_database = get_database
-
-# Update auth dependency as well
-import auth.auth
-auth.auth.get_database = get_database
 
 # Include all routers with /api prefix
 app.include_router(auth_router, prefix="/api")
