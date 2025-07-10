@@ -2040,6 +2040,297 @@ const CustomersManagement = ({ setSlideCard }) => {
   );
 };
 
+// Analytics & Reports Component
+const AnalyticsReports = ({ setSlideCard }) => {
+  const analyticsData = {
+    salesMetrics: [
+      { period: 'Today', revenue: '$2,847', orders: 23, avgOrder: '$123.78', change: '+12.5%' },
+      { period: 'Yesterday', revenue: '$2,534', orders: 19, avgOrder: '$133.37', change: '+8.2%' },
+      { period: 'This Week', revenue: '$18,493', orders: 145, avgOrder: '$127.54', change: '+15.3%' },
+      { period: 'Last Week', revenue: '$16,021', orders: 132, avgOrder: '$121.37', change: '+5.1%' },
+      { period: 'This Month', revenue: '$84,329', orders: 647, avgOrder: '$130.31', change: '+18.7%' },
+      { period: 'Last Month', revenue: '$71,045', orders: 578, avgOrder: '$122.84', change: '+12.1%' },
+    ],
+    topProducts: [
+      { name: 'Blue Dream', sales: 145, revenue: '$6,525', percentage: '18.5%' },
+      { name: 'OG Kush', sales: 132, revenue: '$6,600', percentage: '17.2%' },
+      { name: 'Sativa Mix', sales: 89, revenue: '$4,272', percentage: '11.8%' },
+      { name: 'CBD Gummies', sales: 78, revenue: '$1,950', percentage: '9.2%' },
+      { name: 'Pre-Roll Pack', sales: 67, revenue: '$2,345', percentage: '7.8%' },
+    ],
+    deliveryMetrics: [
+      { metric: 'Avg Delivery Time', value: '28 min', target: '30 min', status: 'good' },
+      { metric: 'On-Time Delivery', value: '94.2%', target: '90%', status: 'excellent' },
+      { metric: 'Customer Satisfaction', value: '4.8/5', target: '4.5/5', status: 'excellent' },
+      { metric: 'Delivery Success Rate', value: '98.7%', target: '95%', status: 'excellent' },
+    ],
+    customerInsights: [
+      { metric: 'New Customers', value: '45', period: 'This Month', change: '+15.3%' },
+      { metric: 'Returning Customers', value: '67%', period: 'Overall', change: '+8.2%' },
+      { metric: 'Customer Lifetime Value', value: '$847', period: 'Average', change: '+12.1%' },
+      { metric: 'Churn Rate', value: '2.3%', period: 'Monthly', change: '-0.5%' },
+    ],
+    referralData: [
+      { source: 'Word of Mouth', customers: 89, percentage: '32.1%' },
+      { source: 'Social Media', customers: 67, percentage: '24.1%' },
+      { source: 'Google Search', customers: 45, percentage: '16.2%' },
+      { source: 'Direct', customers: 34, percentage: '12.3%' },
+      { source: 'Referral Program', customers: 28, percentage: '10.1%' },
+      { source: 'Other', customers: 14, percentage: '5.2%' },
+    ]
+  };
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'excellent': return 'text-green-600';
+      case 'good': return 'text-blue-600';
+      case 'warning': return 'text-yellow-600';
+      case 'poor': return 'text-red-600';
+      default: return 'text-gray-600';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch(status) {
+      case 'excellent': return '🟢';
+      case 'good': return '🔵';
+      case 'warning': return '🟡';
+      case 'poor': return '🔴';
+      default: return '⚪';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Analytics Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Monthly Revenue</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">$84,329</div>
+              <div className="text-sm text-green-600 mt-1">+18.7% from last month</div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Avg Order Value</div>
+              <div className="text-2xl font-bold text-blue-600 mt-1">$130.31</div>
+              <div className="text-sm text-blue-600 mt-1">+6.2% from last month</div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Customer Satisfaction</div>
+              <div className="text-2xl font-bold text-purple-600 mt-1">4.8/5</div>
+              <div className="text-sm text-purple-600 mt-1">Based on 1,247 reviews</div>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-gray-600">Delivery Performance</div>
+              <div className="text-2xl font-bold text-orange-600 mt-1">94.2%</div>
+              <div className="text-sm text-orange-600 mt-1">On-time delivery rate</div>
+            </div>
+            <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M6 7h12" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sales Performance */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Sales Performance</h3>
+          <button 
+            className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+            onClick={() => setSlideCard({
+              isOpen: true,
+              title: 'Detailed Sales Analytics',
+              content: (
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Sales Analytics</h3>
+                    <p className="text-gray-600">Comprehensive sales performance metrics</p>
+                  </div>
+                  
+                  <div className="h-64 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-green-600 font-semibold text-lg">Interactive Sales Chart</div>
+                      <div className="text-sm text-gray-500 mt-2">Revenue trends, order patterns, and growth metrics</div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="text-sm font-medium text-gray-600">Peak Sales Hour</div>
+                      <div className="text-lg font-bold text-gray-900">2:00 PM - 4:00 PM</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="text-sm font-medium text-gray-600">Best Sales Day</div>
+                      <div className="text-lg font-bold text-gray-900">Saturday</div>
+                    </div>
+                  </div>
+                  
+                  <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    Export Detailed Report
+                  </button>
+                </div>
+              )
+            })}
+          >
+            View Details
+          </button>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Order</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Change</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {analyticsData.salesMetrics.map((metric, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{metric.period}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">{metric.revenue}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{metric.orders}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{metric.avgOrder}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">{metric.change}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Top Products & Delivery Metrics */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Performing Products</h3>
+          <div className="space-y-4">
+            {analyticsData.topProducts.map((product, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">{product.name}</div>
+                    <div className="text-sm text-gray-500">{product.sales} units sold</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="font-medium text-green-600">{product.revenue}</div>
+                  <div className="text-sm text-gray-500">{product.percentage}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Delivery Performance</h3>
+          <div className="space-y-4">
+            {analyticsData.deliveryMetrics.map((metric, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="text-lg">{getStatusIcon(metric.status)}</div>
+                  <div>
+                    <div className="font-medium text-gray-900">{metric.metric}</div>
+                    <div className="text-sm text-gray-500">Target: {metric.target}</div>
+                  </div>
+                </div>
+                <div className={`text-right font-medium ${getStatusColor(metric.status)}`}>
+                  {metric.value}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Customer Insights & Referral Tracking */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Insights</h3>
+          <div className="space-y-4">
+            {analyticsData.customerInsights.map((insight, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium text-gray-900">{insight.metric}</div>
+                  <div className="text-sm text-gray-500">{insight.period}</div>
+                </div>
+                <div className="text-right">
+                  <div className="font-medium text-gray-900">{insight.value}</div>
+                  <div className="text-sm text-green-600">{insight.change}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Acquisition</h3>
+          <div className="space-y-4">
+            {analyticsData.referralData.map((source, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium text-gray-900">{source.source}</div>
+                  <div className="text-sm text-gray-500">{source.customers} customers</div>
+                </div>
+                <div className="text-right">
+                  <div className="font-medium text-blue-600">{source.percentage}</div>
+                  <div className="w-20 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full" 
+                      style={{ width: source.percentage }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Dashboard Main Component
 const DashboardMain = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
