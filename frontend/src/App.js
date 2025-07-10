@@ -3581,6 +3581,7 @@ const HomePage = () => {
 
   return (
     <div className="page-container">
+      <Navigation />
       <div className="fixed inset-0 w-full h-full z-0">
         <div 
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
