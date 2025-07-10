@@ -894,7 +894,7 @@ const ProductsCatalog = ({ setSlideCard }) => {
 
   const fetchProducts = async () => {
     try {
-      const result = await ApiService.getProducts();
+      const result = await ApiService.getDemoProducts();
       if (result.success) {
         setProducts(result.data);
       } else {
@@ -907,7 +907,7 @@ const ProductsCatalog = ({ setSlideCard }) => {
 
   const fetchProductStats = async () => {
     try {
-      const result = await ApiService.getProductStats();
+      const result = await ApiService.getDemoProductStats();
       if (result.success) {
         setProductStats(result.data);
       }
