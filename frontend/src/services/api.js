@@ -83,6 +83,37 @@ class ApiService {
     };
   }
 
+  // Demo Products API (no auth required)
+  async getDemoProducts() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/products/demo`);
+
+      if (response.ok) {
+        const data = await response.json();
+        return { success: true, data };
+      } else {
+        return { success: false, error: 'Failed to fetch demo products' };
+      }
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  async getDemoProductStats() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/products/demo/stats`);
+
+      if (response.ok) {
+        const data = await response.json();
+        return { success: true, data };
+      } else {
+        return { success: false, error: 'Failed to fetch demo product stats' };
+      }
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
   // Products API
   async getProducts() {
     try {
