@@ -608,21 +608,23 @@ const OrdersManagement = ({ setSlideCard }) => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {allOrders.map((order, index) => (
-                <tr key={index} className="hover:bg-gray-50">
+              {orders.map((order, index) => (
+                <tr key={order.id || index} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.id}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{order.customer}</div>
-                    <div className="text-sm text-gray-500">{order.phone}</div>
+                    <div className="text-sm font-medium text-gray-900">{order.customer_name || 'Unknown Customer'}</div>
+                    <div className="text-sm text-gray-500">{order.customer_phone || 'N/A'}</div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{order.items}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{order.items_summary || 'No items'}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1).replace('-', ' ')}
+                      {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1).replace('-', ' ') : 'Unknown'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.driver}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.driver_name || 'Not assigned'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    ${order.total_amount ? order.total_amount.toFixed(2) : '0.00'}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">
                       <button 
@@ -637,15 +639,19 @@ const OrdersManagement = ({ setSlideCard }) => {
                                 <div className="space-y-2">
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Name:</span>
-                                    <span className="font-medium">{order.customer}</span>
+                                    <span className="font-medium">{order.customer_name || 'Unknown'}</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Phone:</span>
-                                    <span className="font-medium">{order.phone}</span>
+                                    <span className="font-medium">{order.customer_phone || 'N/A'}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Email:</span>
+                                    <span className="font-medium">{order.customer_email || 'N/A'}</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Address:</span>
-                                    <span className="font-medium text-right">{order.address}</span>
+                                    <span className="font-medium text-right">{order.delivery_address || 'N/A'}</span>
                                   </div>
                                 </div>
                               </div>
@@ -655,25 +661,25 @@ const OrdersManagement = ({ setSlideCard }) => {
                                 <div className="space-y-2">
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Items:</span>
-                                    <span className="font-medium text-right">{order.items}</span>
+                                    <span className="font-medium text-right">{order.items_summary || 'No items'}</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Total:</span>
-                                    <span className="font-medium text-green-600">{order.amount}</span>
+                                    <span className="font-medium text-green-600">${order.total_amount ? order.total_amount.toFixed(2) : '0.00'}</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Status:</span>
                                     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                      {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Unknown'}
                                     </span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Driver:</span>
-                                    <span className="font-medium">{order.driver}</span>
+                                    <span className="font-medium">{order.driver_name || 'Not assigned'}</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Order Time:</span>
-                                    <span className="font-medium">{order.time}</span>
+                                    <span className="font-medium">{order.created_at ? new Date(order.created_at).toLocaleString() : 'N/A'}</span>
                                   </div>
                                 </div>
                               </div>
