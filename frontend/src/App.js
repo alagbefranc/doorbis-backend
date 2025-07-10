@@ -230,8 +230,8 @@ const DashboardOverview = ({ setSlideCard }) => {
       const ordersResult = await ApiService.getOrders();
       console.log('Orders result:', ordersResult);
       if (ordersResult.success) {
-        // Get latest 3 orders
-        const recent = ordersResult.data.orders ? ordersResult.data.orders.slice(0, 3) : [];
+        // Backend returns array directly, not data.orders
+        const recent = ordersResult.data ? ordersResult.data.slice(0, 3) : [];
         setRecentOrders(recent);
         console.log('Recent orders set:', recent);
       } else {
