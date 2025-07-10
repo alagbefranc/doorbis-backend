@@ -755,7 +755,126 @@ class KushDoorBackendTester:
             self.log_result("CORS Configuration", "FAIL", f"CORS test failed: {str(e)}")
             return False
     
-    def test_error_handling(self):
+    def test_sample_data_verification(self):
+        """Test that sample data exists in the database"""
+        if not self.auth_token:
+            self.log_result("Sample Data Verification", "FAIL", "No auth token available")
+            return False
+        
+        try:
+            # Test that sample products exist
+            response = requests.get(
+                f"{API_BASE_URL}/products/",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                products = response.json()
+                if len(products) >= 6:  # Should have 6 sample products
+                    self.log_result("Sample Products", "PASS", f"Found {len(products)} sample products")
+                else:
+                    self.log_result("Sample Products", "FAIL", f"Expected 6+ products, found {len(products)}")
+                    return False
+            else:
+                self.log_result("Sample Products", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Test that sample customers exist
+            response = requests.get(
+                f"{API_BASE_URL}/customers/",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                customers = response.json()
+                if len(customers) >= 5:  # Should have 5 sample customers
+                    self.log_result("Sample Customers", "PASS", f"Found {len(customers)} sample customers")
+                else:
+                    self.log_result("Sample Customers", "FAIL", f"Expected 5+ customers, found {len(customers)}")
+                    return False
+            else:
+                self.log_result("Sample Customers", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Test that sample orders exist
+            response = requests.get(
+                f"{API_BASE_URL}/orders/",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                orders = response.json()
+                if len(orders) >= 4:  # Should have 4 sample orders
+                    self.log_result("Sample Orders", "PASS", f"Found {len(orders)} sample orders")
+                else:
+                    self.log_result("Sample Orders", "FAIL", f"Expected 4+ orders, found {len(orders)}")
+                    return False
+            else:
+                self.log_result("Sample Orders", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Test that sample drivers exist
+            response = requests.get(
+                f"{API_BASE_URL}/drivers/",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                drivers = response.json()
+                if len(drivers) >= 3:  # Should have 3 sample drivers
+                    self.log_result("Sample Drivers", "PASS", f"Found {len(drivers)} sample drivers")
+                else:
+                    self.log_result("Sample Drivers", "FAIL", f"Expected 3+ drivers, found {len(drivers)}")
+                    return False
+            else:
+                self.log_result("Sample Drivers", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Test that sample payments exist
+            response = requests.get(
+                f"{API_BASE_URL}/payments/",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                payments = response.json()
+                if len(payments) >= 4:  # Should have 4 sample payments
+                    self.log_result("Sample Payments", "PASS", f"Found {len(payments)} sample payments")
+                else:
+                    self.log_result("Sample Payments", "FAIL", f"Expected 4+ payments, found {len(payments)}")
+                    return False
+            else:
+                self.log_result("Sample Payments", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            # Test that sample support tickets exist
+            response = requests.get(
+                f"{API_BASE_URL}/support/tickets",
+                headers=self.get_auth_headers(),
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                tickets = response.json()
+                if len(tickets) >= 3:  # Should have 3 sample tickets
+                    self.log_result("Sample Support Tickets", "PASS", f"Found {len(tickets)} sample support tickets")
+                else:
+                    self.log_result("Sample Support Tickets", "FAIL", f"Expected 3+ tickets, found {len(tickets)}")
+                    return False
+            else:
+                self.log_result("Sample Support Tickets", "FAIL", f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            return True
+                
+        except requests.exceptions.RequestException as e:
+            self.log_result("Sample Data Verification", "FAIL", f"Request failed: {str(e)}")
+            return False
         """Test error handling for invalid requests"""
         try:
             # Test invalid endpoint
