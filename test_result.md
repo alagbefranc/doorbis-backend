@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Build out the remaining dashboard sections for the Kush Door cannabis commerce SaaS platform: Payments (Stripe integration, payouts, transaction logs), Customers (customer list, loyalty tracking, history), Analytics (sales metrics, delivery speed, referral tracking), Support (chat widget, tickets, knowledge base), and Settings (profile, store subdomain, notifications, admin roles, logout). Maintain the same comprehensive approach and premium design as existing sections."
+user_problem_statement: "Build out the remaining dashboard sections for the Kush Door cannabis commerce SaaS platform: Payments (Stripe integration, payouts, transaction logs), Customers (customer list, loyalty tracking, history), Analytics (sales metrics, delivery speed, referral tracking), Support (chat widget, tickets, knowledge base), and Settings (profile, store subdomain, notifications, admin roles, logout). Maintain the same comprehensive approach and premium design as existing sections. PLUS: Create comprehensive backend API with authentication system and all CRUD operations for dashboard functionality."
 
 backend:
   - task: "Backend Service Health Check"
