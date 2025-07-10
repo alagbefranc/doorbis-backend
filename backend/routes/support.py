@@ -225,7 +225,7 @@ async def update_knowledge_base_article(
     
     # Return updated article
     updated_article = await db.knowledge_base.find_one({
-        {"id": article_id, "user_id": current_user["id"]
+        "id": article_id, "user_id": current_user["id"]
     })
     
     return KnowledgeBase(**updated_article)
