@@ -1473,21 +1473,7 @@ const EditProductForm = ({ product, onSubmit, onCancel }) => {
   );
 };
 
-// Products Catalog Component
-const ProductsCatalog = ({ setSlideCard }) => {
-  const [products, setProducts] = useState([]);
-  const [productStats, setProductStats] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    fetchProducts();
-    fetchProductStats();
-  }, []);
-
-  const fetchProducts = async () => {
-    try {
-      const result = await ApiService.getProducts();
+// Drivers Management Component
       if (result.success) {
         setProducts(result.data);
       } else {
