@@ -486,7 +486,6 @@ const DashboardOverview = ({ setSlideCard }) => {
     </div>
   );
 };
-};
 
 // Orders Management Component
 const OrdersManagement = ({ setSlideCard }) => {
