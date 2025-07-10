@@ -2960,7 +2960,6 @@ const CustomersManagement = ({ setSlideCard }) => {
 };
 
 const AnalyticsReports = ({ setSlideCard }) => {
-            onClick={() => setSlideCard({
               isOpen: true,
               title: 'Loyalty Program Settings',
               content: (
