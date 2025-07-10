@@ -527,7 +527,7 @@ const OrdersManagement = ({ setSlideCard }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-gray-600">Pending Orders</div>
-              <div className="text-2xl font-bold text-yellow-600 mt-1">8</div>
+              <div className="text-2xl font-bold text-yellow-600 mt-1">{orderStats.pending_orders || 0}</div>
             </div>
             <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -540,7 +540,7 @@ const OrdersManagement = ({ setSlideCard }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-gray-600">In Transit</div>
-              <div className="text-2xl font-bold text-blue-600 mt-1">15</div>
+              <div className="text-2xl font-bold text-blue-600 mt-1">{orderStats.in_transit_orders || 0}</div>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -553,7 +553,7 @@ const OrdersManagement = ({ setSlideCard }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-gray-600">Delivered Today</div>
-              <div className="text-2xl font-bold text-green-600 mt-1">42</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">{orderStats.delivered_today || 0}</div>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -566,7 +566,9 @@ const OrdersManagement = ({ setSlideCard }) => {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-gray-600">Total Revenue</div>
-              <div className="text-2xl font-bold text-gray-900 mt-1">$4,829</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">
+                ${orderStats.total_revenue ? orderStats.total_revenue.toFixed(2) : '0.00'}
+              </div>
             </div>
             <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
