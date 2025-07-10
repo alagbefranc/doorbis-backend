@@ -3,29 +3,26 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List
 from models.payment import Payment, PaymentCreate, PaymentUpdate, Payout
 from auth.auth import get_current_active_user
+from database import get_database
 
 router = APIRouter(prefix="/payments", tags=["Payments"])
 
-async def get_database():
-    # This will be injected by dependency
-    pass
-
 @router.get("/", response_model=List[Payment])
 async def get_payments(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get all payments for the current user's store"""
+    db = await get_database()
     payments = await db.payments.find({"user_id": current_user["id"]}).to_list(1000)
     return [Payment(**payment) for payment in payments]
 
 @router.post("/", response_model=Payment)
 async def create_payment(
     payment_data: PaymentCreate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Create a new payment record"""
+    db = await get_database()
     payment_dict = payment_data.dict()
     payment_dict["user_id"] = current_user["id"]
     
@@ -37,10 +34,10 @@ async def create_payment(
 @router.get("/{payment_id}", response_model=Payment)
 async def get_payment(
     payment_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get a specific payment"""
+    db = await get_database()
     payment = await db.payments.find_one({
         "id": payment_id,
         "user_id": current_user["id"]
@@ -58,10 +55,10 @@ async def get_payment(
 async def update_payment(
     payment_id: str,
     payment_update: PaymentUpdate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Update a payment"""
+    db = await get_database()
     # Check if payment exists and belongs to user
     existing_payment = await db.payments.find_one({
         "id": payment_id,
@@ -92,10 +89,10 @@ async def update_payment(
 
 @router.get("/stats/overview")
 async def get_payment_stats(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get payment statistics overview"""
+    db = await get_database()
     # Total revenue
     revenue_pipeline = [
         {"$match": {"user_id": current_user["id"], "status": "completed"}},
@@ -137,20 +134,20 @@ async def get_payment_stats(
 
 @router.get("/payouts/", response_model=List[Payout])
 async def get_payouts(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get all payouts for the current user's store"""
+    db = await get_database()
     payouts = await db.payouts.find({"user_id": current_user["id"]}).to_list(1000)
     return [Payout(**payout) for payout in payouts]
 
 @router.post("/refund/{payment_id}")
 async def refund_payment(
     payment_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Refund a payment"""
+    db = await get_database()
     payment = await db.payments.find_one({
         "id": payment_id,
         "user_id": current_user["id"],

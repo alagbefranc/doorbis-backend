@@ -3,30 +3,27 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List
 from models.support import SupportTicket, SupportTicketCreate, SupportTicketUpdate, KnowledgeBase, KnowledgeBaseCreate, KnowledgeBaseUpdate
 from auth.auth import get_current_active_user
+from database import get_database
 
 router = APIRouter(prefix="/support", tags=["Support"])
-
-async def get_database():
-    # This will be injected by dependency
-    pass
 
 # Support Tickets
 @router.get("/tickets", response_model=List[SupportTicket])
 async def get_support_tickets(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get all support tickets for the current user's store"""
+    db = await get_database()
     tickets = await db.support_tickets.find({"user_id": current_user["id"]}).to_list(1000)
     return [SupportTicket(**ticket) for ticket in tickets]
 
 @router.post("/tickets", response_model=SupportTicket)
 async def create_support_ticket(
     ticket_data: SupportTicketCreate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Create a new support ticket"""
+    db = await get_database()
     ticket_dict = ticket_data.dict()
     ticket_dict["user_id"] = current_user["id"]
     
@@ -38,10 +35,10 @@ async def create_support_ticket(
 @router.get("/tickets/{ticket_id}", response_model=SupportTicket)
 async def get_support_ticket(
     ticket_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get a specific support ticket"""
+    db = await get_database()
     ticket = await db.support_tickets.find_one({
         "id": ticket_id,
         "user_id": current_user["id"]
@@ -59,10 +56,10 @@ async def get_support_ticket(
 async def update_support_ticket(
     ticket_id: str,
     ticket_update: SupportTicketUpdate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Update a support ticket"""
+    db = await get_database()
     # Check if ticket exists and belongs to user
     existing_ticket = await db.support_tickets.find_one({
         "id": ticket_id,
@@ -94,10 +91,10 @@ async def update_support_ticket(
 @router.delete("/tickets/{ticket_id}")
 async def delete_support_ticket(
     ticket_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Delete a support ticket"""
+    db = await get_database()
     result = await db.support_tickets.delete_one({
         "id": ticket_id,
         "user_id": current_user["id"]
@@ -113,10 +110,10 @@ async def delete_support_ticket(
 
 @router.get("/tickets/stats/overview")
 async def get_support_stats(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get support statistics overview"""
+    db = await get_database()
     total_tickets = await db.support_tickets.count_documents({"user_id": current_user["id"]})
     open_tickets = await db.support_tickets.count_documents({
         "user_id": current_user["id"],
@@ -150,20 +147,20 @@ async def get_support_stats(
 # Knowledge Base
 @router.get("/knowledge-base", response_model=List[KnowledgeBase])
 async def get_knowledge_base_articles(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get all knowledge base articles for the current user's store"""
+    db = await get_database()
     articles = await db.knowledge_base.find({"user_id": current_user["id"]}).to_list(1000)
     return [KnowledgeBase(**article) for article in articles]
 
 @router.post("/knowledge-base", response_model=KnowledgeBase)
 async def create_knowledge_base_article(
     article_data: KnowledgeBaseCreate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Create a new knowledge base article"""
+    db = await get_database()
     article_dict = article_data.dict()
     article_dict["user_id"] = current_user["id"]
     
@@ -175,10 +172,10 @@ async def create_knowledge_base_article(
 @router.get("/knowledge-base/{article_id}", response_model=KnowledgeBase)
 async def get_knowledge_base_article(
     article_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get a specific knowledge base article"""
+    db = await get_database()
     article = await db.knowledge_base.find_one({
         "id": article_id,
         "user_id": current_user["id"]
@@ -202,10 +199,10 @@ async def get_knowledge_base_article(
 async def update_knowledge_base_article(
     article_id: str,
     article_update: KnowledgeBaseUpdate,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Update a knowledge base article"""
+    db = await get_database()
     # Check if article exists and belongs to user
     existing_article = await db.knowledge_base.find_one({
         "id": article_id,
@@ -228,8 +225,7 @@ async def update_knowledge_base_article(
     
     # Return updated article
     updated_article = await db.knowledge_base.find_one({
-        "id": article_id,
-        "user_id": current_user["id"]
+        {"id": article_id, "user_id": current_user["id"]
     })
     
     return KnowledgeBase(**updated_article)
@@ -237,10 +233,10 @@ async def update_knowledge_base_article(
 @router.delete("/knowledge-base/{article_id}")
 async def delete_knowledge_base_article(
     article_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Delete a knowledge base article"""
+    db = await get_database()
     result = await db.knowledge_base.delete_one({
         "id": article_id,
         "user_id": current_user["id"]
@@ -257,10 +253,10 @@ async def delete_knowledge_base_article(
 @router.post("/knowledge-base/{article_id}/helpful")
 async def mark_article_helpful(
     article_id: str,
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Mark an article as helpful"""
+    db = await get_database()
     result = await db.knowledge_base.update_one(
         {"id": article_id, "user_id": current_user["id"]},
         {

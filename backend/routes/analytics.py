@@ -3,19 +3,16 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
 from auth.auth import get_current_active_user
+from database import get_database
 
 router = APIRouter(prefix="/analytics", tags=["Analytics"])
 
-async def get_database():
-    # This will be injected by dependency
-    pass
-
 @router.get("/overview")
 async def get_analytics_overview(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get comprehensive analytics overview"""
+    db = await get_database()
     # Sales metrics
     total_orders = await db.orders.count_documents({"user_id": current_user["id"]})
     
@@ -57,10 +54,10 @@ async def get_analytics_overview(
 
 @router.get("/sales-performance")
 async def get_sales_performance(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get detailed sales performance metrics"""
+    db = await get_database()
     now = datetime.utcnow()
     today = now.replace(hour=0, minute=0, second=0, microsecond=0)
     yesterday = today - timedelta(days=1)
@@ -120,10 +117,10 @@ async def get_sales_performance(
 
 @router.get("/top-products")
 async def get_top_products(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get top performing products"""
+    db = await get_database()
     pipeline = [
         {"$match": {"user_id": current_user["id"]}},
         {"$unwind": "$items"},
@@ -154,10 +151,10 @@ async def get_top_products(
 
 @router.get("/delivery-metrics")
 async def get_delivery_metrics(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get delivery performance metrics"""
+    db = await get_database()
     total_orders = await db.orders.count_documents({"user_id": current_user["id"]})
     delivered_orders = await db.orders.count_documents({
         "user_id": current_user["id"],
@@ -196,10 +193,10 @@ async def get_delivery_metrics(
 
 @router.get("/customer-insights")
 async def get_customer_insights(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get customer behavior insights"""
+    db = await get_database()
     total_customers = await db.customers.count_documents({"user_id": current_user["id"]})
     
     # New customers this month
@@ -254,10 +251,10 @@ async def get_customer_insights(
 
 @router.get("/referral-tracking")
 async def get_referral_tracking(
-    current_user: dict = Depends(get_current_active_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    current_user: dict = Depends(get_current_active_user)
 ):
     """Get customer acquisition source tracking"""
+    db = await get_database()
     total_customers = await db.customers.count_documents({"user_id": current_user["id"]})
     
     # Placeholder data - in a real app, you'd track acquisition sources
