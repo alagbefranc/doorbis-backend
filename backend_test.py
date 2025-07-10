@@ -923,6 +923,10 @@ class KushDoorBackendTester:
         else:
             self.test_get_current_user()
             
+            # Test sample data verification
+            print("\n📊 Testing Sample Data...")
+            self.test_sample_data_verification()
+            
             # Test protected endpoints
             print("\n📦 Testing CRUD Operations...")
             self.test_products_crud()
