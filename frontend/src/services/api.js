@@ -300,9 +300,9 @@ class ApiService {
     }
   }
 
-  async getTopProducts() {
+  async getOrderStats() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/analytics/top-products`, {
+      const response = await fetch(`${API_BASE_URL}/api/analytics/order-stats`, {
         headers: this.getAuthHeaders(),
       });
 
@@ -310,7 +310,7 @@ class ApiService {
         const data = await response.json();
         return { success: true, data };
       } else {
-        return { success: false, error: 'Failed to fetch top products' };
+        return { success: false, error: 'Failed to fetch order stats' };
       }
     } catch (error) {
       return { success: false, error: error.message };
