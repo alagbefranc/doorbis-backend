@@ -509,7 +509,8 @@ class KushDoorBackendTester:
                 "email": "alex.rodriguez@kushdoor.com",
                 "phone": "+1-555-0321",
                 "license_number": "DL123456789",
-                "vehicle_info": "Honda Civic 2020 - ABC123",
+                "vehicle": "Honda Civic 2020 - ABC123",
+                "service_area": "Denver Metro Area",
                 "status": "active"
             }
             
