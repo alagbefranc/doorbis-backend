@@ -16,10 +16,12 @@ from routes.auth import router as auth_router
 from routes.products import router as products_router
 from routes.orders import router as orders_router
 from routes.customers import router as customers_router
+from routes.customer_auth import router as customer_auth_router
 from routes.drivers import router as drivers_router
 from routes.payments import router as payments_router
 from routes.support import router as support_router
 from routes.analytics import router as analytics_router
+from routes.storefront import router as storefront_router
 
 # Create the main app
 app = FastAPI(
@@ -32,9 +34,10 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["*"],
+    allow_origins=["*", "https://doorbis.netlify.app", "http://localhost:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Include all routers with /api prefix
@@ -42,10 +45,12 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(products_router, prefix="/api")
 app.include_router(orders_router, prefix="/api")
 app.include_router(customers_router, prefix="/api")
+app.include_router(customer_auth_router, prefix="/api")
 app.include_router(drivers_router, prefix="/api")
 app.include_router(payments_router, prefix="/api")
 app.include_router(support_router, prefix="/api")
 app.include_router(analytics_router, prefix="/api")
+app.include_router(storefront_router, prefix="/api")
 
 # Health check endpoint
 @app.get("/api/")
@@ -80,8 +85,29 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def startup_event():
     logger.info("Starting Kush Door API server...")
+    try:
+        # Test MongoDB connection
+        db = await get_database()
+        await db.command('ping')
+        logger.info("Successfully connected to MongoDB")
+    except Exception as e:
+        logger.warning(f"MongoDB connection failed during startup: {e}. Using mock database.")
+        # Update the database module to use mock
+        import database
+        database.USE_MOCK_DB = True
     logger.info("Database connection configured")
 
 @app.on_event("shutdown")
 async def shutdown_event():
     logger.info("Shutting down Kush Door API server...")
+
+# Run the server
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "server:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info"
+    )
