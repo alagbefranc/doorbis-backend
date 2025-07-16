@@ -1,20 +1,77 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from typing import List
-from models.support import SupportTicket, SupportTicketCreate, SupportTicketUpdate, KnowledgeBase, KnowledgeBaseCreate, KnowledgeBaseUpdate
-from auth.auth import get_current_active_user
+from typing import List, Optional
 from database import get_database
+from models.support import (
+    SupportTicket, SupportTicketCreate, SupportTicketUpdate,
+    SupportTicketResponse, SupportTicketResponseCreate,
+    ChatSession, ChatSessionCreate, ChatMessage, ChatMessageCreate,
+    SupportStats, ChatStats, KnowledgeBase, KnowledgeBaseCreate, KnowledgeBaseUpdate
+)
+from auth.auth import get_current_active_user
+from datetime import datetime
+import uuid
 
 router = APIRouter(prefix="/support", tags=["Support"])
+
+# Support Statistics
+@router.get("/stats", response_model=SupportStats)
+async def get_support_stats(
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Get support statistics overview"""
+    db = await get_database()
+    user_id = current_user["id"]
+    
+    # Get ticket statistics
+    total_tickets = await db.support_tickets.count_documents({"user_id": user_id})
+    open_tickets = await db.support_tickets.count_documents({
+        "user_id": user_id,
+        "status": "open"
+    })
+    in_progress = await db.support_tickets.count_documents({
+        "user_id": user_id,
+        "status": "in-progress"
+    })
+    resolved_tickets = await db.support_tickets.count_documents({
+        "user_id": user_id,
+        "status": "resolved"
+    })
+    high_priority = await db.support_tickets.count_documents({
+        "user_id": user_id,
+        "priority": "high",
+        "status": {"$in": ["open", "in-progress"]}
+    })
+    
+    # Calculate average response time (in hours)
+    avg_response_time = 2.5  # Mock value for now
+    
+    # Calculate resolution rate
+    resolution_rate = (resolved_tickets / total_tickets * 100) if total_tickets > 0 else 0
+    
+    return SupportStats(
+        total_tickets=total_tickets,
+        open_tickets=open_tickets,
+        in_progress=in_progress,
+        resolved_tickets=resolved_tickets,
+        high_priority=high_priority,
+        avg_response_time=avg_response_time,
+        resolution_rate=round(resolution_rate, 1)
+    )
 
 # Support Tickets
 @router.get("/tickets", response_model=List[SupportTicket])
 async def get_support_tickets(
-    current_user: dict = Depends(get_current_active_user)
+    current_user: dict = Depends(get_current_active_user),
+    skip: int = 0,
+    limit: int = 100
 ):
-    """Get all support tickets for the current user's store"""
+    """Get all support tickets for the current user"""
     db = await get_database()
-    tickets = await db.support_tickets.find({"user_id": current_user["id"]}).to_list(1000)
+    tickets_cursor = db.support_tickets.find(
+        {"user_id": current_user["id"]}
+    ).skip(skip).limit(limit)
+    tickets = await tickets_cursor.to_list(length=limit)
     return [SupportTicket(**ticket) for ticket in tickets]
 
 @router.post("/tickets", response_model=SupportTicket)
@@ -24,13 +81,15 @@ async def create_support_ticket(
 ):
     """Create a new support ticket"""
     db = await get_database()
-    ticket_dict = ticket_data.dict()
-    ticket_dict["user_id"] = current_user["id"]
+    ticket = SupportTicket(
+        user_id=current_user["id"],
+        **ticket_data.dict()
+    )
     
-    new_ticket = SupportTicket(**ticket_dict)
-    await db.support_tickets.insert_one(new_ticket.dict())
+    ticket_dict = ticket.dict()
+    await db.support_tickets.insert_one(ticket_dict)
     
-    return new_ticket
+    return ticket
 
 @router.get("/tickets/{ticket_id}", response_model=SupportTicket)
 async def get_support_ticket(
@@ -74,6 +133,8 @@ async def update_support_ticket(
     
     # Update only provided fields
     update_data = ticket_update.dict(exclude_unset=True)
+    update_data["updated_at"] = datetime.utcnow()
+    
     if update_data:
         await db.support_tickets.update_one(
             {"id": ticket_id, "user_id": current_user["id"]},
@@ -108,169 +169,222 @@ async def delete_support_ticket(
     
     return {"message": "Support ticket deleted successfully"}
 
-@router.get("/tickets/stats/overview")
-async def get_support_stats(
+# Support Ticket Responses
+@router.get("/tickets/{ticket_id}/responses", response_model=List[SupportTicketResponse])
+async def get_ticket_responses(
+    ticket_id: str,
     current_user: dict = Depends(get_current_active_user)
 ):
-    """Get support statistics overview"""
+    """Get all responses for a support ticket"""
     db = await get_database()
-    total_tickets = await db.support_tickets.count_documents({"user_id": current_user["id"]})
-    open_tickets = await db.support_tickets.count_documents({
-        "user_id": current_user["id"],
-        "status": "open"
-    })
-    in_progress = await db.support_tickets.count_documents({
-        "user_id": current_user["id"],
-        "status": "in-progress"
-    })
-    resolved_tickets = await db.support_tickets.count_documents({
-        "user_id": current_user["id"],
-        "status": "resolved"
-    })
-    high_priority = await db.support_tickets.count_documents({
-        "user_id": current_user["id"],
-        "priority": "high",
-        "status": {"$in": ["open", "in-progress"]}
-    })
-    
-    resolution_rate = (resolved_tickets / total_tickets * 100) if total_tickets > 0 else 0
-    
-    return {
-        "total_tickets": total_tickets,
-        "open_tickets": open_tickets,
-        "in_progress": in_progress,
-        "resolved_tickets": resolved_tickets,
-        "high_priority": high_priority,
-        "resolution_rate": round(resolution_rate, 1)
-    }
-
-# Knowledge Base
-@router.get("/knowledge-base", response_model=List[KnowledgeBase])
-async def get_knowledge_base_articles(
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Get all knowledge base articles for the current user's store"""
-    db = await get_database()
-    articles = await db.knowledge_base.find({"user_id": current_user["id"]}).to_list(1000)
-    return [KnowledgeBase(**article) for article in articles]
-
-@router.post("/knowledge-base", response_model=KnowledgeBase)
-async def create_knowledge_base_article(
-    article_data: KnowledgeBaseCreate,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Create a new knowledge base article"""
-    db = await get_database()
-    article_dict = article_data.dict()
-    article_dict["user_id"] = current_user["id"]
-    
-    new_article = KnowledgeBase(**article_dict)
-    await db.knowledge_base.insert_one(new_article.dict())
-    
-    return new_article
-
-@router.get("/knowledge-base/{article_id}", response_model=KnowledgeBase)
-async def get_knowledge_base_article(
-    article_id: str,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Get a specific knowledge base article"""
-    db = await get_database()
-    article = await db.knowledge_base.find_one({
-        "id": article_id,
+    # First verify the ticket belongs to the user
+    ticket = await db.support_tickets.find_one({
+        "id": ticket_id,
         "user_id": current_user["id"]
     })
     
-    if not article:
+    if not ticket:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Knowledge base article not found"
+            detail="Support ticket not found"
         )
     
-    # Increment view count
-    await db.knowledge_base.update_one(
-        {"id": article_id, "user_id": current_user["id"]},
-        {"$inc": {"views": 1}}
+    responses_cursor = db.ticket_responses.find(
+        {"ticket_id": ticket_id}
+    ).sort("created_at", 1)
+    responses = await responses_cursor.to_list(length=None)
+    
+    return [SupportTicketResponse(**response) for response in responses]
+
+@router.post("/tickets/{ticket_id}/responses", response_model=SupportTicketResponse)
+async def add_ticket_response(
+    ticket_id: str,
+    response_data: SupportTicketResponseCreate,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Add a response to a support ticket"""
+    db = await get_database()
+    # First verify the ticket belongs to the user
+    ticket = await db.support_tickets.find_one({
+        "id": ticket_id,
+        "user_id": current_user["id"]
+    })
+    
+    if not ticket:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Support ticket not found"
+        )
+    
+    response = SupportTicketResponse(
+        ticket_id=ticket_id,
+        **response_data.dict()
     )
     
-    return KnowledgeBase(**article)
-
-@router.put("/knowledge-base/{article_id}", response_model=KnowledgeBase)
-async def update_knowledge_base_article(
-    article_id: str,
-    article_update: KnowledgeBaseUpdate,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Update a knowledge base article"""
-    db = await get_database()
-    # Check if article exists and belongs to user
-    existing_article = await db.knowledge_base.find_one({
-        "id": article_id,
-        "user_id": current_user["id"]
-    })
+    response_dict = response.dict()
+    await db.ticket_responses.insert_one(response_dict)
     
-    if not existing_article:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Knowledge base article not found"
-        )
-    
-    # Update only provided fields
-    update_data = article_update.dict(exclude_unset=True)
-    if update_data:
-        await db.knowledge_base.update_one(
-            {"id": article_id, "user_id": current_user["id"]},
-            {"$set": update_data}
-        )
-    
-    # Return updated article
-    updated_article = await db.knowledge_base.find_one({
-        "id": article_id, "user_id": current_user["id"]
-    })
-    
-    return KnowledgeBase(**updated_article)
-
-@router.delete("/knowledge-base/{article_id}")
-async def delete_knowledge_base_article(
-    article_id: str,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Delete a knowledge base article"""
-    db = await get_database()
-    result = await db.knowledge_base.delete_one({
-        "id": article_id,
-        "user_id": current_user["id"]
-    })
-    
-    if result.deleted_count == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Knowledge base article not found"
-        )
-    
-    return {"message": "Knowledge base article deleted successfully"}
-
-@router.post("/knowledge-base/{article_id}/helpful")
-async def mark_article_helpful(
-    article_id: str,
-    current_user: dict = Depends(get_current_active_user)
-):
-    """Mark an article as helpful"""
-    db = await get_database()
-    result = await db.knowledge_base.update_one(
-        {"id": article_id, "user_id": current_user["id"]},
-        {
-            "$inc": {
-                "helpful_count": 1,
-                "total_ratings": 1
-            }
-        }
+    # Update ticket's updated_at timestamp
+    await db.support_tickets.update_one(
+        {"id": ticket_id, "user_id": current_user["id"]},
+        {"$set": {"updated_at": datetime.utcnow()}}
     )
     
-    if result.matched_count == 0:
+    return response
+
+# Chat Sessions
+@router.get("/chat/sessions", response_model=List[ChatSession])
+async def get_chat_sessions(
+    current_user: dict = Depends(get_current_active_user),
+    skip: int = 0,
+    limit: int = 50
+):
+    """Get all chat sessions for the current user"""
+    db = await get_database()
+    sessions_cursor = db.chat_sessions.find(
+        {"user_id": current_user["id"]}
+    ).sort("created_at", -1).skip(skip).limit(limit)
+    sessions = await sessions_cursor.to_list(length=limit)
+    
+    return [ChatSession(**session) for session in sessions]
+
+@router.post("/chat/sessions", response_model=ChatSession)
+async def create_chat_session(
+    session_data: ChatSessionCreate,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Create a new chat session"""
+    db = await get_database()
+    session = ChatSession(
+        user_id=current_user["id"],
+        **session_data.dict()
+    )
+    
+    session_dict = session.dict()
+    await db.chat_sessions.insert_one(session_dict)
+    
+    return session
+
+@router.get("/chat/sessions/{session_id}", response_model=ChatSession)
+async def get_chat_session(
+    session_id: str,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Get a specific chat session"""
+    db = await get_database()
+    session = await db.chat_sessions.find_one({
+        "id": session_id,
+        "user_id": current_user["id"]
+    })
+    
+    if not session:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Knowledge base article not found"
+            detail="Chat session not found"
         )
     
-    return {"message": "Article marked as helpful"}
+    return ChatSession(**session)
+
+# Chat Messages
+@router.get("/chat/sessions/{session_id}/messages", response_model=List[ChatMessage])
+async def get_chat_messages(
+    session_id: str,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Get all messages for a chat session"""
+    db = await get_database()
+    # First verify the session belongs to the user
+    session = await db.chat_sessions.find_one({
+        "id": session_id,
+        "user_id": current_user["id"]
+    })
+    
+    if not session:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Chat session not found"
+        )
+    
+    messages_cursor = db.chat_messages.find(
+        {"session_id": session_id}
+    ).sort("created_at", 1)
+    messages = await messages_cursor.to_list(length=None)
+    
+    return [ChatMessage(**message) for message in messages]
+
+@router.post("/chat/sessions/{session_id}/messages", response_model=ChatMessage)
+async def add_chat_message(
+    session_id: str,
+    message_data: ChatMessageCreate,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Add a message to a chat session"""
+    db = await get_database()
+    # First verify the session belongs to the user
+    session = await db.chat_sessions.find_one({
+        "id": session_id,
+        "user_id": current_user["id"]
+    })
+    
+    if not session:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Chat session not found"
+        )
+    
+    message = ChatMessage(
+        session_id=session_id,
+        **message_data.dict()
+    )
+    
+    message_dict = message.dict()
+    await db.chat_messages.insert_one(message_dict)
+    
+    # Update session's updated_at timestamp
+    await db.chat_sessions.update_one(
+        {"id": session_id, "user_id": current_user["id"]},
+        {"$set": {"updated_at": datetime.utcnow()}}
+    )
+    
+    return message
+
+# Chat Statistics
+@router.get("/chat/stats", response_model=ChatStats)
+async def get_chat_stats(
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Get chat statistics"""
+    db = await get_database()
+    user_id = current_user["id"]
+    
+    total_sessions = await db.chat_sessions.count_documents({"user_id": user_id})
+    active_sessions = await db.chat_sessions.count_documents({
+        "user_id": user_id,
+        "status": "active"
+    })
+    
+    # Calculate total messages across all user sessions
+    pipeline = [
+        {"$match": {"user_id": user_id}},
+        {"$lookup": {
+            "from": "chat_messages",
+            "localField": "id",
+            "foreignField": "session_id",
+            "as": "messages"
+        }},
+        {"$unwind": "$messages"},
+        {"$count": "total_messages"}
+    ]
+    
+    result = await db.chat_sessions.aggregate(pipeline).to_list(length=1)
+    total_messages = result[0]["total_messages"] if result else 0
+    
+    # Calculate average session duration (mock for now)
+    avg_session_duration = 15.5  # minutes
+    
+    return ChatStats(
+        total_sessions=total_sessions,
+        active_sessions=active_sessions,
+        total_messages=total_messages,
+        avg_session_duration=avg_session_duration
+    )

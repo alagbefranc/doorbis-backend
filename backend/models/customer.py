@@ -15,6 +15,7 @@ class Customer(BaseModel):
     loyalty_tier: str = "bronze"  # bronze, silver, gold, platinum
     status: str = "active"  # active, inactive
     user_id: str  # Store owner
+    source: Optional[str] = "admin"  # admin, storefront
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     last_order_date: Optional[datetime] = None

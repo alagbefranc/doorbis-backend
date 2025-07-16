@@ -29,6 +29,7 @@ class ProductCreate(BaseModel):
     stock: int
     description: Optional[str] = None
     image_emoji: str = "🌿"
+    status: str = "active"
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = None

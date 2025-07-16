@@ -16,7 +16,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=dict)
 async def register(user_data: UserCreate):
-    """Register a new user"""
+    """Register a new user and create their storefront"""
     db = await get_database()
     # Check if user already exists
     existing_user = await db.users.find_one({"email": user_data.email})
@@ -43,7 +43,41 @@ async def register(user_data: UserCreate):
     new_user = User(**user_dict)
     await db.users.insert_one(new_user.dict())
     
-    return {"message": "User registered successfully", "user_id": new_user.id}
+    # Automatically create a default storefront for the new user
+    default_storefront = {
+        "user_id": new_user.id,
+        "dispensary_name": user_data.store_name,
+        "description": "Premium cannabis products with fast delivery",
+        "theme_color": "#10B981",
+        "contact_phone": user_data.phone if hasattr(user_data, 'phone') else None,
+        "contact_email": user_data.email,
+        "address": user_data.address if hasattr(user_data, 'address') else None,
+        "hours": {
+            "monday": "9AM-8PM",
+            "tuesday": "9AM-8PM", 
+            "wednesday": "9AM-8PM",
+            "thursday": "9AM-8PM",
+            "friday": "9AM-8PM",
+            "saturday": "10AM-6PM",
+            "sunday": "10AM-6PM"
+        },
+        "social_media": {},
+        "features": {
+            "delivery": True,
+            "pickup": True,
+            "online_ordering": True
+        },
+        "seo_title": f"{user_data.store_name} - Premium Cannabis Products",
+        "seo_description": "Browse our premium cannabis selection with delivery and pickup options.",
+        "custom_css": "",
+        "announcement_banner": "",
+        "is_active": True
+    }
+    
+    # Insert the storefront
+    await db.storefronts.insert_one(default_storefront)
+    
+    return {"message": "User registered successfully and storefront created", "user_id": new_user.id, "subdomain": user_data.subdomain}
 
 @router.post("/login", response_model=Token)
 async def login(user_credentials: UserLogin):

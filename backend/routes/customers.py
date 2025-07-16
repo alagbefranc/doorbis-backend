@@ -13,8 +13,48 @@ async def get_customers(
 ):
     """Get all customers for the current user's store"""
     db = await get_database()
-    customers = await db.customers.find({"user_id": current_user["id"]}).to_list(1000)
-    return [Customer(**customer) for customer in customers]
+    
+    # Get customers from BOTH collections to ensure we show all customers
+    
+    # 1. Get customers from the storefront customer_auth collection
+    storefront_customers = await db.customer_auth.find({"store_id": current_user["id"]}).to_list(1000)
+    
+    # 2. Get customers from the regular customers collection
+    regular_customers = await db.customers.find({"user_id": current_user["id"]}).to_list(1000)
+    
+    # Convert storefront customers to the Customer model format
+    all_customers = []
+    
+    # Add storefront customers (convert format)
+    for customer in storefront_customers:
+        # Convert customer_auth format to customer format
+        customer_data = {
+            "id": customer.get("id"),
+            "name": customer.get("name"),
+            "email": customer.get("email"),
+            "phone": customer.get("phone"),
+            "address": customer.get("address", ""),
+            "total_orders": customer.get("total_orders", 0),
+            "total_spent": customer.get("total_spent", 0.0),
+            "average_order_value": customer.get("total_spent", 0.0) / max(customer.get("total_orders", 1), 1),
+            "loyalty_tier": customer.get("loyalty_tier", "bronze"),
+            "status": customer.get("status", "active"),
+            "created_at": customer.get("created_at"),
+            "last_order_date": customer.get("last_order_date"),
+            "user_id": current_user["id"],
+            "source": "storefront"  # Add a field to identify the source
+        }
+        
+        all_customers.append(Customer(**customer_data))
+    
+    # Add regular customers (they're already in the right format)
+    for customer in regular_customers:
+        # Skip if we already have this customer from storefront
+        existing_emails = [c.email for c in all_customers]
+        if customer.get("email") not in existing_emails:
+            all_customers.append(Customer(**customer))
+    
+    return all_customers
 
 @router.post("/", response_model=Customer)
 async def create_customer(
@@ -125,34 +165,56 @@ async def get_customer_stats(
 ):
     """Get customer statistics overview"""
     db = await get_database()
-    total_customers = await db.customers.count_documents({"user_id": current_user["id"]})
-    active_customers = await db.customers.count_documents({
-        "user_id": current_user["id"],
-        "status": "active"
-    })
     
-    # Calculate average order value
-    pipeline = [
-        {"$match": {"user_id": current_user["id"]}},
-        {"$group": {"_id": None, "avg_order_value": {"$avg": "$average_order_value"}}}
-    ]
-    avg_result = await db.customers.aggregate(pipeline).to_list(1)
-    avg_order_value = avg_result[0]["avg_order_value"] if avg_result else 0
+    # Get customers from both collections
+    storefront_customers_count = await db.customer_auth.count_documents({"store_id": current_user["id"]})
+    regular_customers_count = await db.customers.count_documents({"user_id": current_user["id"]})
     
-    # Calculate repeat customers (customers with > 1 order)
-    repeat_customers = await db.customers.count_documents({
-        "user_id": current_user["id"],
-        "total_orders": {"$gt": 1}
-    })
+    # Get unique customers (avoid double counting)
+    storefront_customers = await db.customer_auth.find({"store_id": current_user["id"]}).to_list(1000)
+    regular_customers = await db.customers.find({"user_id": current_user["id"]}).to_list(1000)
     
-    repeat_percentage = (repeat_customers / total_customers * 100) if total_customers > 0 else 0
+    # Create a set of unique emails to avoid double counting
+    unique_emails = set()
+    total_spent = 0
+    total_orders = 0
+    active_count = 0
+    repeat_customers_count = 0
+    
+    # Process storefront customers
+    for customer in storefront_customers:
+        email = customer.get("email")
+        if email not in unique_emails:
+            unique_emails.add(email)
+            total_spent += customer.get("total_spent", 0.0)
+            total_orders += customer.get("total_orders", 0)
+            if customer.get("status") == "active":
+                active_count += 1
+            if customer.get("total_orders", 0) > 1:
+                repeat_customers_count += 1
+    
+    # Process regular customers (only if not already counted)
+    for customer in regular_customers:
+        email = customer.get("email")
+        if email not in unique_emails:
+            unique_emails.add(email)
+            total_spent += customer.get("total_spent", 0.0)
+            total_orders += customer.get("total_orders", 0)
+            if customer.get("status") == "active":
+                active_count += 1
+            if customer.get("total_orders", 0) > 1:
+                repeat_customers_count += 1
+    
+    total_customers = len(unique_emails)
+    avg_order_value = (total_spent / total_orders) if total_orders > 0 else 0
+    repeat_percentage = (repeat_customers_count / total_customers * 100) if total_customers > 0 else 0
     
     return {
         "total_customers": total_customers,
-        "active_customers": active_customers,
+        "active_customers": active_count,
         "avg_order_value": round(avg_order_value, 2),
         "repeat_customers_percentage": round(repeat_percentage, 1),
-        "repeat_customers_count": repeat_customers
+        "repeat_customers_count": repeat_customers_count
     }
 
 @router.get("/loyalty/tiers")
@@ -161,20 +223,22 @@ async def get_loyalty_tiers(
 ):
     """Get loyalty tier statistics"""
     db = await get_database()
-    bronze_count = await db.customers.count_documents({
-        "user_id": current_user["id"],
+    
+    # For shop admins, only count storefront customers
+    bronze_count = await db.customer_auth.count_documents({
+        "store_id": current_user["id"],
         "loyalty_tier": "bronze"
     })
-    silver_count = await db.customers.count_documents({
-        "user_id": current_user["id"],
+    silver_count = await db.customer_auth.count_documents({
+        "store_id": current_user["id"],
         "loyalty_tier": "silver"
     })
-    gold_count = await db.customers.count_documents({
-        "user_id": current_user["id"],
+    gold_count = await db.customer_auth.count_documents({
+        "store_id": current_user["id"],
         "loyalty_tier": "gold"
     })
-    platinum_count = await db.customers.count_documents({
-        "user_id": current_user["id"],
+    platinum_count = await db.customer_auth.count_documents({
+        "store_id": current_user["id"],
         "loyalty_tier": "platinum"
     })
     
