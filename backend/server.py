@@ -31,13 +31,22 @@ app = FastAPI(
 )
 
 # CORS middleware
+origins = [
+    "https://doorbis.netlify.app",
+    "http://doorbis.netlify.app", 
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "*"
+]
+
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=origins,
     allow_credentials=True,
-    allow_origins=["*", "https://doorbis.netlify.app", "http://localhost:3000"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    expose_headers=["Content-Length", "X-Total-Count"],
+    max_age=600,
 )
 
 # Include all routers with /api prefix
