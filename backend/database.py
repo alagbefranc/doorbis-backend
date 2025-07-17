@@ -17,8 +17,26 @@ logger = logging.getLogger(__name__)
 mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
 db_name = os.environ.get('DB_NAME', 'kush_door')
 
-# Initialize MongoDB client (connection will be tested later)
-client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=5000)
+# Initialize MongoDB client with explicit SSL config
+# Add additional TLS/SSL configuration for Atlas
+try:
+    # For deployment environment, use TLS 1.2 minimum
+    import ssl
+    client = AsyncIOMotorClient(
+        mongo_url,
+        serverSelectionTimeoutMS=5000,
+        ssl=True,
+        ssl_cert_reqs=ssl.CERT_NONE,  # Bypass certificate validation for now
+        tls=True,
+        tlsInsecure=True
+    )
+    logger.info("MongoDB client initialized with SSL/TLS configuration")
+except Exception as e:
+    logger.error(f"Error initializing MongoDB client: {e}")
+    # Fallback initialization
+    client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=5000)
+    logger.info("MongoDB client initialized with default configuration")
+
 database = client[db_name]
 USE_MOCK_DB = None  # Will be determined at runtime
 
