@@ -74,10 +74,17 @@ async def register(user_data: UserCreate):
         "is_active": True
     }
     
-    # Insert the storefront
-    await db.storefronts.insert_one(default_storefront)
+    # Insert the storefront with error handling
+    try:
+        await db.storefronts.insert_one(default_storefront)
+        success_message = "User registered successfully and storefront created"
+    except Exception as e:
+        # Log the error but still return success if user was created
+        import logging
+        logging.error(f"Error creating storefront: {e}")
+        success_message = "User registered successfully, but there was an issue creating the storefront"
     
-    return {"message": "User registered successfully and storefront created", "user_id": new_user.id, "subdomain": user_data.subdomain}
+    return {"message": success_message, "user_id": new_user.id, "subdomain": user_data.subdomain}
 
 @router.post("/login", response_model=Token)
 async def login(user_credentials: UserLogin):

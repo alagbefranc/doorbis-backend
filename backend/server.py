@@ -35,8 +35,8 @@ origins = [
     "https://doorbis.netlify.app",
     "http://doorbis.netlify.app", 
     "http://localhost:3000",
-    "http://localhost:8000",
-    "*"
+    "http://localhost:8000"
+    # Removed wildcard origin as it can cause issues with credentials
 ]
 
 app.add_middleware(
